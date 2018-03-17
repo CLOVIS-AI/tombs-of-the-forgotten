@@ -13,7 +13,7 @@ import static java.lang.Integer.max;
  */
 public final class Bar {
     
-    final int minimum, maximum;
+    int minimum, maximum;
     
     int real;
     
@@ -89,6 +89,28 @@ public final class Bar {
                         + "lesser than the allowed maximum (%d)", value, real, 
                         value+real, maximum));
         }
+    }
+    
+    /**
+     * Increments the maximum value.
+     * @param value by how much you want to increment the maximum
+     */
+    public void increaseMaximum(int value){
+        if(value < 0)
+            throw new IllegalArgumentException("Negative values are not allowed: " + value);
+        
+        maximum += value;
+    }
+    
+    /**
+     * Decrements the minimum value.
+     * @param value by how much you want to decrement the minimum
+     */
+    public void decreaseMinimum(int value){
+        if(value < 0)
+            throw new IllegalArgumentException("Negative values are not allowed: " + value);
+        
+        minimum -= value;
     }
     
     final void updateBonus(){
