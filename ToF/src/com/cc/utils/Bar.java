@@ -5,13 +5,15 @@
  */
 package com.cc.utils;
 
+import static java.lang.Integer.max;
+
 /**
  * Bars are used to represent information about the player (skills, health bar)... 
  * @author Ivan Canet
  */
 public final class Bar {
     
-    final int minimum, maximum;
+    int minimum, maximum;
     
     int real;
     
@@ -41,6 +43,76 @@ public final class Bar {
         this(minimum, maximum, minimum);
     }
     
+    /**
+     * Increments the value of this bar by a set number.
+     * <p>Note that this is not the same as a bonus. See {@link #newBonus(int,int)}.
+     * @param value how much you'd like to increment to value of this bar
+     * @param mode what should do this method if the maximum value is reached.
+     */
+    public void add(int value, Behavior mode){
+        if(value < 0)
+            throw new IllegalArgumentException("Negative increments are not "
+                    + "allowed. See Bar.remove(int,int).");
+        
+        if(real + value < maximum)
+           real += value;
+        else{
+            if(mode.BOOLEAN)
+                real = maximum;
+            else
+                throw new IllegalArgumentException(String.format("Adding %d to "
+                        + "the current value (%d) would result in %d, which is "
+                        + "greater than the allowed maximum (%d)", value, real, 
+                        value+real, maximum));
+        }
+    }
+    
+    /**
+     * Decrements the value of this bar by a set number.
+     * <p>Note that this is not the same as a bonus. See {@link #newBonus(int,int)}.
+     * @param value how much you'd like to decrement to value of this bar
+     * @param mode what should do this method if the minimum value is reached.
+     */
+    public void remove(int value, Behavior mode){
+        if(value < 0)
+            throw new IllegalArgumentException("Negative decrements are not "
+                    + "allowed. See Bar.add(int,int).");
+        
+        if(real - value > minimum)
+           real -= value;
+        else{
+            if(mode.BOOLEAN)
+                real = minimum;
+            else
+                throw new IllegalArgumentException(String.format("Removing %d from "
+                        + "the current value (%d) would result in %d, which is "
+                        + "lesser than the allowed maximum (%d)", value, real, 
+                        value+real, maximum));
+        }
+    }
+    
+    /**
+     * Increments the maximum value.
+     * @param value by how much you want to increment the maximum
+     */
+    public void increaseMaximum(int value){
+        if(value < 0)
+            throw new IllegalArgumentException("Negative values are not allowed: " + value);
+        
+        maximum += value;
+    }
+    
+    /**
+     * Decrements the minimum value.
+     * @param value by how much you want to decrement the minimum
+     */
+    public void decreaseMinimum(int value){
+        if(value < 0)
+            throw new IllegalArgumentException("Negative values are not allowed: " + value);
+        
+        minimum -= value;
+    }
+    
     final void updateBonus(){
         
     }
@@ -65,12 +137,13 @@ public final class Bar {
      * The current value of this bar.
      * <p>This value is the sum of the value contained in this Bar and the sum 
      * of the bonuses, therefore it is the one that should be used.
+     * <p>This value cannot exceed {@link #getMaximum() }.
      * @return The current value of this bar.
      * @see #getBonusTotal() Sum of the bonuses
      * @see #getReal() The value of this bar without the bonuses
      */
     public int getCurrent() {
-        return real + bonusTotal;
+        return max(real + bonusTotal, maximum);
     }
     
     /**
@@ -95,6 +168,29 @@ public final class Bar {
         return bonusTotal;
     }
     
-    
-    
+    /**
+     * Specifies what the behavior of methods such as 
+     * {@link #add(int, boolean) add } or 
+     * {@link #remove(int, boolean) remove } should be.
+     */
+    public enum Behavior{
+        /**
+         * If the maximum or minimum value is reached, sets the value to the
+         * maximum or minimum value.
+         */
+        ACCEPT(true),
+        
+        /**
+         * If the maximum or minimum value is reached, throws an {@link IllegalArgumentException}.
+         */
+        DENY(false);
+        
+        /** The value of this object; {@code true} for {@link #ACCEPT} and 
+         * {@code false} for {@link #DENY}. */
+        public final boolean BOOLEAN;
+        
+        Behavior(boolean b){
+            BOOLEAN = b;
+        }
+    }
 }
