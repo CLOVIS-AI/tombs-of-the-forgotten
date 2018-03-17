@@ -20,14 +20,18 @@ public final class Bar {
     int bonusTotal;
     
     // Pair<Integer, Integer> bonuses;
+    
+    final String name;
 
     /**
      * Creates a Bar.
+     * @param name display name of this bar
      * @param minimum minimum value of this bar
      * @param maximum maximum value of this bar
      * @param value beginning value of this bar
      */
-    public Bar(int minimum, int maximum, int value) {
+    public Bar(String name, int minimum, int maximum, int value) {
+        this.name = name;
         this.minimum = minimum;
         this.maximum = maximum;
         this.real = value;
@@ -36,11 +40,12 @@ public final class Bar {
     
     /**
      * Creates a Bar.
+     * @param name display name of this bar
      * @param minimum minimum value of this bar
      * @param maximum maximum value of this bar
      */
-    public Bar(int minimum, int maximum){
-        this(minimum, maximum, minimum);
+    public Bar(String name, int minimum, int maximum){
+        this(name, minimum, maximum, minimum);
     }
     
     /**
@@ -166,6 +171,14 @@ public final class Bar {
      */
     public int getBonusTotal() {
         return bonusTotal;
+    }
+    
+    /**
+     * The display name of this Bar.
+     * @return Display name of this Bar.
+     */
+    public String getName() {
+        return name;
     }
     
     /**

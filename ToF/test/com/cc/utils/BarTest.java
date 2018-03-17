@@ -45,7 +45,7 @@ public class BarTest {
     @Test
     public void addAccept() {
         System.out.println("add:accept");
-        Bar b = new Bar(5, 10, 9);
+        Bar b = new Bar(null, 5, 10, 9);
         b.add(2, ACCEPT);
         assertEquals(10, b.getReal());
     }
@@ -53,7 +53,7 @@ public class BarTest {
     @Test
     public void addNormal() {
         System.out.println("add:normal");
-        Bar b = new Bar(0, 10, 0);
+        Bar b = new Bar(null, 0, 10, 0);
         
         b.add(1, ACCEPT);
         assertEquals(1, b.getReal());
@@ -65,7 +65,7 @@ public class BarTest {
     @Test
     public void addNegatives() {
         System.out.println("add:negatives");
-        Bar b = new Bar(0, 5, 0);
+        Bar b = new Bar(null, 0, 5, 0);
         
         try{
             b.add(-1, ACCEPT);
@@ -85,7 +85,7 @@ public class BarTest {
     @Test
     public void addDeny() {
         System.out.println("add:deny");
-        Bar b = new Bar(0, 10, 10);
+        Bar b = new Bar(null, 0, 10, 10);
         try{
             b.add(1, DENY);
             fail();
@@ -97,7 +97,7 @@ public class BarTest {
     @Test
     public void removeAccept() {
         System.out.println("remove:accept");
-        Bar b = new Bar(5, 10, 6);
+        Bar b = new Bar(null, 5, 10, 6);
         b.remove(2, ACCEPT);
         assertEquals(5, b.getReal());
     }
@@ -105,7 +105,7 @@ public class BarTest {
     @Test
     public void removeNormal() {
         System.out.println("remove:normal");
-        Bar b = new Bar(0, 10, 10);
+        Bar b = new Bar(null, 0, 10, 10);
         
         b.remove(1, ACCEPT);
         assertEquals(9, b.getReal());
@@ -117,7 +117,7 @@ public class BarTest {
     @Test
     public void removeNegatives() {
         System.out.println("remove:negatives");
-        Bar b = new Bar(0, 5, 5);
+        Bar b = new Bar(null, 0, 5, 5);
         
         try{
             b.remove(-1, ACCEPT);
@@ -137,7 +137,7 @@ public class BarTest {
     @Test
     public void removeDeny() {
         System.out.println("remove:deny");
-        Bar b = new Bar(0, 10, 0);
+        Bar b = new Bar(null, 0, 10, 0);
         try{
             b.remove(1, DENY);
             fail();
