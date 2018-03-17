@@ -8,7 +8,7 @@ package com.cc.utils;
 import java.util.Objects;
 
 /**
- *
+ * Management of the first value or the second value.
  * @author a.chourouq
  */
 public class Pair<T, U> {
@@ -17,8 +17,8 @@ public class Pair<T, U> {
     
     /**
      * Constructor.
-     * @param first
-     * @param second 
+     * @param first first value.
+     * @param second second value.
      */
     public Pair(T first, U second) {
         this.first = first;
@@ -26,22 +26,41 @@ public class Pair<T, U> {
     }
     
     /**
-     * 
-     * @return first
+     * Get the first value.
+     * @return first value.
      */
     public T getFirst() {
         return first;
     }
+    
+    /**
+     * Set the first value.
+     * @param first value.
+     */
+    public void setFirst(T first) {
+        this.first = first;
+    }
 
     /**
-     * 
-     * @return second
+     * Get the second value.
+     * @return second second value.
      */
     public U getSecond() {
         return second;
     }
     
+    /**
+     * Set the second value.
+     * @param second value.
+     */
+    public void setSecond(U second) {
+        this.second = second;
+    }
     
+    /**
+     * A hash code value for the object.
+     * @return a hash code value for this object.
+     */
     @Override
     public int hashCode() {
         int hash = 5;
@@ -49,7 +68,13 @@ public class Pair<T, U> {
         hash = 67 * hash + Objects.hashCode(this.second);
         return hash;
     }
-
+    
+    /**
+     * Indicates whether some other object is "equal to" this one.
+     * @param obj the reference object with which to compare.
+     * @return true if this object is the same as the obj argument,
+     * false otherwise.
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
