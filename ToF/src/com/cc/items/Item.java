@@ -6,9 +6,21 @@
 package com.cc.items;
 
 /**
- *
- * @author ivan
+ * Represents a generic Item.
+ * @author Ivan Canet
  */
 public interface Item {
+    
+    /**
+     * The weight of this Item, in grams.
+     * @return The weight of this Item.
+     */
+    public int getWeight();
+    
+    /**
+     * The description of this Item.
+     * @return The description of this Item.
+     */
+    public String getDescription();
     
 }
