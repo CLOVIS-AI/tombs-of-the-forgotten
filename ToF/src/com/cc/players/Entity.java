@@ -6,6 +6,7 @@
 package com.cc.players;
 
 import com.cc.utils.Bar;
+import static com.cc.utils.Bar.Behavior.ACCEPT;
 import static com.cc.utils.Translator.LINES;
 
 /**
@@ -32,6 +33,24 @@ public abstract class Entity {
         mana = new Bar(LINES.get("mana"), 0, maxMana, 0);
         
         weightCapacity = new Bar(LINES.get("weight_capacity"), 0, maxWeight, weight);
+    }
+    
+    /**
+     * Increases the health of the entity.
+     * @param n how much this should heal
+     * @throws IllegalArgumentException for negative values
+     */
+    public final void heal(int n){
+        health.add(n, ACCEPT);
+    }
+    
+    /**
+     * Decreases the health of the entity.
+     * @param n how much this should hurt
+     * @throws IllegalArgumentException for negative values
+     */
+    public final void hurt(int n){
+        health.remove(n, ACCEPT);
     }
     
 }
