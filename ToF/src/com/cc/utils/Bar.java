@@ -53,6 +53,7 @@ public final class Bar {
      * <p>Note that this is not the same as a bonus. See {@link #newBonus(int,int)}.
      * @param value how much you'd like to increment to value of this bar
      * @param mode what should do this method if the maximum value is reached.
+     * @throws IllegalArgumentException for negative values
      */
     public void add(int value, Behavior mode){
         if(value < 0)
@@ -77,6 +78,7 @@ public final class Bar {
      * <p>Note that this is not the same as a bonus. See {@link #newBonus(int,int)}.
      * @param value how much you'd like to decrement to value of this bar
      * @param mode what should do this method if the minimum value is reached.
+     * @throws IllegalArgumentException for negative values
      */
     public void remove(int value, Behavior mode){
         if(value < 0)
@@ -99,6 +101,7 @@ public final class Bar {
     /**
      * Increments the maximum value.
      * @param value by how much you want to increment the maximum
+     * @throws IllegalArgumentException for negative values
      */
     public void increaseMaximum(int value){
         if(value < 0)
@@ -110,6 +113,7 @@ public final class Bar {
     /**
      * Decrements the minimum value.
      * @param value by how much you want to decrement the minimum
+     * @throws IllegalArgumentException for negative values
      */
     public void decreaseMinimum(int value){
         if(value < 0)
