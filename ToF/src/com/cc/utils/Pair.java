@@ -10,6 +10,8 @@ import java.util.Objects;
 /**
  * Management of the first value or the second value.
  * @author a.chourouq
+ * @param <T> The first element of this pair
+ * @param <U> The second element of this pair
  */
 public class Pair<T, U> {
     T first;
