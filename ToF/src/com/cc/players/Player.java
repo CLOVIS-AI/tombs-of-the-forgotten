@@ -22,6 +22,8 @@ public class Player extends Entity {
     private final Bar weight;
     private final List<Item> items;
     
+    private int searchLuck;
+    
     /**
      * Creates a default player with default values.
      */
@@ -38,6 +40,7 @@ public class Player extends Entity {
      */
     public Player(int maxHealth, int maxStrength, int maxMana, int maxWeight) {
         super(maxHealth, maxStrength, maxMana);
+        searchLuck = 0;
         items = new ArrayList<>();
         
         weight = new Bar(LINES.get("weight"), 0, maxWeight, 0);
