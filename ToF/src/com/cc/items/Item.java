@@ -24,4 +24,10 @@ public interface Item {
      */
     public String getDescription();
     
+    /**
+     * The rarity of an Item.
+     * @return The rarity of an Item.
+     */
+    public Rarity getRarity();
+    
 }
