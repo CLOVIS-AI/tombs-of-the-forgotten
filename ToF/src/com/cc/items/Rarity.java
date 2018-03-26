@@ -13,19 +13,26 @@ public enum Rarity {
     
     /**
      * Common items.
-     * {@code Common < Rare < Legendary}
+     * {@code Common < Rare < Epic < Legendary}
      */
     COMMON,
     
     /**
      * Rare items.
-     * {@code Common < Rare < Legendary}
+     * {@code Common < Rare < Epic < Legendary}
      */
     RARE,
     
     /**
+     * Epic items.
+     * {@code Common < Rare < Epic < Legendary
+     */
+    
+    EPIC,
+    
+    /**
      * Legendary items.
-     * {@code Common < Rare < Legendary}
+     * {@code Common < Rare < Epic < Legendary}
      */
     LEGENDARY;
 }
