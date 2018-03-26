@@ -13,6 +13,7 @@ public interface Item {
     
     /**
      * The weight of this Item, in grams.
+     * <p>Note that the weight of an Item is a constant, and can NOT change.
      * @return The weight of this Item.
      */
     public int getWeight();
