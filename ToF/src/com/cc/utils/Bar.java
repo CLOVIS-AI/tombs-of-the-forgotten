@@ -19,7 +19,7 @@ public final class Bar {
     
     int bonusTotal;
     
-    // Pair<Integer, Integer> bonuses;
+    Pair<Integer, Integer> bonuses;
     
     final String name;
 
@@ -120,6 +120,10 @@ public final class Bar {
             throw new IllegalArgumentException("Negative values are not allowed: " + value);
         
         minimum -= value;
+    }
+    
+    public void addBonus(int time, int value) {
+        bonuses.add(new Pair<>(time, value));
     }
     
     final void updateBonus(){
