@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -35,6 +36,7 @@ public class World {
     
     /**
      * Get every room of the World.
+     * <p>Note that the rooms are provided in no particular order.
      * @return A Collection of rooms.
      */
     public Collection<Room> getRooms(){
@@ -43,6 +45,7 @@ public class World {
     
     /**
      * Get the rooms which location validate a predicate.
+     * <p>Note that the rooms are provided in no particular order.
      * @param p a predicate on the location of each room
      * @return The rooms.
      */
@@ -56,6 +59,7 @@ public class World {
     
     /**
      * Get the rooms that validate a predicate.
+     * <p>Note that the rooms are provided in no particular order.
      * @param p a predicate on the room
      * @return The rooms.
      */
@@ -71,7 +75,7 @@ public class World {
      * @param floor The floor you want [0..]
      * @return A Map of every room and its location.
      */
-    public Map<Location, Room> getFloor(int floor){
+    public TreeMap<Location, Room> getFloor(int floor){
         if(floor < 0)
             throw new IllegalArgumentException("Negative values are forbidden "
                     + "in this method, you provided: " + floor);
@@ -79,15 +83,16 @@ public class World {
         return rooms.entrySet()
                 .stream()
                 .filter(e -> e.getKey().getZ() == floor)
-                .collect(Collectors.toMap(
-                        e -> e.getKey(), 
-                        e -> e.getValue()));
+                .collect(
+                        TreeMap::new, 
+                        (TreeMap m, Entry e) -> m.put(e.getKey(), e.getValue()), 
+                        TreeMap::putAll);
     }
     
     public String floorToString(final int floor){
         StringBuilder sb = new StringBuilder();
         
-        Map<Location, Room> floorMap = getFloor(floor);
+        TreeMap<Location, Room> floorMap = new TreeMap<>(getFloor(floor));
         
         int x = 0, y = 0;
         for(Entry<Location, Room> e : floorMap.entrySet()){
@@ -101,13 +106,14 @@ public class World {
             }
             
             // Jump column if needed
-            while(y < l.getY()-1){
+            while(y < l.getY()){
                 sb.append(' ');
                 y++;
             }
             
             // Draw room
             sb.append(e.getValue().getChar());
+            y++;
         }
         
         return sb.toString();
