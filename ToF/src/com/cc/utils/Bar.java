@@ -6,6 +6,8 @@
 package com.cc.utils;
 
 import static java.lang.Integer.max;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Bars are used to represent information about the player (skills, health bar)... 
@@ -19,7 +21,7 @@ public final class Bar {
     
     int bonusTotal;
     
-    Pair<Integer, Integer> bonuses;
+    List<Pair<Integer, Integer>> bonuses;
     
     final String name;
 
@@ -36,6 +38,8 @@ public final class Bar {
         this.maximum = maximum;
         this.real = value;
         bonusTotal = 0;
+        
+        bonuses = new ArrayList<>();
     }
     
     /**
@@ -127,7 +131,10 @@ public final class Bar {
     }
     
     final void updateBonus(){
+        bonusTotal = 0;
         
+        for(Pair<Integer, Integer> p : bonuses)
+            bonusTotal += p.getSecond();
     }
 
     /**
