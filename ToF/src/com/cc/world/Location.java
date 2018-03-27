@@ -10,13 +10,13 @@ package com.cc.world;
  * <p>In effect, this class is very similar to a 3-Vector in a mathematical sense.
  * <p>The different axis are described as follow:
  * <ul>
- *  <li><b>X:</b> North-South, positive towards North.</li>
+ *  <li><b>X:</b> South-North, positive towards South.</li>
  *  <li><b>Y:</b> East-West, positive towards East.</li>
  *  <li><b>Z:</b> Up-Down, positive towards Up.</li>
  * </ul>
  * @author Ivan Canet
  */
-public class Location {
+public class Location implements Comparable<Location> {
     
     private final int X, Y, Z;
 
@@ -66,7 +66,7 @@ public class Location {
 
     /**
      * Get the value of the X axis.
-     * <p>This value is positive for northern points and negative for southern
+     * <p>This value is positive for southern points and negative for northern
      * points.
      * @return The value of the X axis.
      * @see Location Information about the axis
@@ -138,6 +138,13 @@ public class Location {
      */
     public static Location add(Location a, Location b){
         return a.add(b);
+    }
+
+    @Override
+    public int compareTo(Location l) {
+        return Z != l.Z ? Z - l.Z :
+               Y != l.Y ? Y - l.Y :
+                          X - l.X ;
     }
     
 }

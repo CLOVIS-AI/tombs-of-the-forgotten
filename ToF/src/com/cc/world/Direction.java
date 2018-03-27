@@ -12,10 +12,10 @@ package com.cc.world;
 public enum Direction {
     
     /** The North. */
-    NORTH(1, 0, 0),
+    NORTH(-1, 0, 0),
     
     /** The South. */
-    SOUTH(-1, 0, 0),
+    SOUTH(1, 0, 0),
     
     /** The East. */
     EAST(0, 1, 0),
