@@ -136,6 +136,18 @@ public final class Bar {
         for(Pair<Integer, Integer> p : bonuses)
             bonusTotal += p.getSecond();
     }
+    
+    /**
+     * Method that notifies this object that a tick has passed, and updates this
+     * object.
+     */
+    public void nextTick(){
+        bonuses.forEach(b -> b.first--);
+        
+        bonuses.removeIf(b -> b.first <= 0);
+        
+        updateBonus();
+    }
 
     /**
      * The minimum value of this bar.
