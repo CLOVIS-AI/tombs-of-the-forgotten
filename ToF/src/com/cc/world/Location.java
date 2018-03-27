@@ -147,4 +147,9 @@ public class Location implements Comparable<Location> {
                           X - l.X ;
     }
     
+    @Override
+    public String toString() {
+        return String.format("(%d, %d, %d)", X, Y, Z);
+    }
+    
 }
