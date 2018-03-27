@@ -126,6 +126,11 @@ public final class Bar {
         minimum -= value;
     }
     
+    /**
+     * Adds a bonus to this bar.
+     * @param time How many ticks the bonus will last
+     * @param value How much does this bonus increase the value
+     */
     public void addBonus(int time, int value) {
         bonuses.add(new Pair<>(time, value));
     }
@@ -142,9 +147,7 @@ public final class Bar {
      * object.
      */
     public void nextTick(){
-        bonuses.forEach(b -> b.first--);
-        
-        bonuses.removeIf(b -> b.first <= 0);
+        bonuses.removeIf(b -> b.first-- <= 0);
         
         updateBonus();
     }
