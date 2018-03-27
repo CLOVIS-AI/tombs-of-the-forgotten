@@ -12,7 +12,9 @@ import static com.cc.world.Direction.SOUTH;
 import static com.cc.world.Direction.UP;
 import static com.cc.world.Direction.WEST;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 import org.junit.After;
@@ -112,6 +114,23 @@ public class LocationTest {
         assertEquals(new Location(0, 1, 0), l.get(2));
         assertEquals(new Location(0, 0, 1), l.get(3));
         assertEquals(new Location(1, 1, 1), l.get(4));
+        
+        // -----------------------------------------
+        
+        TreeMap<Location, Integer> iii = new TreeMap();
+        iii.put(new Location(0, 0, 0), 1);
+        iii.put(new Location(-1, 0, 0), 0);
+        iii.put(new Location(1, 0, 0), 2);
+        iii.put(new Location(0, 1, 0), 4);
+        iii.put(new Location(1, 1, 0), 5);
+        iii.put(new Location(2, 0, 0), 3);
+        
+        List<Integer> ii = iii
+                .values()
+                .stream()
+                .collect(Collectors.toList());
+        for(int i = 0; i < ii.size(); i++)
+            assertEquals(i, (int)ii.get(i));
     }
     
 }
