@@ -24,12 +24,17 @@ public class ToF {
         
         TreeMap<Location, Room> map = new TreeMap<>();
         map.put(new Location(0, 0, 0), new Room());
+        map.put(new Location(1, 1, 0), new Room());
+        map.put(new Location(2, 2, 0), new Room());
         map.put(new Location(0, 1, 0), new Room());
-        map.put(new Location(2, 0, 0), new Room());
-        map.put(new Location(1, 0, 0), new Room());
-        map.put(new Location(-1, 3, 0), new Room());
+        //map.put(new Location(1, 0, 0), new Room());
         World w = new World(map);
+        
+        map.keySet().forEach(System.out::println);
+        
+        System.out.println("---");
         System.out.println(w.floorToString(0));
+        System.out.println("---");
     }
     
 }
