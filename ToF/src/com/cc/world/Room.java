@@ -17,4 +17,8 @@ public class Room {
     
     private String description;
     
+    public char getChar(){
+        return '+';
+    }
+    
 }

@@ -5,6 +5,11 @@
  */
 package com.cc.tof;
 
+import com.cc.world.Location;
+import com.cc.world.Room;
+import com.cc.world.World;
+import java.util.TreeMap;
+
 /**
  *
  * @author ivan
@@ -16,6 +21,15 @@ public class ToF {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        
+        TreeMap<Location, Room> map = new TreeMap<>();
+        map.put(new Location(0, 0, 0), new Room());
+        map.put(new Location(0, 1, 0), new Room());
+        map.put(new Location(2, 0, 0), new Room());
+        map.put(new Location(1, 0, 0), new Room());
+        map.put(new Location(-1, 3, 0), new Room());
+        World w = new World(map);
+        System.out.println(w.floorToString(0));
     }
     
 }

@@ -10,6 +10,7 @@ import com.cc.players.Player;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -27,6 +28,10 @@ public class World {
     private List<Entity> entities;
     
     private GameState gameState;
+    
+    public World(TreeMap<Location, Room> map){
+        rooms = map;
+    }
     
     /**
      * Get every room of the World.
@@ -77,5 +82,34 @@ public class World {
                 .collect(Collectors.toMap(
                         e -> e.getKey(), 
                         e -> e.getValue()));
+    }
+    
+    public String floorToString(final int floor){
+        StringBuilder sb = new StringBuilder();
+        
+        Map<Location, Room> floorMap = getFloor(floor);
+        
+        int x = 0, y = 0;
+        for(Entry<Location, Room> e : floorMap.entrySet()){
+            Location l = e.getKey();
+            
+            // Next line if needed
+            while(x < l.getX()){
+                sb.append('\n');
+                x++;
+                y = 0;
+            }
+            
+            // Jump column if needed
+            while(y < l.getY()-1){
+                sb.append(' ');
+                y++;
+            }
+            
+            // Draw room
+            sb.append(e.getValue().getChar());
+        }
+        
+        return sb.toString();
     }
 }
