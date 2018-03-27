@@ -5,6 +5,7 @@
  */
 package com.cc.utils;
 
+import static com.cc.utils.Bar.Behavior.ACCEPT;
 import static java.lang.Integer.max;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +68,7 @@ public final class Bar {
         if(real + value < maximum)
            real += value;
         else{
-            if(mode.BOOLEAN)
+            if(mode == ACCEPT)
                 real = maximum;
             else
                 throw new IllegalArgumentException(String.format("Adding %d to "
@@ -92,7 +93,7 @@ public final class Bar {
         if(real - value > minimum)
            real -= value;
         else{
-            if(mode.BOOLEAN)
+            if(mode == ACCEPT)
                 real = minimum;
             else
                 throw new IllegalArgumentException(String.format("Removing %d from "
