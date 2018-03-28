@@ -108,6 +108,14 @@ public class World implements Timable {
     // *********************************************************** G E T T E R S
     
     /**
+     * The player of the game.
+     * @return The player of the game.
+     */
+    public Player getPlayer(){
+        return player;
+    }
+    
+    /**
      * The state of the game.
      * @return The state of the game.
      */
