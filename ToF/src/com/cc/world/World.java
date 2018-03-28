@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * The world in which the game is taking place.
  * @author Ivan Canet
  */
-public class World {
+public class World implements Timable {
     
     private TreeMap<Location, Room> rooms;
     
@@ -94,7 +94,16 @@ public class World {
         }
     }
     
+    // ****************************************************** G A M E  L O G I C
     
+    /**
+     * Notifies every component of the World that a tick has passed.
+     */
+    @Override
+    public void nextTick(){
+        player.nextTick();
+        entities.forEach(e -> e.nextTick());
+    }
     
     // *********************************************************** G E T T E R S
     

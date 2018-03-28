@@ -8,12 +8,13 @@ package com.cc.players;
 import com.cc.utils.Bar;
 import static com.cc.utils.Bar.Behavior.ACCEPT;
 import static com.cc.utils.Translator.LINES;
+import com.cc.world.Timable;
 
 /**
  * A class that represents an Entity.
  * @author Ivan Canet
  */
-public abstract class Entity {
+public abstract class Entity implements Timable {
     
     /** Health bar. Game over when 0. */
     Bar health;
@@ -46,6 +47,13 @@ public abstract class Entity {
      */
     public final void hurt(int n){
         health.remove(n, ACCEPT);
+    }
+
+    @Override
+    public void nextTick() {
+        health.nextTick();
+        strength.nextTick();
+        mana.nextTick();
     }
     
 }
