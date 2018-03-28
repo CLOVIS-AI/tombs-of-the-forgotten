@@ -108,6 +108,14 @@ public class World implements Timable {
     // *********************************************************** G E T T E R S
     
     /**
+     * The state of the game.
+     * @return The state of the game.
+     */
+    public GameState getGameState(){
+        return gameState;
+    }
+    
+    /**
      * Get every room of the World.
      * <p>Note that the rooms are provided in no particular order.
      * @return A Collection of rooms.
