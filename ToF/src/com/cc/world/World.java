@@ -7,12 +7,13 @@ package com.cc.world;
 
 import com.cc.players.Entity;
 import com.cc.players.Player;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Scanner;
 import java.util.TreeMap;
-import java.util.TreeSet;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -30,9 +31,72 @@ public class World {
     
     private GameState gameState;
     
+    // ************************************************* C O N S T R U C T O R S
+    
     public World(TreeMap<Location, Room> map){
         rooms = map;
     }
+    
+    /**
+     * Creates a new World (random generation).
+     */
+    public World(){
+        this(System.currentTimeMillis());
+    }
+    
+    /**
+     * Creates a new World (random generation) based on a seed.
+     * @param seed The generation seed.
+     */
+    public World(final long seed){
+        throw new UnsupportedOperationException();
+    }
+    
+    /**
+     * Loads a World object from a file.
+     * <p>Note that this contructor is meant for the Prototype only, it will
+     * marked as deprecated in any other releases (JSON will be used instead).
+     * @param f the file
+     */
+    public World(File f){
+        rooms = new TreeMap<>();
+        
+        System.out.println("Loading world from file " + f.getAbsolutePath());
+        try {
+            Scanner s = new Scanner(f);
+            
+            int y = 0, 
+                z = 0;
+            
+            while(s.hasNextLine()){
+                String line = s.nextLine();
+                
+                switch(line){
+                    case "-":   y=0; z++; break;
+                    case "":    continue;
+                }
+                
+                int x = 0;
+                for(char c : line.toCharArray()){
+                    switch(c){
+                        case '@':
+                            player = new Player();
+                        case '+':
+                            rooms.put(new Location(x, y, z), new Room());
+                            break;
+                        default:
+                    }
+                    x++;
+                }
+            }
+        } catch (FileNotFoundException ex) {
+            throw new IllegalArgumentException("The file doesn't exist: " + f.getAbsolutePath());
+        }
+    }
+    
+    
+    
+    // *********************************************************** G E T T E R S
     
     /**
      * Get every room of the World.
