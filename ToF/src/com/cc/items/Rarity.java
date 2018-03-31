@@ -25,7 +25,7 @@ public enum Rarity {
     
     /**
      * Epic items.
-     * {@code Common < Rare < Epic < Legendary
+     * {@code Common < Rare < Epic < Legendary}
      */
     
     EPIC,

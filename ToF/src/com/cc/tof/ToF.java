@@ -5,38 +5,45 @@
  */
 package com.cc.tof;
 
-import com.cc.world.Location;
-import com.cc.world.Room;
+import static com.cc.world.GameState.EXPLORE;
 import com.cc.world.World;
-import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.TreeMap;
+
 
 /**
- *
- * @author ivan
+ * The main game interface
+ * @author Ivan Canet
  */
 public class ToF {
+    
+    private static World world;
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // TODO code application logic here
+    }
+    
+    static void gameLoop(){
+        while(true){
+            // TODO: Ask the user
+            // TODO: Do what they said
+            gameTick();
+            System.out.println(world.floorToString(0));
+        }
+    }
+    
+    static void gameTick(){
+        if(world == null)
+            throw new IllegalStateException("This method should not be called "
+                    + "when no world is loaded.");
         
-        TreeMap<Location, Room> map = new TreeMap<>();
-        map.put(new Location(0, 0, 0), new Room());
-        map.put(new Location(1, 1, 0), new Room());
-        map.put(new Location(2, 2, 0), new Room());
-        map.put(new Location(0, 1, 0), new Room());
-        //map.put(new Location(1, 0, 0), new Room());
-        World w = new World(map);
-        
-        map.keySet().forEach(System.out::println);
-        
-        System.out.println("---");
-        System.out.println(w.floorToString(0));
-        System.out.println("---");
+        if(world.getGameState() == EXPLORE){
+            world.nextTick();
+        }else{
+            
+        }
     }
     
     public Action action() {
