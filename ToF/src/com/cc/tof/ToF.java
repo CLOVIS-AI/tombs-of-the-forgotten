@@ -8,6 +8,8 @@ package com.cc.tof;
 import com.cc.world.Location;
 import com.cc.world.Room;
 import com.cc.world.World;
+import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.TreeMap;
 
 /**
@@ -35,6 +37,20 @@ public class ToF {
         System.out.println("---");
         System.out.println(w.floorToString(0));
         System.out.println("---");
+    }
+    
+    public Action action() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter your command : ");
+        String command = scanner.next();
+        String[] s = command.split(" ");
+        String commands= s[0];
+        String[] parameters = new String[s.length - 1];
+        for (int i = 0 ; i > s.length - 1 ; i++ ) {
+            parameters[i] = s[i+1];
+        }
+        return new Action(commands, parameters);
+        
     }
     
 }
