@@ -72,15 +72,35 @@ public class ToFTest {
     }
 
     /**
-     * Test of action method, of class ToF.
+     * Test of getInput method, of class ToF.
      */
     @Test
-    public void testAction() {
-        System.out.println("move north");
-        ToF instance = new ToF();
-        Action expResult = new Action("move", new String[] {"north"});
-        Action result = instance.action();
+    public void testGetInput() {
+        System.out.println("getInput");
+        String expResult = "";
+        String result = ToF.getInput();
         assertEquals(expResult, result);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+
+    /**
+     * Test of commands method, of class ToF.
+     */
+    @Test
+    public void testCommands() {
+        System.out.println("Testing commands...");
+        Action test1 = new Action("move", new String[] {"north"});
+        Action result1 = ToF.commands("move north");
+        assertEquals(test1, result1);
+        
+        Action test2 = new Action("rest", new String[] {""});
+        Action result2 = ToF.commands("rest");
+        assertEquals(test2, result2);
+
+        Action test3 = new Action("drop", new String[] {"2", "sword"});
+        Action result3 = ToF.commands("drop 2 swords");
+        assertEquals(test3, result3);
     }
     
 }
