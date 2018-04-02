@@ -46,14 +46,18 @@ public class ToF {
         }
     }
     
-    public Action action() {
+    public static String getInput() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter your command : ");
-        String command = scanner.next();
-        String[] s = command.split(" ");
-        String commands= s[0];
+        String input = scanner.next();
+        return input;
+    }
+    
+    public static Action commands(String input){
+        String[] s = input.split(" ");
+        String commands = s[0];
         String[] parameters = new String[s.length - 1];
-        for (int i = 0 ; i > s.length - 1 ; i++ ) {
+        for (int i = 0 ; i < s.length - 1 ; i++ ) {
             parameters[i] = s[i+1];
         }
         return new Action(commands, parameters);
