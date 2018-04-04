@@ -38,53 +38,6 @@ public class ToFTest {
     }
 
     /**
-     * Test of main method, of class ToF.
-     */
-    @Test
-    public void testMain() {
-        System.out.println("main");
-        String[] args = null;
-        ToF.main(args);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of gameLoop method, of class ToF.
-     */
-    @Test
-    public void testGameLoop() {
-        System.out.println("gameLoop");
-        ToF.gameLoop();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of gameTick method, of class ToF.
-     */
-    @Test
-    public void testGameTick() {
-        System.out.println("gameTick");
-        ToF.gameTick();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getInput method, of class ToF.
-     */
-    @Test
-    public void testGetInput() {
-        System.out.println("getInput");
-        String expResult = "";
-        String result = ToF.getInput();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of commands method, of class ToF.
      */
     @Test
