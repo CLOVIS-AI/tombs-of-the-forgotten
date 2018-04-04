@@ -53,7 +53,7 @@ public class ToFTest {
         assertEquals(test2, result2);
 
         Action test3 = new Action("drop", new String[] {"2", "sword"});
-        Action result3 = ToF.commands("drop 2 swords");
+        Action result3 = ToF.commands("drop 2 sword");
         assertEquals(test3, result3);
     }
     
