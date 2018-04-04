@@ -55,13 +55,13 @@ public class ToF {
     
     public static Action commands(String input){
         String[] s = input.split(" ");
-        String commands = s[0];
         String[] parameters = new String[s.length - 1];
+        
         for (int i = 0 ; i < s.length - 1 ; i++ ) {
             parameters[i] = s[i+1];
         }
-        return new Action(commands, parameters);
         
+        return new Action(s[0], parameters);
     }
     
 }
