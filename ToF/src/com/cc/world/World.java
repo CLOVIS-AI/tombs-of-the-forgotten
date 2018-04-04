@@ -231,4 +231,12 @@ public class World implements Timable {
         
         return sb.toString();
     }
+    
+    /**
+     * Moves the player in a direction.
+     * @param direction the direction
+     */
+    public final void movePlayer(Direction direction){
+        player.move(direction);
+    }
 }
