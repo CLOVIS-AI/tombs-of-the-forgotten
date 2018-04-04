@@ -5,6 +5,7 @@
  */
 package com.cc.tof;
 
+import java.util.Objects;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -47,7 +48,7 @@ public class ToFTest {
         Action result1 = ToF.commands("move north");
         assertEquals(test1, result1);
         
-        Action test2 = new Action("rest", new String[] {""});
+        Action test2 = new Action("rest", new String[] {});
         Action result2 = ToF.commands("rest");
         assertEquals(test2, result2);
 
