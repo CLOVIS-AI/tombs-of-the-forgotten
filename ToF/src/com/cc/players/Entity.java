@@ -65,6 +65,14 @@ public abstract class Entity implements Timable {
     public final void move(Direction d){
         location = location.add(d);
     }
+    
+    /**
+     * The location of this entity.
+     * @return The location of this entity.
+     */
+    public final Location getLocation(){
+        return location;
+    }
 
     @Override
     public void nextTick() {
