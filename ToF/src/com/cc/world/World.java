@@ -160,6 +160,30 @@ public class World implements Timable {
     }
     
     /**
+     * Gets the entities according to a predicate. The player is ignored.
+     * @param p how to choose the entities
+     * @return The selected entities.
+     */
+    public List<Entity> selectEntities(Predicate<Entity> p){
+        return entities
+                .stream()
+                .filter(p)
+                .collect(Collectors.toList());
+    }
+    
+    /**
+     * Gets the entities that are located in a specific floor.
+     * @param floor the floor you want
+     * @return The entities on that floor.
+     */
+    public List<Entity> selectEntitiesByFloor(int floor){
+        return entities
+                .stream()
+                .filter(e -> e.getLocation().getZ() == floor)
+                .collect(Collectors.toList());
+    }
+    
+    /**
      * Get the map of a specific floor.
      * @param floor The floor you want [0..]
      * @return A Map of every room and its location.
