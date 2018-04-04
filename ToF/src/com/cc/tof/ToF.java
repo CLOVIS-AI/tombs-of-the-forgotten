@@ -27,7 +27,7 @@ public class ToF {
     
     static void gameLoop(){
         while(true){
-            Action input = commands(getInput());
+            Action input = analyseInput(getInput());
             // TODO: Do what they said
             gameTick();
             System.out.println(world.floorToString(0));
@@ -46,6 +46,10 @@ public class ToF {
         }
     }
     
+    /**
+     * Prompts the user for input.
+     * @return The input
+     */
     public static String getInput() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter your command : ");
@@ -53,7 +57,12 @@ public class ToF {
         return input;
     }
     
-    public static Action commands(String input){
+    /**
+     * Parses the input to get the different parts.
+     * @param input the input
+     * @return An action object
+     */
+    public static Action analyseInput(String input){
         String[] s = input.split(" ");
         String[] parameters = new String[s.length - 1];
         

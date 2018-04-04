@@ -45,15 +45,15 @@ public class ToFTest {
     public void testCommands() {
         System.out.println("Testing commands...");
         Action test1 = new Action("move", new String[] {"north"});
-        Action result1 = ToF.commands("move north");
+        Action result1 = ToF.analyseInput("move north");
         assertEquals(test1, result1);
         
         Action test2 = new Action("rest", new String[] {});
-        Action result2 = ToF.commands("rest");
+        Action result2 = ToF.analyseInput("rest");
         assertEquals(test2, result2);
 
         Action test3 = new Action("drop", new String[] {"2", "sword"});
-        Action result3 = ToF.commands("drop 2 sword");
+        Action result3 = ToF.analyseInput("drop 2 sword");
         assertEquals(test3, result3);
     }
     
