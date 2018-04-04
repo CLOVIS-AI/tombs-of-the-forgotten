@@ -59,4 +59,15 @@ public class Action {
         return true;
     }
     
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(commands);
+        for(String s : parameters){
+            sb.append(" ");
+            sb.append(s);
+        }
+        return sb.toString();
+    }
+    
 }
