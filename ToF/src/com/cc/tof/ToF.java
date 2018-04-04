@@ -27,7 +27,7 @@ public class ToF {
     
     static void gameLoop(){
         while(true){
-            // TODO: Ask the user
+            Action input = commands(getInput());
             // TODO: Do what they said
             gameTick();
             System.out.println(world.floorToString(0));
