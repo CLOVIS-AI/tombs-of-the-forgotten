@@ -128,4 +128,16 @@ The player has several attributes that a regular Entity doesn't have:
  - Different AIs
  - Different enemy types (kamikazes...)
 
+## 7 Use-Case scenario
 
+Plain-english scenario of the game:
+
+ - The user starts the game
+ - In the general menu, the user chooses to load a save file
+ - The user is prompted to choose the file
+ - The file is loaded and the story is displayed in the state it was left in
+ - The user changes room (dir. North)
+ - The user chooses to use an item
+ - The item is used
+ - The user saves the game
+ - The user exits the game
