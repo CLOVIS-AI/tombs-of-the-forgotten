@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="13.3">
+  <zoom_level>8</zoom_level>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>592</x>
+      <y>552</y>
+      <w>104</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>com.cc.world</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>320</x>
+      <y>112</y>
+      <w>288</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>Room
+--
+- description : String
+- hasBeenLooted : boolean
+--
++ getItems() : ItemContainer
++ getNotes() : List&lt;Note&gt;
++ canLoot() : boolean
++ loot() : ItemContainer
++ getReachableRooms(int distance) : List&lt;Room&gt;
++ getPathTo(Room) : Path
++ getPathTo(Room, int) : Path</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>256</x>
+      <y>56</y>
+      <w>168</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=-[indexed by Direction]
+m1=0..*
+m2=0..*
+neighbors</panel_attributes>
+    <additional_attributes>80.0;80.0;10.0;80.0;10.0;10.0;130.0;10.0;130.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>160</x>
+      <y>152</y>
+      <w>88</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>ItemContainer</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>160</x>
+      <y>128</y>
+      <w>104</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>com.cc.items</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>56</x>
+      <y>200</y>
+      <w>192</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>Note
+--
+- id : int &lt;&lt;id&gt;&gt;
+- author : Optional&lt;String&gt;
+- text : String
+--
++ getAuthor() : Optional&lt;String&gt;
++ getDescription() : String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>240</x>
+      <y>144</y>
+      <w>96</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m2=0..1
+&lt; items</panel_attributes>
+    <additional_attributes>100.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>240</x>
+      <y>232</y>
+      <w>96</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m2=0..2
+&lt; notes</panel_attributes>
+    <additional_attributes>100.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>456</x>
+      <y>304</y>
+      <w>264</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>World
+--
+- gameState : GameState
+--
++ World(TreeMap&lt;Location, Room&gt;)
++ getReachableRooms(Predicate)
++ nextTick()
++ getPlayer() : Player
++ getEntities() : List&lt;Entity&gt;
++ getGameState() : GameState
++ getRooms() : List&lt;Room&gt;
++ getFloor(int) : TreeMap&lt;Location, Room&gt;
++ floorToString() : String
++ movePlayer(Direction)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>712</x>
+      <y>112</y>
+      <w>168</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>Path
+--
+--
++ getRooms() : List&lt;Room&gt;
++ getLength() : int
++ allowReverse() : boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>576</x>
+      <y>120</y>
+      <w>152</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;[&lt;&lt;ordered&gt;&gt;]
+m2=2..*
+&lt; steps
+</panel_attributes>
+    <additional_attributes>170.0;20.0;40.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>344</x>
+      <y>272</y>
+      <w>128</w>
+      <h>96</h>
+    </coordinates>
+    <panel_attributes>lt=-[sorted by Location]
+m2=*
+&lt; rooms
+</panel_attributes>
+    <additional_attributes>140.0;90.0;60.0;90.0;60.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>752</x>
+      <y>200</y>
+      <w>128</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>/Timable &lt;&lt;interface&gt;&gt;/
+--
+--
++ nextTick()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>712</x>
+      <y>232</y>
+      <w>120</w>
+      <h>128</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>130.0;10.0;130.0;140.0;10.0;140.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>800</x>
+      <y>400</y>
+      <w>80</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>Player</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>800</x>
+      <y>456</y>
+      <w>80</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>/Entity/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>792</x>
+      <y>432</y>
+      <w>104</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>com.cc.entities</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>712</x>
+      <y>392</y>
+      <w>104</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m2=1
+player &gt;</panel_attributes>
+    <additional_attributes>10.0;20.0;110.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>712</x>
+      <y>448</y>
+      <w>104</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m2=*
+entities &gt;</panel_attributes>
+    <additional_attributes>10.0;20.0;110.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>120</x>
+      <y>328</y>
+      <w>128</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>GameState &lt;&lt;enum&gt;&gt;
+--
++ FIGHT
++ EXPLORE</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>248</x>
+      <y>408</y>
+      <w>168</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>Location
+--
+X : int
+Y : int
+Z : int
+--
++ Location(int,int,int)
++ add(Location) : Location
++ add(Direction) : Location
++ getX() : int
++ getY() : int
++ getZ() : int
++ compareTo(Location l) : int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>32</x>
+      <y>408</y>
+      <w>168</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>/Comparable/
+--
+--
++ compareTo(Object o) : int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>88</x>
+      <y>392</y>
+      <w>104</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>java.lang</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>192</x>
+      <y>416</y>
+      <w>72</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>120</x>
+      <y>464</y>
+      <w>80</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>Direction &lt;&lt;enum&gt;&gt;
+--
++ NORTH
++ SOUTH
++ EAST
++ WEST
++ UP
++ DOWN</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

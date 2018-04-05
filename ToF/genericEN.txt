@@ -1,0 +1,4 @@
+weight Weight
+health Health
+strength Strength
+mana ManaX

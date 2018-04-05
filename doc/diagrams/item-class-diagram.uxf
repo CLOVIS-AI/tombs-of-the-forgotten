@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="13.3">
+  <zoom_level>8</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>344</x>
+      <y>512</y>
+      <w>128</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>Weapon
+--
+- damage : int
+--
++ use(Player)
++ getDamage() : int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>440</x>
+      <y>352</y>
+      <w>128</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>/Item &lt;&lt;interface&gt;&gt;/
+--
+--
+/+ use(Player)/
+/+ getWeight()/
+/+ getDescription()/
+/+ getRarity(): Rarity/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>128</x>
+      <y>504</y>
+      <w>128</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>Rarity &lt;&lt;enum&gt;&gt;
+--
+_+ COMMON_
+_+ RARE_
+_+ EPIC_
+_+ LENGENDARY_</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>400</x>
+      <y>424</y>
+      <w>56</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>50.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>128</x>
+      <y>352</y>
+      <w>192</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>Armor
+--
+- damageReduction : int
+--
++ use(Player)
++ getDamageReduction() : int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>312</x>
+      <y>392</y>
+      <w>144</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>160.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>520</x>
+      <y>512</y>
+      <w>120</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>MagicalWeapon
+--
+- manaCost : int
+--
++ use(Player)
++ getManaCost()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>560</x>
+      <y>424</y>
+      <w>32</w>
+      <h>104</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;20.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>208</x>
+      <y>216</y>
+      <w>160</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>/UniqueUsage &lt;&lt;abstract&gt;&gt;/
+--
+- alreadyUsed : boolean
+--
++ use(Player) &lt;&lt;final&gt;&gt;
+/+ do(Player) &lt;&lt;abstract&gt;&gt;/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>360</x>
+      <y>280</y>
+      <w>96</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;100.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>176</x>
+      <y>80</y>
+      <w>240</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>UniqueLambda
+--
+- action : Consumer&lt;Player&gt;
+--
++ UniqueLambda(Consumer&lt;Player&gt;)
++ do(Player)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>288</x>
+      <y>144</y>
+      <w>24</w>
+      <h>88</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>632</x>
+      <y>200</y>
+      <w>104</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m2=1
+&lt; inventory</panel_attributes>
+    <additional_attributes>110.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>720</x>
+      <y>200</y>
+      <w>120</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>/Player &lt;&lt;abstract&gt;&gt;/</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>728</x>
+      <y>224</y>
+      <w>104</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>com.cc.players</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>440</x>
+      <y>152</y>
+      <w>200</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>ItemContainer
+--
+--
++ getItems() : List&lt;Item&gt;
++ addItem(Item)
++ transferTo(Item, ItemContainer)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>496</x>
+      <y>216</y>
+      <w>64</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=* items</panel_attributes>
+    <additional_attributes>10.0;170.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>648</x>
+      <y>352</y>
+      <w>176</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>com.cc.items</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>632</x>
+      <y>144</y>
+      <w>104</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m2=0..1
+&lt; items</panel_attributes>
+    <additional_attributes>110.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>720</x>
+      <y>144</y>
+      <w>120</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>Room</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>736</x>
+      <y>120</y>
+      <w>104</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>com.cc.world</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

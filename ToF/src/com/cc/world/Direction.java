@@ -1,0 +1,57 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.cc.world;
+
+/**
+ * A direction.
+ * @author Ivan Canet
+ */
+public enum Direction {
+    
+    /** The North. */
+    NORTH(-1, 0, 0),
+    
+    /** The South. */
+    SOUTH(1, 0, 0),
+    
+    /** The East. */
+    EAST(0, 1, 0),
+    
+    /** The West. */
+    WEST(0, -1, 0),
+    
+    /** The upper floor. */
+    UP(0, 0, 1),
+    
+    /** The lower floor. */
+    DOWN(0, 0, -1);
+    
+    private final Location location;
+    
+    Direction(int x, int y, int z){
+        location = new Location(x, y, z);
+    }
+
+    /**
+     * This direction, as a Location; that is, the distance that this direction
+     * corresponds to.
+     * @return The direction of this object.
+     */
+    public Location getDirection() {
+        return location;
+    }
+    
+    /**
+     * The point where you will end up if you travel in this direction from a
+     * {@code departure} point.
+     * <p>This is the same as {@code departure.add(this.getDirection())}.
+     * @param departure Where you depart from
+     * @return Where you will end up.
+     */
+    public Location getArrival(Location departure) {
+        return departure.add(location);
+    }
+}
