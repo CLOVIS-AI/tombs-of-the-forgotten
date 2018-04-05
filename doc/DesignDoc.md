@@ -127,6 +127,7 @@ The player has several attributes that a regular Entity doesn't have:
  - Representation of the map in 2D
  - Different AIs
  - Different enemy types (kamikazes...)
+ - Loading JSON through reflexivity (see File/Database)
 
 ## 7 Use-Case scenario
 
@@ -141,3 +142,11 @@ Plain-english scenario of the game:
  - The item is used
  - The user saves the game
  - The user exits the game
+
+# 2 File/Database of the System
+
+The save files will be stored using the JSON format.
+
+In a first version, the objects will be loaded using a traditional Builder object, and saved with the same object.
+
+In a second version, we'd like to be able to save/load the objects using annotations; the loader would see what the class 'wants' and assign it. This is an optional feature, as we do not know if we will be able to do it.
