@@ -17,23 +17,23 @@ A room is represented by:
 
 Let's detail all of these. (Note: the room does NOT know its own position in the World, because it's unneeded).
 
-### Description
+##### Description
 
 The room's description is a String that is printed to the GUI when the user walks into the room. It can not change, and must be internationalized (thanks to the Translator platform).
 
-### Searching a Room
+##### Searching a Room
 
 A player can use one of its skills to search a Room. A room can only be looted once, which means that the Items do not need to be stored in the Room object (they are generated on the fly when the user searches the room); therefore the Room only stores whether it was already looted or not.
 
-### Items in containers
+##### Items in containers
 
 A room can contain a container (read, a chest) that has different items in it. Multiple types of containers exists but they are only differentiated by their description and their capacity.
 
-### Notes
+##### Notes
 
 Notes are story elements, they only consist of a description and, optionally, an author. The user can find them in rooms, but cannot take them with him. Notes are generated from a list of notes loaded from a file (this allows to easily change the story elements without needing to recompile).
 
-### The neighbors
+##### The neighbors
 
 The neighbors of a Room are stored as a Map of Direction and Room, that is, any given Room associates directions where it has a neighbor with that neighbor. This way, you can easily:
 
@@ -41,6 +41,17 @@ The neighbors of a Room are stored as a Map of Direction and Room, that is, any 
  - Get the neighboring Room in that direction (thanks to `.get`)
 
 However, this is not the only way to access a Room, as they can be found through the World object, that knows the location of every room.
+
+## 2 Input
+
+The user will input commands through button pressing.
+
+The GUI is split into 4 parts;
+
+ - The Player (left side), contains information about the player (health points...)
+ - The Story (top), contains the data from the game (the enemy's stats, the description of the room...)
+ - The Actions (bottom center), contains the buttons to interact with the game
+ - The Map (bottom right), contains a 2D-representation of the floor the player is in. In our case, the Map representation is very important to the gameplay, as it is the only way the player can know if enemies are awaiting him. In a first time, we will implement the map in ASCII-art (alike what the game A Dark Room did), and, if possible, we will change it to a Map drawn with squares and circles at the of the project.
 
 ## 3
 
