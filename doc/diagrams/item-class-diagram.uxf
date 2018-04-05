@@ -3,8 +3,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>392</x>
-      <y>496</y>
+      <x>344</x>
+      <y>512</y>
       <w>128</w>
       <h>72</h>
     </coordinates>
@@ -19,8 +19,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>480</x>
-      <y>336</y>
+      <x>440</x>
+      <y>352</y>
       <w>128</w>
       <h>80</h>
     </coordinates>
@@ -36,8 +36,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>176</x>
-      <y>488</y>
+      <x>128</x>
+      <y>504</y>
       <w>128</w>
       <h>80</h>
     </coordinates>
@@ -52,19 +52,19 @@ _+ LENGENDARY_</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>448</x>
-      <y>408</y>
-      <w>48</w>
+      <x>400</x>
+      <y>424</y>
+      <w>56</w>
       <h>104</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>40.0;10.0;10.0;110.0</additional_attributes>
+    <additional_attributes>50.0;10.0;10.0;110.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>176</x>
-      <y>336</y>
+      <x>128</x>
+      <y>352</y>
       <w>192</w>
       <h>72</h>
     </coordinates>
@@ -79,19 +79,19 @@ _+ LENGENDARY_</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>360</x>
-      <y>376</y>
-      <w>136</w>
+      <x>312</x>
+      <y>392</y>
+      <w>144</w>
       <h>24</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>150.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>160.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>568</x>
-      <y>496</y>
+      <x>520</x>
+      <y>512</y>
       <w>120</w>
       <h>72</h>
     </coordinates>
@@ -106,19 +106,19 @@ _+ LENGENDARY_</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>600</x>
-      <y>408</y>
-      <w>40</w>
+      <x>560</x>
+      <y>424</y>
+      <w>32</w>
       <h>104</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>10.0;10.0;30.0;110.0</additional_attributes>
+    <additional_attributes>10.0;10.0;20.0;110.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>256</x>
-      <y>200</y>
+      <x>208</x>
+      <y>216</y>
       <w>160</w>
       <h>72</h>
     </coordinates>
@@ -133,19 +133,19 @@ _+ LENGENDARY_</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>408</x>
-      <y>264</y>
-      <w>88</w>
+      <x>360</x>
+      <y>280</y>
+      <w>96</w>
       <h>88</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>10.0;10.0;90.0;90.0</additional_attributes>
+    <additional_attributes>10.0;10.0;100.0;90.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>224</x>
-      <y>64</y>
+      <x>176</x>
+      <y>80</y>
       <w>240</w>
       <h>72</h>
     </coordinates>
@@ -160,8 +160,8 @@ _+ LENGENDARY_</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>336</x>
-      <y>128</y>
+      <x>288</x>
+      <y>144</y>
       <w>24</w>
       <h>88</h>
     </coordinates>
@@ -171,34 +171,110 @@ _+ LENGENDARY_</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>600</x>
-      <y>376</y>
-      <w>64</w>
-      <h>24</h>
+      <x>632</x>
+      <y>200</y>
+      <w>104</w>
+      <h>40</h>
     </coordinates>
-    <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>60.0;10.0;10.0;10.0</additional_attributes>
+    <panel_attributes>lt=-&gt;
+m2=1
+&lt; inventory</panel_attributes>
+    <additional_attributes>110.0;20.0;10.0;20.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>648</x>
-      <y>368</y>
+      <x>720</x>
+      <y>200</y>
       <w>120</w>
       <h>24</h>
     </coordinates>
-    <panel_attributes>/Entity &lt;&lt;interface&gt;&gt;/</panel_attributes>
+    <panel_attributes>/Player &lt;&lt;abstract&gt;&gt;/</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Text</id>
     <coordinates>
-      <x>552</x>
+      <x>728</x>
+      <y>224</y>
+      <w>104</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>com.cc.players</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>440</x>
+      <y>152</y>
+      <w>200</w>
+      <h>72</h>
+    </coordinates>
+    <panel_attributes>ItemContainer
+--
+--
++ getItems() : List&lt;Item&gt;
++ addItem(Item)
++ transferTo(Item, ItemContainer)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>496</x>
       <y>216</y>
+      <w>64</w>
+      <h>152</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=* items</panel_attributes>
+    <additional_attributes>10.0;170.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>648</x>
+      <y>352</y>
       <w>176</w>
       <h>40</h>
     </coordinates>
     <panel_attributes>com.cc.items</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>632</x>
+      <y>144</y>
+      <w>104</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m2=0..1
+&lt; items</panel_attributes>
+    <additional_attributes>110.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>720</x>
+      <y>144</y>
+      <w>120</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>Room</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>736</x>
+      <y>120</y>
+      <w>104</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>com.cc.world</panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>
