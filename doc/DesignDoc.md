@@ -121,3 +121,11 @@ The player has several attributes that a regular Entity doesn't have:
  - The search luck: is improved overtime during playing
  - The enemy: last targetted enemy (none if none was targetted or if it was defeated)
  - The weight he can carry (used to choose whether the player can take a new Item in their inventory)
+
+## 6 Optional Features
+
+ - Representation of the map in 2D
+ - Different AIs
+ - Different enemy types (kamikazes...)
+
+
