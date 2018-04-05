@@ -85,4 +85,18 @@ Several commands are necessary to play the game. They are implemented into diffe
 - USE_ITEM : Use an item. May be done during a fight.
 	> USE_PARCHMENT : One parchment = One spell. It's a one-used only item. It can be 	used while fighting to deal damage to the ennemies.
 
+## 4 Setting
+
+The game is set in a medieval-like fantasy-world. Because there are no graphics, however, this will only be noticeable through the description of rooms, items, and through the story notes - as with the different item types.
+
+There are three item types: Physicals, Magicals, and Unique Use.
+
+Physicals represent the "normal" objects - armor, weapons... They are separated into multiple types:
+ - Armors are used to protect yourself from your enemies
+ - Weapons are used to attack enemies using your stamina: the stronger you are, the more damage you inflict upon your enemies - and vice-versa, the weaker you are, the less damage you inflict.
+
+Magical items are mainly weapons: they are used to attack your enemies by consuming mana (mana increases overtime). Unlike physical items, they do not alter your damage based on the quantity of mana left (nor your stamina, for that matter). This makes magical items the counterpart of physical items, they each have their pros and cons, so you should probably cary both kind with you.
+
+Unique Use items are similar as Physical and Magical weapons, because they can consume mana or reduce your stamina - what makes them special is that they cannot be used twice (that is, they are cleared from your inventory on usage). They can go from spells (inflict damage on your opponent) to potions (regenerate your health points, improve your stamina), explosives... In the code though, they only differ by their description and their effect.
+
 
