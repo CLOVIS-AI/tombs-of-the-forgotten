@@ -128,6 +128,8 @@ The player has several attributes that a regular Entity doesn't have:
  - Different AIs
  - Different enemy types (kamikazes...)
  - Loading JSON through reflexivity (see File/Database)
+ - AIs can cooperate (one AI 'drives' multiple entities)
+ - Allow AIs to join a fight (1v* fights)
 
 ## 7 Use-Case scenario
 
@@ -150,3 +152,44 @@ The save files will be stored using the JSON format.
 In a first version, the objects will be loaded using a traditional Builder object, and saved with the same object.
 
 In a second version, we'd like to be able to save/load the objects using annotations; the loader would see what the class 'wants' and assign it. This is an optional feature, as we do not know if we will be able to do it.
+
+# 3 Events
+
+## External events
+
+Let's order the external events by the context in which they can be sent.
+
+### Exploration
+
+ - ARR_Move(): change room
+ - ARR_Rest(): Accelerates the game speed (the player rests to refill their stamina bar, however this can lead to enemies breaking in)
+ - ARR_StopRest(): (only when resting) Stops resting, resets the game speed
+ - ARR_Search(): (only if the room has not been searched) The user searches the room he's in to find items
+ - ARR_OpenChest(): (only if chest exists) The user opens the chest of the room
+
+### Fighting
+
+Fighting mode is automatically started when the player is in the same room as any other Entity. It can either end with ARR_Flee() or with the death of either the player or the enemy. On the enemy's death, the player's inventory is openned so the player can take the loot.
+
+ - ARR_Flee(): Similar to ARR\_Move(), but consumes more stamina and can fail. On success, stops the fighting mode
+ - ARR_Attack(): Opens the inventory and prompts for an item, then attacks using that item
+
+### In inventory
+
+The player can always open their inventory.
+
+ - ARR_CloseInventory()
+ - ARR_ThrowItem(): throws an item
+ - ARR_TakeItem(): if comparing inventory with a container, takes an item from the container and puts it into the player's inventory
+ - ARR_SelectItem(): selects an item and closes the inventory
+
+## Time events
+
+Even though there are actions that happen "overtime" (like regeneration...), there are no time events: whenever the player does an action (note that I said action and not interaction), every object is notified that time has passed; the only exception being "restmode", in which the player doesn't act anymore. In RestMode, there exists:
+
+ - TIME_NextTick(): Updates every objects (entities move, stamina bar replenishes...), the player cannot do anything except ARR\_StopRest()
+
+## Result events
+
+ - OUT_Refresh(): updates the screen
+ - OUT_SelectInInventory(): allows the player to act on its inventory
