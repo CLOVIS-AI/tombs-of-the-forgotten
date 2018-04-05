@@ -99,4 +99,25 @@ Magical items are mainly weapons: they are used to attack your enemies by consum
 
 Unique Use items are similar as Physical and Magical weapons, because they can consume mana or reduce your stamina - what makes them special is that they cannot be used twice (that is, they are cleared from your inventory on usage). They can go from spells (inflict damage on your opponent) to potions (regenerate your health points, improve your stamina), explosives... In the code though, they only differ by their description and their effect.
 
+## 5 Character Attributes
 
+### Entity attributes
+
+The characters (called "entities", see glossary) have several attributes:
+
+ - Health Points (HP): Can be regenerated using potions (for example). When HP reaches 0, the entity dies (read, is removed from the World)
+ - Stamina: Decreases when the entity moves, fights... Can be replenished through sleeping
+ - Mana: The mana the entity is able to use to power magical items
+
+An entity also has:
+
+ - A position (Location object)
+
+### Player attributes
+
+The player has several attributes that a regular Entity doesn't have:
+
+ - An inventory (a container of items, as seen in a Room)
+ - The search luck: is improved overtime during playing
+ - The enemy: last targetted enemy (none if none was targetted or if it was defeated)
+ - The weight he can carry (used to choose whether the player can take a new Item in their inventory)
