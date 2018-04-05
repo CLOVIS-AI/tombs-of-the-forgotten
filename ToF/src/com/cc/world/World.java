@@ -33,8 +33,9 @@ public class World implements Timable {
     
     // ************************************************* C O N S T R U C T O R S
     
-    public World(TreeMap<Location, Room> map){
+    public World(TreeMap<Location, Room> map, Player player){
         rooms = map;
+        this.player = player;
     }
     
     /**
@@ -224,12 +225,21 @@ public class World implements Timable {
                 y++;
             }
             
-            // Draw room
-            sb.append(e.getValue().getChar());
+            if(player.getLocation().equals(l)){
+                // Draw the player
+                sb.append("@");
+            }else{
+                // Draw room
+                sb.append(e.getValue().getChar());
+            }
             y++;
         }
         
         return sb.toString();
+    }
+    
+    public final boolean canMove(Location location, Direction direction){
+        return rooms.containsKey(location.add(direction));
     }
     
     /**
@@ -237,6 +247,9 @@ public class World implements Timable {
      * @param direction the direction
      */
     public final void movePlayer(Direction direction){
-        player.move(direction);
+        if(canMove(player.getLocation(), direction))
+            player.move(direction);
+        else
+            System.out.println("Cannot move in this direction.");
     }
 }
