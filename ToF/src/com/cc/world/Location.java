@@ -143,8 +143,8 @@ public class Location implements Comparable<Location> {
     @Override
     public int compareTo(Location l) {
         return Z != l.Z ? Z - l.Z :
-               Y != l.Y ? Y - l.Y :
-                          X - l.X ;
+               X != l.X ? X - l.X :
+                          Y - l.Y ;
     }
     
     @Override
