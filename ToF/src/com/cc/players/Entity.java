@@ -23,7 +23,7 @@ public abstract class Entity implements Timable {
     private Bar health;
     
     /** Strength bar. Used for physical attacks. */
-    private Bar strength;
+    private Bar stamina;
     
     /** Mana bar. Used for magical attacks. */
     private Bar mana;
@@ -38,7 +38,7 @@ public abstract class Entity implements Timable {
     
     public Entity(int maxHealth, int maxStrength, int maxMana, Location l){
         health = new Bar(LINES.get("health"), 0, maxHealth, maxHealth);
-        strength = new Bar(LINES.get("strength"), 0, maxStrength, maxStrength);
+        stamina = new Bar(LINES.get("stamina"), 0, maxStrength, maxStrength);
         mana = new Bar(LINES.get("mana"), 0, maxMana, 0);
         location = l;
         opponent = Optional.empty();
@@ -81,7 +81,7 @@ public abstract class Entity implements Timable {
     @Override
     public void nextTick() {
         health.nextTick();
-        strength.nextTick();
+        stamina.nextTick();
         mana.nextTick();
     }
     
