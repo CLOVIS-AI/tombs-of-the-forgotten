@@ -55,7 +55,7 @@ public final class Bar {
     
     /**
      * Increments the value of this bar by a set number.
-     * <p>Note that this is not the same as a bonus. See {@link #newBonus(int,int)}.
+     * <p>Note that this is not the same as a bonus. See {@link #addBonus(int,int)}.
      * @param value how much you'd like to increment to value of this bar
      * @param mode what should do this method if the maximum value is reached.
      * @throws IllegalArgumentException for negative values
@@ -80,7 +80,7 @@ public final class Bar {
     
     /**
      * Decrements the value of this bar by a set number.
-     * <p>Note that this is not the same as a bonus. See {@link #newBonus(int,int)}.
+     * <p>Note that this is not the same as a bonus. See {@link #addBonus(int,int)}.
      * @param value how much you'd like to decrement to value of this bar
      * @param mode what should do this method if the minimum value is reached.
      * @throws IllegalArgumentException for negative values
@@ -214,8 +214,8 @@ public final class Bar {
     
     /**
      * Specifies what the behavior of methods such as 
-     * {@link #add(int, boolean) add } or 
-     * {@link #remove(int, boolean) remove } should be.
+     * {@link Bar#add(int, Behavior) add } or 
+     * {@link Bar#remove(int, Behavior) remove } should be.
      */
     public enum Behavior{
         /**
