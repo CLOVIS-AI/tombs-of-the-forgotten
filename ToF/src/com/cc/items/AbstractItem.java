@@ -22,6 +22,11 @@ public abstract class AbstractItem implements Item {
      * @param rarity the rarity of the item
      */
     public AbstractItem(int weight, String description, Rarity rarity) {
+        if(description == null)
+            throw new IllegalArgumentException("The description of an item cannot be null.");
+        if(weight <= 0)
+            throw new IllegalArgumentException("Weight cannot be negative or null.");
+        
         this.weight = weight;
         this.description = description;
         this.rarity = rarity;

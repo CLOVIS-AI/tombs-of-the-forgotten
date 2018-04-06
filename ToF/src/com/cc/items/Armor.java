@@ -24,6 +24,11 @@ public class Armor extends AbstractItem {
      */
     public Armor(int weight, String description, Rarity rarity, int damage) {
         super(weight, description, rarity);
+        
+        if(damage <= 0)
+            throw new IllegalArgumentException("Damage cannot be negative or "
+                    + "null: " + damage);
+        
         this.damage = damage;
     }
 

@@ -32,6 +32,14 @@ public class Weapon extends AbstractItem {
     public Weapon(int weight, String description, Rarity rarity, int damage,
             double effect, int staminaLevel) {
         super(weight, description, rarity);
+        
+        if(damage <= 0)
+            throw new IllegalArgumentException("Damage cannot be negative or "
+                    + "null: " + damage);
+        if(staminaLevel <= 0)
+            throw new IllegalArgumentException("Stamina level cannot be negative"
+                    + " or null: " + staminaLevel);
+        
         this.damage = damage;
         this.effect = effect;
         this.neededStamina = staminaLevel;
