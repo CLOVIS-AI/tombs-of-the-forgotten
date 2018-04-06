@@ -93,4 +93,20 @@ public abstract class Entity implements Timable {
         return opponent;
     }
     
+    /**
+     * The stamina level of the player.
+     * @return The stamina of the player.
+     */
+    public int getStamina(){
+        return stamina.getCurrent();
+    }
+    
+    /**
+     * Uses stamina.
+     * @param value how much stamina is lost
+     */
+    public void useStamina(int value){
+        stamina.remove(value, ACCEPT);
+    }
+    
 }
