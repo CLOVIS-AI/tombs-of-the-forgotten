@@ -11,6 +11,7 @@ import static com.cc.utils.Translator.LINES;
 import com.cc.world.Direction;
 import com.cc.world.Location;
 import com.cc.world.Timable;
+import java.util.Optional;
 
 /**
  * A class that represents an Entity.
@@ -29,6 +30,8 @@ public abstract class Entity implements Timable {
     
     private Location location;
     
+    private Optional<Entity> opponent;
+    
     public Entity(int maxHealth, int maxStrength, int maxMana){
         this(maxHealth, maxStrength, maxMana, new Location());
     }
@@ -38,6 +41,7 @@ public abstract class Entity implements Timable {
         strength = new Bar(LINES.get("strength"), 0, maxStrength, maxStrength);
         mana = new Bar(LINES.get("mana"), 0, maxMana, 0);
         location = l;
+        opponent = Optional.empty();
     }
     
     /**
@@ -79,6 +83,14 @@ public abstract class Entity implements Timable {
         health.nextTick();
         strength.nextTick();
         mana.nextTick();
+    }
+    
+    /**
+     * Gets the last opponent of this entity.
+     * @return The last opponent of this entity.
+     */
+    public Optional<Entity> getOpponent() {
+        return opponent;
     }
     
 }
