@@ -10,6 +10,8 @@ import com.cc.players.Entity;
 /**
  * UniqueUsage items cannot be used twice; as soon as they are used they will
  * reject any further call to their {@link #use(com.cc.players.Entity) } method.
+ * <p>Note for the devs: when implementing an item than can only be used once
+ * that has a very simple action, look at {@link UniqueLambda}.
  * @author Ivan Canet
  */
 public abstract class UniqueUsage extends AbstractItem {
