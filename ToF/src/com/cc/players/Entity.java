@@ -109,4 +109,20 @@ public abstract class Entity implements Timable {
         stamina.remove(value, ACCEPT);
     }
     
+    /**
+     * Gets the mana amount of the player.
+     * @return The mana of the player.
+     */
+    public int getMana(){
+        return mana.getCurrent();
+    }
+    
+    /**
+     * Uses mana.
+     * @param amount the amount to remove
+     */
+    public void useMana(int amount){
+        mana.remove(amount, ACCEPT);
+    }
+    
 }
