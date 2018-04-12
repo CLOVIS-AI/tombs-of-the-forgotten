@@ -11,6 +11,7 @@ import static com.cc.utils.Translator.LINES;
 import com.cc.world.Direction;
 import com.cc.world.Location;
 import com.cc.world.Timable;
+import com.cc.world.World;
 import java.util.Optional;
 
 /**
@@ -29,6 +30,7 @@ public abstract class Entity implements Timable {
     private Bar mana;
     
     private Location location;
+    private World world;
     
     private Optional<Entity> opponent;
     
@@ -42,6 +44,13 @@ public abstract class Entity implements Timable {
         mana = new Bar(LINES.get("mana"), 0, maxMana, 0);
         location = l;
         opponent = Optional.empty();
+    }
+    
+    public void setWorld(World w){
+        if(world != null)
+            throw new IllegalStateException("This method can only be called once.");
+        
+        world = w;
     }
     
     /**
