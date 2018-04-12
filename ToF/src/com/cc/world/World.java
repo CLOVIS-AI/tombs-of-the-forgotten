@@ -34,6 +34,8 @@ public class World implements Timable {
     // ************************************************* C O N S T R U C T O R S
     
     public World(TreeMap<Location, Room> map, Player player){
+        map.forEach((l, r) -> r.setWorld(this));
+        
         rooms = map;
         this.player = player;
     }
@@ -83,7 +85,7 @@ public class World implements Timable {
                         case '@':
                             player = new Player();
                         case '+':
-                            rooms.put(new Location(x, y, z), new Room());
+                            rooms.put(new Location(x, y, z), new Room().setWorld(this));
                             break;
                         default:
                     }
