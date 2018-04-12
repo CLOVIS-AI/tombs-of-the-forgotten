@@ -12,6 +12,8 @@ import com.cc.world.Direction;
 import com.cc.world.Location;
 import com.cc.world.Timable;
 import com.cc.world.World;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -132,6 +134,18 @@ public abstract class Entity implements Timable {
      */
     public void useMana(int amount){
         mana.remove(amount, ACCEPT);
+    }
+    
+    /**
+     * Returns all the bars of this entity.
+     * @return The bars of this entity.
+     */
+    public List<Bar> getBars(){
+        ArrayList<Bar> a = new ArrayList<>();
+        a.add(health);
+        a.add(mana);
+        a.add(stamina);
+        return a;
     }
     
 }

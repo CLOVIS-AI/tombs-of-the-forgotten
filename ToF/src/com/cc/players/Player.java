@@ -101,4 +101,11 @@ public class Player extends Entity {
         }
     }
     
+    @Override
+    public List<Bar> getBars(){
+        List<Bar> bars = super.getBars();
+        bars.add(weight);
+        return bars;
+    }
+    
 }
