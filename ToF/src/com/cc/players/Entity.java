@@ -11,6 +11,10 @@ import static com.cc.utils.Translator.LINES;
 import com.cc.world.Direction;
 import com.cc.world.Location;
 import com.cc.world.Timable;
+import com.cc.world.World;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * A class that represents an Entity.
@@ -22,12 +26,15 @@ public abstract class Entity implements Timable {
     private Bar health;
     
     /** Strength bar. Used for physical attacks. */
-    private Bar strength;
+    private Bar stamina;
     
     /** Mana bar. Used for magical attacks. */
     private Bar mana;
     
     private Location location;
+    private World world;
+    
+    private Optional<Entity> opponent;
     
     public Entity(int maxHealth, int maxStrength, int maxMana){
         this(maxHealth, maxStrength, maxMana, new Location());
@@ -35,9 +42,17 @@ public abstract class Entity implements Timable {
     
     public Entity(int maxHealth, int maxStrength, int maxMana, Location l){
         health = new Bar(LINES.get("health"), 0, maxHealth, maxHealth);
-        strength = new Bar(LINES.get("strength"), 0, maxStrength, maxStrength);
+        stamina = new Bar(LINES.get("stamina"), 0, maxStrength, maxStrength);
         mana = new Bar(LINES.get("mana"), 0, maxMana, 0);
         location = l;
+        opponent = Optional.empty();
+    }
+    
+    public void setWorld(World w){
+        if(world != null)
+            throw new IllegalStateException("This method can only be called once.");
+        
+        world = w;
     }
     
     /**
@@ -77,8 +92,60 @@ public abstract class Entity implements Timable {
     @Override
     public void nextTick() {
         health.nextTick();
-        strength.nextTick();
+        stamina.nextTick();
         mana.nextTick();
+    }
+    
+    /**
+     * Gets the last opponent of this entity.
+     * @return The last opponent of this entity.
+     */
+    public Optional<Entity> getOpponent() {
+        return opponent;
+    }
+    
+    /**
+     * The stamina level of the player.
+     * @return The stamina of the player.
+     */
+    public int getStamina(){
+        return stamina.getCurrent();
+    }
+    
+    /**
+     * Uses stamina.
+     * @param value how much stamina is lost
+     */
+    public void useStamina(int value){
+        stamina.remove(value, ACCEPT);
+    }
+    
+    /**
+     * Gets the mana amount of the player.
+     * @return The mana of the player.
+     */
+    public int getMana(){
+        return mana.getCurrent();
+    }
+    
+    /**
+     * Uses mana.
+     * @param amount the amount to remove
+     */
+    public void useMana(int amount){
+        mana.remove(amount, ACCEPT);
+    }
+    
+    /**
+     * Returns all the bars of this entity.
+     * @return The bars of this entity.
+     */
+    public List<Bar> getBars(){
+        ArrayList<Bar> a = new ArrayList<>();
+        a.add(health);
+        a.add(mana);
+        a.add(stamina);
+        return a;
     }
     
 }

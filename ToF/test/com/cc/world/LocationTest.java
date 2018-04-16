@@ -124,8 +124,6 @@ public class LocationTest {
         iii.put(new Location(1, 1, 0), 4);
         iii.put(new Location(2, 0, 0), 5);
         
-        iii.keySet().forEach(System.out::println);
-        
         List<Integer> ii = iii
                 .values()
                 .stream()

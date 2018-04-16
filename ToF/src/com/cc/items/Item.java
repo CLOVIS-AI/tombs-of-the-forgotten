@@ -5,11 +5,19 @@
  */
 package com.cc.items;
 
+import com.cc.players.Entity;
+
 /**
  * Represents a generic Item.
  * @author Ivan Canet
  */
 public interface Item {
+    
+    /**
+     * Notifies the Item that an entity is using it.
+     * @param entity the entity that uses the Item
+     */
+    public void use(Entity entity);
     
     /**
      * The weight of this Item, in grams.

@@ -17,6 +17,21 @@ public class Room {
     
     private String description;
     
+    private World world;
+    
+    /**
+     * Sets the world of this object. This method can only be called once.
+     * @param w the world of this object.
+     * @return This room itself, to allow method-chaining.
+     */
+    public Room setWorld(World w){
+        if(world != null)
+            throw new IllegalStateException("This method should only be called once.");
+        
+        world = w;
+        return this;
+    }
+    
     public char getChar(){
         return '+';
     }
