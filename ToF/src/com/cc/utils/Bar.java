@@ -6,7 +6,7 @@
 package com.cc.utils;
 
 import static com.cc.utils.Bar.Behavior.ACCEPT;
-import static java.lang.Integer.max;
+import static java.lang.Integer.min;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,17 +14,17 @@ import java.util.List;
  * Bars are used to represent information about the player (skills, health bar)... 
  * @author Ivan Canet
  */
-public final class Bar {
+public class Bar {
     
-    int minimum, maximum;
+    private int minimum, maximum;
     
-    int real;
+    private int real;
     
-    int bonusTotal;
+    private int bonusTotal;
     
-    List<Pair<Integer, Integer>> bonuses;
+    private List<Pair<Integer, Integer>> bonuses;
     
-    final String name;
+    private final String name;
 
     /**
      * Creates a Bar.
@@ -65,7 +65,7 @@ public final class Bar {
             throw new IllegalArgumentException("Negative increments are not "
                     + "allowed. See Bar.remove(int,int).");
         
-        if(real + value < maximum)
+        if(real + value <= maximum)
            real += value;
         else{
             if(mode == ACCEPT)
@@ -90,7 +90,7 @@ public final class Bar {
             throw new IllegalArgumentException("Negative decrements are not "
                     + "allowed. See Bar.add(int,int).");
         
-        if(real - value > minimum)
+        if(real - value >= minimum)
            real -= value;
         else{
             if(mode == ACCEPT)
@@ -179,7 +179,7 @@ public final class Bar {
      * @see #getReal() The value of this bar without the bonuses
      */
     public int getCurrent() {
-        return max(real + bonusTotal, maximum);
+        return min(real + bonusTotal, maximum);
     }
     
     /**
