@@ -134,6 +134,8 @@ public class Bar {
      */
     public void addBonus(int time, int value) {
         bonuses.add(new Pair<>(time, value));
+        
+        updateBonus();
     }
     
     final void updateBonus(){
