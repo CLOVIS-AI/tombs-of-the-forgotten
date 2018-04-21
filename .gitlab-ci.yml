@@ -1,0 +1,11 @@
+image: java:latest
+
+stages:
+  - build
+
+ant:
+  stage: build
+  script:
+    - cd ToF 
+    - ant
+
