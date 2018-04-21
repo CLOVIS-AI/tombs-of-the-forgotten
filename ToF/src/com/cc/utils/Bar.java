@@ -148,7 +148,7 @@ public class Bar {
      * object.
      */
     public void nextTick(){
-        bonuses.removeIf(b -> b.first-- <= 0);
+        bonuses.removeIf(b -> --b.first <= 0);
         
         updateBonus();
     }
