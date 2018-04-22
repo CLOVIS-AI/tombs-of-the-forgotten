@@ -232,6 +232,54 @@ public class Room {
     public boolean canClose(Room r, Entity e){
         return canClose(getDirectionTo(r), e);
     }
+    
+    /**
+     * Opens the link in a direction.
+     * @param d the direction
+     * @param e the entity that wants to open the link
+     * @return The state of the link after the call.
+     */
+    public boolean open(Direction d, Entity e){
+        if(!neighbors.containsKey(d))
+            throw new IllegalArgumentException("There is no neighbor in that "
+                    + "Direction: " + d);
+        
+        return neighbors.get(d).open(e);
+    }
+    
+    /**
+     * Opens the link to a room.
+     * @param r the room
+     * @param e the entity that wants to open the link
+     * @return The state of the link after the call.
+     */
+    public boolean open(Room r, Entity e){
+        return open(getDirectionTo(r), e);
+    }
+    
+    /**
+     * Closes the link in a direction.
+     * @param d the direction
+     * @param e the entity that wants to close the link
+     * @return The state of the link after the call.
+     */
+    public boolean close(Direction d, Entity e){
+        if(!neighbors.containsKey(d))
+            throw new IllegalArgumentException("There is no neighbor in that "
+                    + "Direction: " + d);
+        
+        return neighbors.get(d).close(e);
+    }
+    
+    /**
+     * Closes the link to a Room.
+     * @param r the room
+     * @param e the entity that wants to close the link
+     * @return The state of the link after the call.
+     */
+    public boolean close(Room r, Entity e){
+        return close(getDirectionTo(r), e);
+    }
 
     @Override
     public int hashCode() {
