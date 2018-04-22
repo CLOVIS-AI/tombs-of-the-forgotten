@@ -104,6 +104,10 @@ public class Chest {
             chest.remove(item);
     }
     
+    public void remove(Item item) {
+        throw new UnsupportedOperationException();
+    }
+    
     /**
      * Verify if a container contains a specific item.
      * @param container A container.
@@ -115,6 +119,10 @@ public class Chest {
         return container.containsValue(item);
     }
     
+    public boolean contains(Item item) {
+        throw new UnsupportedOperationException();
+    }
+    
     /**
      * Add an item into a container.
      * @param name The name of the item.
@@ -122,6 +130,10 @@ public class Chest {
      */
     public void addItem(String name, Item item) {
         container.put(name, item);
+    }
+    
+    public void add(Item i) {
+        throw new UnsupportedOperationException();
     }
     
 }
