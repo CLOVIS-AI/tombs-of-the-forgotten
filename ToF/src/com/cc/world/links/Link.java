@@ -6,12 +6,18 @@
 package com.cc.world.links;
 
 import com.cc.players.Entity;
+import com.cc.world.Direction;
+import static com.cc.world.Direction.fromCoordinates;
 import com.cc.world.Room;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The link between two Rooms (eg. a door).
+ * <p>Because two rooms cannot be linked together by two links, this object's
+ * {@link #equals(java.lang.Object) } method will return {@code true} for two 
+ * links that share the same two Rooms (no matter the order).
  * @author Ivan Canet
  */
 public abstract class Link {
@@ -43,7 +49,7 @@ public abstract class Link {
      * Returns the two rooms as an array.
      * @return An array of the two rooms linked by this object.
      */
-    public Room[] getRoomsArray(){
+    public final Room[] getRoomsArray(){
         return new Room[]{room1, room2};
     }
     
@@ -51,7 +57,7 @@ public abstract class Link {
      * Returns the two rooms linked by this object.
      * @return The two rooms linked by this object.
      */
-    public List<Room> getRooms(){
+    public final List<Room> getRooms(){
         return Arrays.asList(room1, room2);
     }
     
@@ -60,8 +66,18 @@ public abstract class Link {
      * @param r the room
      * @return {@code true} if the specified room is linked by this object.
      */
-    public boolean links(Room r){
+    public final boolean links(Room r){
         return room1.equals(r) || room2.equals(r);
+    }
+    
+    /**
+     * Links this Link to both of its Rooms.
+     */
+    public final void autoLink(){
+        Direction d = fromCoordinates(room2.getLocation().remove(room1.getLocation()));
+        
+        room1.addLink(d, this);
+        room2.addLink(d.getOpposite(), this);
     }
     
     /**
@@ -69,7 +85,7 @@ public abstract class Link {
      * @param r one of the rooms that this object links to
      * @return The other room linked by this object.
      */
-    public Room getOtherRoom(Room r){
+    public final Room getOtherRoom(Room r){
         if(r.equals(room1))
             return room2;
         else if(r.equals(room2))
@@ -83,7 +99,7 @@ public abstract class Link {
      * Is this link open?
      * @return {@code true} if it is open.
      */
-    public boolean isOpenned(){
+    public final boolean isOpenned(){
         return isOpen;
     }
     
@@ -114,5 +130,28 @@ public abstract class Link {
      * @return The state of the link after the call; {@code true} if it is open.
      */
     public abstract boolean close(Entity e);
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = hash + Objects.hashCode(this.room1) * 89;
+        hash = hash + Objects.hashCode(this.room2) * 89;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        
+        final Link other = (Link) obj;
+        if(room1.equals(other.room1) && room2.equals(other.room2))
+            return true;
+        if(room1.equals(other.room2) && room2.equals(other.room1))
+            return true;
+        return false;
+    }
+    
     
 }

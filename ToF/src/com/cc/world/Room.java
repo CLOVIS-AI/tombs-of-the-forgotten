@@ -7,6 +7,7 @@ package com.cc.world;
 
 import com.cc.world.links.Link;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * An ingame room.
@@ -18,6 +19,7 @@ public class Room {
     
     private String description;
     
+    private Location location;
     private World world;
     
     private boolean isGenerated = false;
@@ -34,6 +36,28 @@ public class Room {
         
         world = w;
         return this;
+    }
+    
+    /**
+     * Sets the location of this object. This method can only be called once, during
+     * the generation phase.
+     * @param l the location of this object.
+     * @return This room itself, to allow method-chaining.
+     */
+    public Room setLocation(Location l){
+        if(location != null && !isGenerated)
+            throw new IllegalStateException("This method should only be called once.");
+        
+        location = l;
+        return this;
+    }
+
+    /**
+     * The location of this Room.
+     * @return The location of this Room.
+     */
+    public Location getLocation() {
+        return location;
     }
     
     /**
@@ -70,11 +94,51 @@ public class Room {
         if(world == null)
             throw new IllegalStateException("The world is missing, call #setWorld.");
         
+        if(location == null)
+            throw new IllegalStateException("The location is missing, call #setLocation.");
+        
         isGenerated = true;
     }
     
     public char getChar(){
         return '+';
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.neighbors);
+        hash = 79 * hash + Objects.hashCode(this.description);
+        hash = 79 * hash + Objects.hashCode(this.location);
+        hash = 79 * hash + Objects.hashCode(this.world);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Room other = (Room) obj;
+        if (!Objects.equals(this.description, other.description)) {
+            return false;
+        }
+        if (!Objects.equals(this.neighbors, other.neighbors)) {
+            return false;
+        }
+        if (!Objects.equals(this.location, other.location)) {
+            return false;
+        }
+        if (!Objects.equals(this.world, other.world)) {
+            return false;
+        }
+        return true;
     }
     
 }
