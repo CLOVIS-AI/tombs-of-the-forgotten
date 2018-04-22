@@ -77,4 +77,15 @@ public enum Direction {
         throw new IllegalArgumentException("No direction corresponds to the "
                 + "provided location: " + l);
     }
+    
+    /**
+     * Gets the direction that corresponds to this location.
+     * @param x the X coordinate
+     * @param y the Y coordinate
+     * @param z the Z coordinate
+     * @return The direction that corresponds to a location.
+     */
+    public static Direction fromCoordinates(int x, int y, int z){
+        return fromCoordinates(new Location(x, y, z));
+    }
 }
