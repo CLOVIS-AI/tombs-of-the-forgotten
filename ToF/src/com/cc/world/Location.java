@@ -63,6 +63,27 @@ public class Location implements Comparable<Location> {
     public Location add(Direction d){
         return add(d.getDirection());
     }
+    
+    /**
+     * Removes this location to an other one, and returns the result. Neither
+     * location is modified.
+     * @param l the other location
+     * @return The result of a difference between this location and an other one.
+     */
+    public Location remove(Location l){
+        return new Location(X - l.X, 
+                            Y - l.Y, 
+                            Z - l.Z);
+    }
+    
+    /**
+     * The opposite location.
+     * <p>For every location (x, y, z), it's opposite is (-x, -y, -z).
+     * @return The opposite location.
+     */
+    public Location getOpposite(){
+        return new Location(-X, -Y, -Z);
+    }
 
     /**
      * Get the value of the X axis.
