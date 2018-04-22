@@ -190,6 +190,48 @@ public class Room {
     public boolean canMove(Room r){
         return canMove(getDirectionTo(r));
     }
+    
+    /**
+     * Can an entity open the link to a Room in that Direction?
+     * @param d the direction
+     * @param e the entity
+     * @return {@code true} if it can
+     */
+    public boolean canOpen(Direction d, Entity e){
+        return neighbors.containsKey(d)
+            && neighbors.get(d).canOpen(e);
+    }
+    
+    /**
+     * Can an entity open the link to that Room?
+     * @param r the room
+     * @param e the entity
+     * @return {@code true} if it can
+     */
+    public boolean canOpen(Room r, Entity e){
+        return canOpen(getDirectionTo(r), e);
+    }
+    
+    /**
+     * Can an entity close the link to a Room in that Direction?
+     * @param d the direction
+     * @param e the entity
+     * @return {@code true} if it can
+     */
+    public boolean canClose(Direction d, Entity e){
+        return neighbors.containsKey(d)
+            && neighbors.get(d).canClose(e);
+    }
+    
+    /**
+     * Can an entity close the link to that Room?
+     * @param r the room
+     * @param e the entity
+     * @return {@code true} if it can
+     */
+    public boolean canClose(Room r, Entity e){
+        return canClose(getDirectionTo(r), e);
+    }
 
     @Override
     public int hashCode() {
