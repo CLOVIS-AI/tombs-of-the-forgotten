@@ -10,6 +10,7 @@ import com.cc.world.links.Link;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -161,6 +162,17 @@ public class Room {
                 .map(l -> l.getOtherRoom(this))
                 .collect(Collectors.toList());
     }
+    
+    Direction getDirectionTo(Room r){
+        for(Entry<Direction, Link> entry : neighbors.entrySet())
+            if(entry.getValue().getOtherRoom(this).equals(r))
+                return entry.getKey();
+        
+        throw new IllegalArgumentException("You provided a room that is not a "
+                + "neighbor of this room.");
+    }
+    
+    
 
     @Override
     public int hashCode() {
