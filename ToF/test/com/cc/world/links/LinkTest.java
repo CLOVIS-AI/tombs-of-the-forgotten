@@ -98,7 +98,7 @@ public class LinkTest {
         assertTrue(l1.hashCode() == l2.hashCode());
     }
 
-    public class LinkImpl extends Link {
+    public static class LinkImpl extends Link {
         
         public LinkImpl(Room r1, Room r2, boolean openByDefault) {
             super(r1, r2, openByDefault);
