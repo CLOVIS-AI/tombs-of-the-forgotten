@@ -6,6 +6,7 @@
 package com.cc.world;
 
 import com.cc.world.links.Link;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -15,14 +16,25 @@ import java.util.Objects;
  */
 public class Room {
     
-    private Map<Direction, Link> neighbors;
+    private final Map<Direction, Link> neighbors
+            = new HashMap<>();
     
-    private String description;
+    private final String description;
     
     private Location location;
     private World world;
     
     private boolean isGenerated = false;
+    
+    public Room(String description){
+        this.description = description;
+    }
+    
+    public Room(String description, Location location, World world){
+        this.description = description;
+        this.location = location;
+        this.world = world;
+    }
     
     /**
      * Sets the world of this object. This method can only be called once, during
@@ -90,7 +102,7 @@ public class Room {
         return this;
     }
     
-    public void endGeneration(){
+    public final void endGeneration(){
         if(world == null)
             throw new IllegalStateException("The world is missing, call #setWorld.");
         
