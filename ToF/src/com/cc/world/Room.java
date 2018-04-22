@@ -172,7 +172,24 @@ public class Room {
                 + "neighbor of this room.");
     }
     
+    /**
+     * Can an entity move from this Room in that direction?
+     * @param d the direction
+     * @return {@code true} if it can 
+     */
+    public boolean canMove(Direction d){
+        return neighbors.containsKey(d) 
+            && neighbors.get(d).isOpenned();
+    }
     
+    /**
+     * Can an entity move from this Room to that Room?
+     * @param r the room (must be a neighboring room)
+     * @return {@code true} if it can 
+     */
+    public boolean canMove(Room r){
+        return canMove(getDirectionTo(r));
+    }
 
     @Override
     public int hashCode() {
