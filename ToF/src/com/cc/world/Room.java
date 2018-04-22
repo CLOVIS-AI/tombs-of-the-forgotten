@@ -5,10 +5,13 @@
  */
 package com.cc.world;
 
+import com.cc.players.Entity;
 import com.cc.world.links.Link;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * An ingame room.
@@ -114,6 +117,49 @@ public class Room {
     
     public char getChar(){
         return '+';
+    }
+    
+    /**
+     * Gets all the neighbors of this Room.
+     * @return All the neighbors of this Room.
+     * @see #getOpenNeighbors() The neighbors that are opened
+     * @see #getReachableNeighbors(com.cc.players.Entity) The neighbors that an entity can go to
+     */
+    public Collection<Room> getAllNeighbors() {
+        return neighbors.values()
+                .stream()
+                .map(l -> l.getOtherRoom(this))
+                .collect(Collectors.toList());
+    }
+    
+    /**
+     * Gets the neighbors of this Room that are opened (any entity can go there).
+     * @return The neighbors that are open.
+     * @see #getAllNeighbors() All the neighbors
+     * @see #getReachableNeighbors(com.cc.players.Entity) The neighbors that an entity can go to
+     */
+    public Collection<Room> getOpenNeighbors() {
+        return neighbors.values()
+                .stream()
+                .filter(l -> l.isOpenned())
+                .map(l -> l.getOtherRoom(this))
+                .collect(Collectors.toList());
+    }
+    
+    /**
+     * Gets the neighbors of this Room that an entity can go to (open or the 
+     * entity can open them).
+     * @param e the entity
+     * @return The neighbors that an Entity can reach.
+     * @see #getAllNeighbors() All the neighbors
+     * @see #getOpenNeighbors() The neighbors that are opened
+     */
+    public Collection<Room> getReachableNeighbors(Entity e) {
+        return neighbors.values()
+                .stream()
+                .filter(l -> l.isOpenned() || l.canOpen(e))
+                .map(l -> l.getOtherRoom(this))
+                .collect(Collectors.toList());
     }
 
     @Override
