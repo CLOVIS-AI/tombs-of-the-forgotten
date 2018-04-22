@@ -85,7 +85,7 @@ public class World implements Timable {
                         case '@':
                             player = new Player();
                         case '+':
-                            rooms.put(new Location(x, y, z), new Room().setWorld(this));
+                            rooms.put(new Location(x, y, z), new Room("+").setWorld(this));
                             break;
                         default:
                     }

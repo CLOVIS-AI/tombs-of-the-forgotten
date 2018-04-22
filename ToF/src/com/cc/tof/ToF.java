@@ -35,13 +35,13 @@ public class ToF {
                 + "\texit\n");
         
         TreeMap<Location, Room> rooms = new TreeMap<>();
-        rooms.put(new Location(0, 0, 0), new Room());
-        rooms.put(new Location(1, 0, 0), new Room());
-        rooms.put(new Location(0, 1, 0), new Room());
-        rooms.put(new Location(1, 0, 0), new Room());
-        rooms.put(new Location(1, 2, 0), new Room());
-        rooms.put(new Location(0, 2, 0), new Room());
-        rooms.put(new Location(2, 2, 0), new Room());
+        rooms.put(new Location(0, 0, 0), new Room(""));
+        rooms.put(new Location(1, 0, 0), new Room(""));
+        rooms.put(new Location(0, 1, 0), new Room(""));
+        rooms.put(new Location(1, 0, 0), new Room(""));
+        rooms.put(new Location(1, 2, 0), new Room(""));
+        rooms.put(new Location(0, 2, 0), new Room(""));
+        rooms.put(new Location(2, 2, 0), new Room(""));
         
         Player p = new Player(1, 1, 1, 1);
         

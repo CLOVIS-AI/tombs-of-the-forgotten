@@ -54,4 +54,38 @@ public enum Direction {
     public Location getArrival(Location departure) {
         return departure.add(location);
     }
+    
+    /**
+     * The opposite Direction to this one.
+     * <p>For example, the opposite of NORTH is SOUTH.
+     * @return The opposite Direction.
+     */
+    public Direction getOpposite() {
+        return fromCoordinates(location.getOpposite());
+    }
+    
+    /**
+     * Gets the direction that corresponds to this location.
+     * @param l a location
+     * @return The direction that corresponds to a location.
+     */
+    public static Direction fromCoordinates(Location l) {
+        for(Direction d : values())
+            if(l.equals(d.location))
+                return d;
+        
+        throw new IllegalArgumentException("No direction corresponds to the "
+                + "provided location: " + l);
+    }
+    
+    /**
+     * Gets the direction that corresponds to this location.
+     * @param x the X coordinate
+     * @param y the Y coordinate
+     * @param z the Z coordinate
+     * @return The direction that corresponds to a location.
+     */
+    public static Direction fromCoordinates(int x, int y, int z){
+        return fromCoordinates(new Location(x, y, z));
+    }
 }
