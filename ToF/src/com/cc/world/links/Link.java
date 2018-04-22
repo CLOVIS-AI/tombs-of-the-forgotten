@@ -56,6 +56,15 @@ public abstract class Link {
     }
     
     /**
+     * Does this link links to this room?
+     * @param r the room
+     * @return {@code true} if the specified room is linked by this object.
+     */
+    public boolean links(Room r){
+        return room1.equals(r) || room2.equals(r);
+    }
+    
+    /**
      * Used by a room to get the other room.
      * @param r one of the rooms that this object links to
      * @return The other room linked by this object.
