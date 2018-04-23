@@ -10,6 +10,7 @@ import static com.cc.utils.Bar.Behavior.ACCEPT;
 import static com.cc.utils.Translator.LINES;
 import com.cc.world.Direction;
 import com.cc.world.Location;
+import com.cc.world.Room;
 import com.cc.world.Timable;
 import com.cc.world.World;
 import java.util.ArrayList;
@@ -135,6 +136,28 @@ public abstract class Entity implements Timable {
     public void useMana(int amount){
         mana.remove(amount, ACCEPT);
     }
+    
+    /**
+     * The Room where the Entity is.
+     * @return The Room where the Entity is.
+     * @see #getCurrentRoom() Without Optional
+     */
+    public Optional<Room> getCurrentRoomOptional(){
+        return world.getRoom(location);
+    }
+    
+    /**
+     * The Room where the Entity is.
+     * @return The Room where the Entity is.
+     * @see #getCurrentRoomOptional() Using an Optional instead of an exception.
+     * @throws IllegalStateException if no Room is found
+     */
+    public Room getCurrentRoom(){
+        return getCurrentRoomOptional()
+                .orElseThrow(() -> new IllegalStateException("No room was found"
+                        + " for this entity ("+this+") !"));
+    }
+    
     
     /**
      * Returns all the bars of this entity.
