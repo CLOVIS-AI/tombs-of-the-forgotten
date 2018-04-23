@@ -158,6 +158,25 @@ public abstract class Entity implements Timable {
                         + " for this entity ("+this+") !"));
     }
     
+    /**
+     * Can the Entity move in that Direction?
+     * @param d the direction
+     * @return Whether the Entity can move in that Direction, according to 
+     *         {@link Room#canMove(com.cc.world.Direction) Room.canMove(Direction)}.
+     */
+    public boolean canMoveTo(Direction d){
+        return getCurrentRoom().canMove(d);
+    }
+    
+    /**
+     * Can the Entity move in one move to that Room?
+     * @param r the Room
+     * @return Whether the Entity can move to that Room, according to 
+     *         {@link Room#canMove(com.cc.world.Room) Room.canMove(Room)}.
+     */
+    public boolean canMoveTo(Room r){
+        return getCurrentRoom().canMove(r);
+    }
     
     /**
      * Returns all the bars of this entity.
