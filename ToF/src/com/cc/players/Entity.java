@@ -185,16 +185,7 @@ public abstract class Entity implements Timable {
                         + "by Room#getNeighbor, this shouldn't ever happen."))
                 .getLocation();
         
-        switch(world.getGameState()){
-            case EXPLORE:
-                stamina.remove(1, ACCEPT);
-            case FIGHT:
-                stamina.remove(5, ACCEPT);
-            default:
-                throw new RuntimeException("Switching through the enum "
-                        + "GameState shouldn't bring a 'default' value; found: "
-                        + world.getGameState());
-        }
+        stamina.remove(world.getGameState().MOVING_STAMINA_COST, ACCEPT);
     }
     
     /**
