@@ -14,11 +14,17 @@ public enum GameState {
     /**
      * The player is fighting an enemy.
      */
-    FIGHT,
+    FIGHT(5),
     
     /**
      * The player is exploring.
      */
-    EXPLORE;
+    EXPLORE(1);
+    
+    public final int MOVING_STAMINA_COST;
+    
+    GameState(int movingStaminaCost){
+        MOVING_STAMINA_COST = movingStaminaCost;
+    }
     
 }

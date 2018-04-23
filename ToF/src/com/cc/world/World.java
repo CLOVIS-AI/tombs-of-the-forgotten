@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.function.Predicate;
@@ -133,6 +134,16 @@ public class World implements Timable {
      */
     public Collection<Room> getRooms(){
         return rooms.values();
+    }
+    
+    /**
+     * Gets a Room in this World.
+     * @param location the location you want
+     * @return The room that is found at that Location, or an empty Optional if
+     *         no Room is found there.
+     */
+    public Optional<Room> getRoom(Location location){
+        return Optional.ofNullable(rooms.get(location));
     }
     
     /**

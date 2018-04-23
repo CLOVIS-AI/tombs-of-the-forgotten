@@ -10,6 +10,7 @@ import static com.cc.utils.Bar.Behavior.ACCEPT;
 import static com.cc.utils.Translator.LINES;
 import com.cc.world.Direction;
 import com.cc.world.Location;
+import com.cc.world.Room;
 import com.cc.world.Timable;
 import com.cc.world.World;
 import java.util.ArrayList;
@@ -134,6 +135,77 @@ public abstract class Entity implements Timable {
      */
     public void useMana(int amount){
         mana.remove(amount, ACCEPT);
+    }
+    
+    /**
+     * The Room where the Entity is.
+     * @return The Room where the Entity is.
+     * @see #getCurrentRoom() Without Optional
+     */
+    public Optional<Room> getCurrentRoomOptional(){
+        return world.getRoom(location);
+    }
+    
+    /**
+     * The Room where the Entity is.
+     * @return The Room where the Entity is.
+     * @see #getCurrentRoomOptional() Using an Optional instead of an exception.
+     * @throws IllegalStateException if no Room is found
+     */
+    public Room getCurrentRoom(){
+        return getCurrentRoomOptional()
+                .orElseThrow(() -> new IllegalStateException("No room was found"
+                        + " for this entity ("+this+") !"));
+    }
+    
+    /**
+     * Can the Entity move in that Direction?
+     * @param d the direction
+     * @return Whether the Entity can move in that Direction, according to 
+     *         {@link Room#canMove(com.cc.world.Direction) Room.canMove(Direction)}.
+     */
+    public boolean canMoveTo(Direction d){
+        return getCurrentRoom().canMove(d);
+    }
+    
+    /**
+     * Moves this Entity in that Direction (if allowed).
+     * @param d the direction
+     * @throws IllegalStateException if the Entity cannot move in that Direction.
+     */
+    public void moveTo(Direction d){
+        if(!canMoveTo(d))
+            throw new IllegalStateException("This Entity ("+this+") located in "
+                    +location+" cannot move in that Direction ("+d+")");
+        
+        location = getCurrentRoom()
+                .getNeighbor(d)
+                .orElseThrow(() -> new RuntimeException("The call of"
+                        + " Entity#canMoveTo passed but no neighbor was found "
+                        + "by Room#getNeighbor, this shouldn't ever happen."))
+                .getLocation();
+        
+        stamina.remove(world.getGameState().MOVING_STAMINA_COST, ACCEPT);
+    }
+    
+    /**
+     * Moves this Entity to that Room, only is possible (the Room must be a 
+     * neighbor of the Entity's current room, and must be reachable by the 
+     * Entity (see {@link #canMoveTo(com.cc.world.Room) })).
+     * @param r the Room
+     */
+    public void moveTo(Room r){
+        moveTo(getCurrentRoom().getDirectionTo(r));
+    }
+    
+    /**
+     * Can the Entity move in one move to that Room?
+     * @param r the Room
+     * @return Whether the Entity can move to that Room, according to 
+     *         {@link Room#canMove(com.cc.world.Room) Room.canMove(Room)}.
+     */
+    public boolean canMoveTo(Room r){
+        return getCurrentRoom().canMove(r);
     }
     
     /**
