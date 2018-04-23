@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -121,6 +122,20 @@ public class Room {
     }
     
     /**
+     * Gets a Neighboring Room of this Room.
+     * @param d the Direction in which to search a neighbor
+     * @return The neighboring room, or an empty Optional if none was found.
+     */
+    public Optional<Room> getNeighbor(Direction d) {
+        if(!neighbors.containsKey(d))
+            return Optional.empty();
+        
+        return Optional.ofNullable(
+                neighbors.get(d).getOtherRoom(this)
+            );
+    }
+    
+    /**
      * Gets all the neighbors of this Room.
      * @return All the neighbors of this Room.
      * @see #getOpenNeighbors() The neighbors that are opened
@@ -163,7 +178,13 @@ public class Room {
                 .collect(Collectors.toList());
     }
     
-    Direction getDirectionTo(Room r){
+    /**
+     * For a given Room, checks that it is a neighbor of this Room and returns
+     * the Direction to take to get to it.
+     * @param r the given room
+     * @return The Direction you should take to get to the given Room.
+     */
+    public Direction getDirectionTo(Room r){
         for(Entry<Direction, Link> entry : neighbors.entrySet())
             if(entry.getValue().getOtherRoom(this).equals(r))
                 return entry.getKey();

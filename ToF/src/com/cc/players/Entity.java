@@ -169,6 +169,34 @@ public abstract class Entity implements Timable {
     }
     
     /**
+     * Moves this Entity in that Direction (if allowed).
+     * @param d the direction
+     * @throws IllegalStateException if the Entity cannot move in that Direction.
+     */
+    public void moveTo(Direction d){
+        if(!canMoveTo(d))
+            throw new IllegalStateException("This Entity ("+this+") located in "
+                    +location+" cannot move in that Direction ("+d+")");
+        
+        location = getCurrentRoom()
+                .getNeighbor(d)
+                .orElseThrow(() -> new RuntimeException("The call of"
+                        + " Entity#canMoveTo passed but no neighbor was found "
+                        + "by Room#getNeighbor, this shouldn't ever happen."))
+                .getLocation();
+    }
+    
+    /**
+     * Moves this Entity to that Room, only is possible (the Room must be a 
+     * neighbor of the Entity's current room, and must be reachable by the 
+     * Entity (see {@link #canMoveTo(com.cc.world.Room) })).
+     * @param r the Room
+     */
+    public void moveTo(Room r){
+        moveTo(getCurrentRoom().getDirectionTo(r));
+    }
+    
+    /**
      * Can the Entity move in one move to that Room?
      * @param r the Room
      * @return Whether the Entity can move to that Room, according to 
