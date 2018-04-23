@@ -184,6 +184,17 @@ public abstract class Entity implements Timable {
                         + " Entity#canMoveTo passed but no neighbor was found "
                         + "by Room#getNeighbor, this shouldn't ever happen."))
                 .getLocation();
+        
+        switch(world.getGameState()){
+            case EXPLORE:
+                stamina.remove(1, ACCEPT);
+            case FIGHT:
+                stamina.remove(5, ACCEPT);
+            default:
+                throw new RuntimeException("Switching through the enum "
+                        + "GameState shouldn't bring a 'default' value; found: "
+                        + world.getGameState());
+        }
     }
     
     /**
