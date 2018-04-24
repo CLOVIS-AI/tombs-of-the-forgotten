@@ -40,29 +40,15 @@ public class ChestTest {
     }
 
     /**
-     * Test of getContainer method, of class Chest.
-     */
-    @Test
-    public void testGetContainer() {
-        System.out.println("getContainer");
-        Chest instance = null;
-        Map<String, Item> expResult = null;
-        Map<String, Item> result = instance.getContainer();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of getDescription method, of class Chest.
      */
     @Test
     public void testGetDescription() {
         System.out.println("getDescription");
-        Chest c1 = new Chest(Optional.empty());
+        ItemContainer c1 = new ItemContainer(Optional.empty());
         assertFalse(c1.getDescription().isPresent());
         
-        Chest c2 = new Chest("description");
+        ItemContainer c2 = new ItemContainer("description");
         assertTrue(c2.getDescription().isPresent());
         assertEquals("description", c2.getDescription().get());
     }
@@ -73,11 +59,11 @@ public class ChestTest {
     @Test
     public void testEquals() {
         System.out.println("equals");
-        Item i = new Weapon("d", 0, "d", Rarity.RARE, 0, 0, 0);
-        Chest c1 = new Chest("d");
+        Item i = new Weapon("d", 1, "d", Rarity.RARE, 1, 0, 1);
+        ItemContainer c1 = new ItemContainer("d");
         c1.add(i);
         
-        Chest c2 = new Chest("d");
+        ItemContainer c2 = new ItemContainer("d");
         c2.add(i);
         
         assertTrue(c1.equals(c2));
@@ -89,9 +75,10 @@ public class ChestTest {
     @Test
     public void testRemoveItem() {
         System.out.println("remove, add, contains");
-        Item i = new Weapon("d", 0, "d", Rarity.RARE, 0, 0, 0);
+        Item i = new Weapon("d", 1, "d", Rarity.RARE, 1, 0, 1);
         
-        Chest c1 = new Chest("d");
+        ItemContainer c1 = new ItemContainer("d");
+        System.out.println("==== TEST " + c1.getItems());
         c1.add(i);
         assertTrue(c1.contains(i));
         

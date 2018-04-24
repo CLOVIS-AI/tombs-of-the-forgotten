@@ -5,46 +5,46 @@
  */
 package com.cc.items;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.TreeMap;
 
 /**
  * Represents a container.
  * @author schourouq
  */
-public class Chest {
+public class ItemContainer {
         
-    private Map<String, Item> container;
+    private final List<Item> items;
     
-    private Optional<String> description;
+    private final Optional<String> description;
     
     /**
      * Creates a chest.
      * @param description Description of a chest.
      */
-    public Chest(Optional<String> description) {
+    public ItemContainer(Optional<String> description) {
         this.description = description;
-        container = new TreeMap<>();
+        items = new ArrayList<>();
     }
 
     /**
      * Creates a chest
      * @param description Description of a chest
      */
-    public Chest(String description) {
-        this.description = (description == null) ? 
+    public ItemContainer(String description) {
+        this((description == null) ? 
             Optional.empty() : 
-            Optional.of(description);
+            Optional.of(description));
     }
 
     /**
-     * A container.
+     * A COPY of the items.
      * @return A container.
      */
-    public Map<String, Item> getContainer() {
-        return container;
+    public List<Item> getItems() {
+        return new ArrayList<>(items);
     }
 
     /**
@@ -56,13 +56,40 @@ public class Chest {
     }
 
     /**
+     * Remove an item from this object.
+     * @param item An item.
+     * @return {@code true} if this list contained the specified element.
+     */
+    public boolean remove(Item item) {
+        return items.remove(item);
+    }
+    
+    /**
+     * Verify if a container contains a specific item.
+     * @param item An item
+     * @return <code> true </code>: A container contains a specific item.
+     * <code> false </code> otherwise.
+     */
+    public boolean contains(Item item) {
+        return items.contains(item);
+    }
+    
+    /**
+     * Add an item into this object.
+     * @param item The item.
+     */
+    public void add(Item item) {
+        items.add(item);
+    }
+    
+    /**
      * A hash code value for the object.
      * @return a hash code value for this object.
      */
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 67 * hash + Objects.hashCode(this.container);
+        hash = 67 * hash + Objects.hashCode(this.items);
         hash = 67 * hash + Objects.hashCode(this.description);
         return hash;
     }
@@ -84,56 +111,14 @@ public class Chest {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Chest other = (Chest) obj;
-        if (!Objects.equals(this.container, other.container)) {
+        final ItemContainer other = (ItemContainer) obj;
+        if (!Objects.equals(this.items, other.items)) {
             return false;
         }
         if (!Objects.equals(this.description, other.description)) {
             return false;
         }
         return true;
-    }
-    
-    /**
-     * Remove an item from a chest.
-     * @param chest A chest.
-     * @param item An item.
-     */
-    public void removeItem(Map<String, Item> chest, Item item) {
-        if (contains(chest, item))
-            chest.remove(item);
-    }
-    
-    public void remove(Item item) {
-        throw new UnsupportedOperationException();
-    }
-    
-    /**
-     * Verify if a container contains a specific item.
-     * @param container A container.
-     * @param item An item
-     * @return <code> True </code>: A container contains a specific item.
-     * <code> False </code> otherwise.
-     */
-    public boolean contains(Map<String, Item> container, Item item) {
-        return container.containsValue(item);
-    }
-    
-    public boolean contains(Item item) {
-        throw new UnsupportedOperationException();
-    }
-    
-    /**
-     * Add an item into a container.
-     * @param name The name of the item.
-     * @param item The item.
-     */
-    public void addItem(String name, Item item) {
-        container.put(name, item);
-    }
-    
-    public void add(Item i) {
-        throw new UnsupportedOperationException();
     }
     
 }
