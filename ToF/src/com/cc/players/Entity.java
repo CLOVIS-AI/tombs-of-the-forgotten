@@ -5,8 +5,8 @@
  */
 package com.cc.players;
 
+import com.cc.items.Inventory;
 import com.cc.items.Item;
-import com.cc.items.ItemContainer;
 import com.cc.utils.Bar;
 import static com.cc.utils.Bar.Behavior.ACCEPT;
 import static com.cc.utils.Translator.LINES;
@@ -44,7 +44,7 @@ public abstract class Entity implements Timable {
     
     private Optional<Entity> opponent;
     
-    private ItemContainer inventory;
+    private Inventory inventory;
     
     
     public Entity(int maxHealth, int maxStrength, int maxMana, int maxWeight){
