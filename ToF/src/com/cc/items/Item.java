@@ -27,6 +27,12 @@ public interface Item {
     public int getWeight();
     
     /**
+     * The name of this Item.
+     * @return The name of this Item.
+     */
+    public String getName();
+    
+    /**
      * The description of this Item.
      * @return The description of this Item.
      */

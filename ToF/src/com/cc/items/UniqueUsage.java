@@ -20,12 +20,13 @@ public abstract class UniqueUsage extends AbstractItem {
 
     /**
      * Creates an item that can only be used once.
-     * @param weight its item
+     * @param name its name
+     * @param weight its weight
      * @param description its description
      * @param rarity its rarity
      */
-    public UniqueUsage(int weight, String description, Rarity rarity) {
-        super(weight, description, rarity);
+    public UniqueUsage(String name, int weight, String description, Rarity rarity) {
+        super(name, weight, description, rarity);
     }
 
     /**

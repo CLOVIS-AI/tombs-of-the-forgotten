@@ -20,6 +20,7 @@ public class MagicalItem extends AbstractItem {
     
     /**
      * Constructs a Magical Item using a lambda-expression as an effect.
+     * @param name the name of the item
      * @param weight the weight of the item
      * @param description the description of the item
      * @param rarity the rarity of the item
@@ -27,15 +28,16 @@ public class MagicalItem extends AbstractItem {
      * @param action what happens when you use it
      * @see #MagicalItem(int, java.lang.String, com.cc.items.Rarity, int, int) Magical Weapon
      */
-    public MagicalItem(int weight, String description, Rarity rarity, 
+    public MagicalItem(String name, int weight, String description, Rarity rarity, 
             int manaCost, Consumer<Entity> action) {
-        super(weight, description, rarity);
+        super(name, weight, description, rarity);
         this.manaCost = manaCost;
         this.action = action;
     }
     
     /**
      * Constructs a Magical weapon.
+     * @param name the name of the weapon
      * @param weight the weight of the weapon
      * @param description the description of the weapon
      * @param rarity the rarity of the weapon
@@ -43,9 +45,9 @@ public class MagicalItem extends AbstractItem {
      * @param damage the damage dealt by the weapon (see {@link Entity#hurt(int) })
      * @see #MagicalItem(int, java.lang.String, com.cc.items.Rarity, int, java.util.function.Consumer) Magical Item
      */
-    public MagicalItem(int weight, String description, Rarity rarity, 
+    public MagicalItem(String name, int weight, String description, Rarity rarity, 
             int manaCost, int damage) {
-        this(weight, description, rarity, manaCost, 
+        this(name, weight, description, rarity, manaCost, 
                 e -> e.getOpponent().ifPresent(f -> f.hurt(damage)));
     }
 

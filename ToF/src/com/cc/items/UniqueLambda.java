@@ -21,13 +21,15 @@ public class UniqueLambda extends UniqueUsage {
     
     /**
      * Constructs a single-use item with a lambda-expression.
+     * @param name its name
      * @param weight its weight
      * @param description its description
      * @param rarity its rarity
      * @param action what happens when an entity uses the item
      */
-    public UniqueLambda(int weight, String description, Rarity rarity, Consumer<Entity> action) {
-        super(weight, description, rarity);
+    public UniqueLambda(String name, int weight, String description, 
+            Rarity rarity, Consumer<Entity> action) {
+        super(name, weight, description, rarity);
         this.action = action;
     }
 

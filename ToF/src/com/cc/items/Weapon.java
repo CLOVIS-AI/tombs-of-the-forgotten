@@ -19,6 +19,7 @@ public class Weapon extends AbstractItem {
     
     /**
      * Creates a Weapon.
+     * @param name the weapon's name
      * @param weight the weight of the weapon
      * @param description the description of the weapon
      * @param rarity the rarity of the weapon
@@ -29,9 +30,9 @@ public class Weapon extends AbstractItem {
      * @see #use(com.cc.players.Entity) More information on the effect and 
      *      staminaLevel
      */
-    public Weapon(int weight, String description, Rarity rarity, int damage,
-            double effect, int staminaLevel) {
-        super(weight, description, rarity);
+    public Weapon(String name, int weight, String description, Rarity rarity, 
+            int damage, double effect, int staminaLevel) {
+        super(name, weight, description, rarity);
         
         if(damage <= 0)
             throw new IllegalArgumentException("Damage cannot be negative or "

@@ -17,13 +17,15 @@ public class Armor extends AbstractItem {
     
     /**
      * Creates an armor object.
+     * @param name the name of the item
      * @param weight the weight of the item
      * @param description the description of the item
      * @param rarity the rarity of the item
      * @param damage the damage reduction of the item
      */
-    public Armor(int weight, String description, Rarity rarity, int damage) {
-        super(weight, description, rarity);
+    public Armor(String name, int weight, String description, Rarity rarity, 
+            int damage) {
+        super(name, weight, description, rarity);
         
         if(damage <= 0)
             throw new IllegalArgumentException("Damage cannot be negative or "
