@@ -26,7 +26,7 @@ public class MagicalItem extends AbstractItem {
      * @param rarity the rarity of the item
      * @param manaCost the mana cost of the item
      * @param action what happens when you use it
-     * @see #MagicalItem(int, java.lang.String, com.cc.items.Rarity, int, int) Magical Weapon
+     * @see #MagicalItem(java.lang.String, int, java.lang.String, com.cc.items.Rarity, int, int) Magical Weapon
      */
     public MagicalItem(String name, int weight, String description, Rarity rarity, 
             int manaCost, Consumer<Entity> action) {
@@ -43,7 +43,7 @@ public class MagicalItem extends AbstractItem {
      * @param rarity the rarity of the weapon
      * @param manaCost the mana cost of using the weapon
      * @param damage the damage dealt by the weapon (see {@link Entity#hurt(int) })
-     * @see #MagicalItem(int, java.lang.String, com.cc.items.Rarity, int, java.util.function.Consumer) Magical Item
+     * @see #MagicalItem(java.lang.String, int, java.lang.String, com.cc.items.Rarity, int, java.util.function.Consumer) Magical Item
      */
     public MagicalItem(String name, int weight, String description, Rarity rarity, 
             int manaCost, int damage) {
