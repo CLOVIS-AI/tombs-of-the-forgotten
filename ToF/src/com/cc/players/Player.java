@@ -9,6 +9,7 @@ import com.cc.items.Item;
 import com.cc.utils.Bar;
 import static com.cc.utils.Bar.Behavior.ACCEPT;
 import static com.cc.utils.Translator.LINES;
+import com.cc.world.Direction;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -44,6 +45,16 @@ public class Player extends Entity {
         items = new ArrayList<>();
         
         weight = new Bar(LINES.get("weight"), 0, maxWeight, 0);
+    }
+    
+    private void updateWorld(){
+        super.getWorld().nextTick();
+    }
+    
+    @Override
+    public void moveTo(Direction d){
+        super.moveTo(d);
+        updateWorld();
     }
     
     /**
