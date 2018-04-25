@@ -5,6 +5,8 @@
  */
 package com.cc.players;
 
+import com.cc.items.Inventory;
+import com.cc.items.Item;
 import com.cc.utils.Bar;
 import static com.cc.utils.Bar.Behavior.ACCEPT;
 import static com.cc.utils.Translator.LINES;
@@ -14,6 +16,7 @@ import com.cc.world.Room;
 import com.cc.world.Timable;
 import com.cc.world.World;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,18 +40,28 @@ public abstract class Entity implements Timable {
     
     private Optional<Entity> opponent;
     
-    public Entity(int maxHealth, int maxStrength, int maxMana){
-        this(maxHealth, maxStrength, maxMana, new Location());
+    private final Inventory inventory;
+    
+    
+    public Entity(int maxHealth, int maxStrength, int maxMana, int maxWeight){
+        this(maxHealth, maxStrength, maxMana, maxWeight, new Location());
     }
     
-    public Entity(int maxHealth, int maxStrength, int maxMana, Location l){
+    public Entity(int maxHealth, int maxStrength, int maxMana, int maxWeight,
+            Location l){
         health = new Bar(LINES.get("health"), 0, maxHealth, maxHealth);
         stamina = new Bar(LINES.get("stamina"), 0, maxStrength, maxStrength);
         mana = new Bar(LINES.get("mana"), 0, maxMana, 0);
+        inventory = new Inventory(LINES.get("inventory"), maxWeight);
+        
         location = l;
         opponent = Optional.empty();
     }
     
+    /**
+     * Set the world.
+     * @param w The world.
+     */
     public void setWorld(World w){
         if(world != null)
             throw new IllegalStateException("This method can only be called once.");
@@ -201,6 +214,36 @@ public abstract class Entity implements Timable {
     }
     
     /**
+     * Can the item be added to the inventory?
+     * @param item An item.
+     * @return Whether one player is strong enough to take this item.
+     * @see Inventory#canAdd(com.cc.items.Item) canAdd
+     */
+    public boolean canAddItem(Item item) {
+        return inventory.canAdd(item);
+    }
+    
+    /**
+     * Adds an item to the inventorty.
+     * @param item An item.
+     * @see Inventory#add(com.cc.items.Item) add
+     */
+    public void addItem (Item item) {
+        inventory.add(item);
+    }
+    
+    /**
+     * How much item can be added to the inventory without exceeding the weight
+     * amount.
+     * @param items An item.
+     * @return The items that couldn't be added. If none, an empty list is returned.
+     * @see Inventory#addIfPossible(java.util.Collection) addIfPossible
+     */
+    public List<Item> addItemIfPossible(Collection<Item> items) {
+        return inventory.addIfPossible(items);
+    }
+    
+    /**
      * Returns all the bars of this entity.
      * @return The bars of this entity.
      */
@@ -209,6 +252,7 @@ public abstract class Entity implements Timable {
         a.add(health);
         a.add(mana);
         a.add(stamina);
+        a.add(inventory.getWeightBar());
         return a;
     }
     
