@@ -75,14 +75,6 @@ public abstract class Entity implements Timable {
     }
     
     /**
-     * Moves this entity in a direction.
-     * @param d The direction in which the entity moves
-     */
-    public final void move(Direction d){
-        location = location.add(d);
-    }
-    
-    /**
      * The location of this entity.
      * @return The location of this entity.
      */
@@ -218,6 +210,14 @@ public abstract class Entity implements Timable {
         a.add(mana);
         a.add(stamina);
         return a;
+    }
+    
+    /**
+     * The world this entity is in.
+     * @return The world this entity is in.
+     */
+    protected final World getWorld(){
+        return world;
     }
     
 }
