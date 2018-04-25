@@ -35,16 +35,12 @@ public abstract class Entity implements Timable {
     /** Mana bar. Used for magical attacks. */
     private Bar mana;
     
-    /** Weigth bar. Can't add item into the inventory when full.*/
-    private Bar weight;
-
-    
     private Location location;
     private World world;
     
     private Optional<Entity> opponent;
     
-    private Inventory inventory;
+    private final Inventory inventory;
     
     
     public Entity(int maxHealth, int maxStrength, int maxMana, int maxWeight){
@@ -56,7 +52,7 @@ public abstract class Entity implements Timable {
         health = new Bar(LINES.get("health"), 0, maxHealth, maxHealth);
         stamina = new Bar(LINES.get("stamina"), 0, maxStrength, maxStrength);
         mana = new Bar(LINES.get("mana"), 0, maxMana, 0);
-        weight = new Bar(LINES.get("weight"), 0, maxWeight, 0);
+        inventory = new Inventory(LINES.get("inventory"), maxWeight);
         
         location = l;
         opponent = Optional.empty();
@@ -155,49 +151,6 @@ public abstract class Entity implements Timable {
     }
     
     /**
-     * Verifies that one player can add a specific item to the inventory (based
-     * on the weight one can carry).
-     * @param item The item
-     * @return Whether one player is strong enough to take this item.
-     */
-    public boolean canAddItem(Item item) {
-        return weight.getCurrent() + item.getWeight() < weight.getMaximum();
-    }
-    
-     /**
-     * Adds an item to one's inventory.
-     * <p>If the item is too heavy for the player, nothing is done. See 
-     * {@link #canAddItem(com.cc.items.Item) canAddItem(Item)}.
-     * @param item The item to be added.
-     */
-    public void addItem(Item item) {
-        if (canAddItem(item)) {
-            inventory.add(item);
-            weight.add(item.getWeight(), ACCEPT);
-        }
-    }
-    
-    /**
-     * Adds as many items as possible from a Collection of items.
-     * <p>An item can be added if its weight is not too much for a player to
-     * carry. {@link #canAddItem(com.cc.items.Item) canAddItem(Item)}.
-     * @param items a Collection of items.
-     * @return The items that couldn't be added. If none, an empty list is returned.
-     */
-    public List<Item> addItemsIfPossible(Collection<Item> items){
-        List<Item> couldnt = new ArrayList<>();
-        
-        for(Item i : items){
-            if(canAddItem(i))
-                addItem(i);
-            else
-                couldnt.add(i);
-        }
-        
-        return couldnt;
-    }
-    
-    /**
      * The Room where the Entity is.
      * @return The Room where the Entity is.
      * @see #getCurrentRoom() Without Optional
@@ -269,6 +222,36 @@ public abstract class Entity implements Timable {
     }
     
     /**
+     * Can the item be added to the inventory?
+     * @param item An item.
+     * @return Whether one player is strong enough to take this item.
+     * @see Inventory#canAdd(com.cc.items.Item) canAdd
+     */
+    public boolean canAddItem(Item item) {
+        return inventory.canAdd(item);
+    }
+    
+    /**
+     * Adds an item to the inventorty.
+     * @param item An item.
+     * @see Inventory#add(com.cc.items.Item) add
+     */
+    public void addItem (Item item) {
+        inventory.add(item);
+    }
+    
+    /**
+     * How much item can be added to the inventory without exceeding the weight
+     * amount.
+     * @param items An item.
+     * @return The items that couldn't be added. If none, an empty list is returned.
+     * @see Inventory#addIfPossible(java.util.Collection) addIfPossible
+     */
+    public List<Item> addItemIfPossible(Collection<Item> items) {
+        return inventory.addIfPossible(items);
+    }
+    
+    /**
      * Returns all the bars of this entity.
      * @return The bars of this entity.
      */
@@ -277,7 +260,7 @@ public abstract class Entity implements Timable {
         a.add(health);
         a.add(mana);
         a.add(stamina);
-        a.add(weight);
+        a.add(inventory.getWeightBar());
         return a;
     }
     
