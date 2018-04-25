@@ -7,12 +7,14 @@ package com.cc.world;
 
 import com.cc.players.Entity;
 import com.cc.players.Player;
+import com.cc.utils.messages.Message;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.function.Predicate;
@@ -31,6 +33,8 @@ public class World implements Timable {
     private List<Entity> entities;
     
     private GameState gameState;
+    
+    private Queue<Message> messages;
     
     // ************************************************* C O N S T R U C T O R S
     
@@ -264,5 +268,22 @@ public class World implements Timable {
             player.move(direction);
         else
             System.out.println("Cannot move in this direction.");
+    }
+    
+    /**
+     * Adds a message to the queue of messages (story messages...).
+     * @param message the message
+     */
+    public final void newMessage(Message message){
+        messages.add(message);
+    }
+    
+    /**
+     * Gets a message from the queue of messages. That message is then deleted
+     * from the queue.
+     * @return A message from the queue.
+     */
+    public final Message getNextMessage() {
+        return messages.remove();
     }
 }
