@@ -5,6 +5,7 @@
  */
 package com.cc.world;
 
+import com.cc.items.ItemContainer;
 import com.cc.players.Entity;
 import com.cc.world.links.Link;
 import java.util.Collection;
@@ -30,6 +31,8 @@ public class Room {
     private World world;
     
     private boolean isGenerated = false;
+    
+    private ItemContainer items;
     
     public Room(String description){
         this.description = description;
