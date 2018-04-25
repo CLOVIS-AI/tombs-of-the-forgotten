@@ -265,7 +265,7 @@ public class World implements Timable {
      */
     public final void movePlayer(Direction direction){
         if(canMove(player.getLocation(), direction))
-            player.move(direction);
+            player.moveTo(direction);
         else
             System.out.println("Cannot move in this direction.");
     }
