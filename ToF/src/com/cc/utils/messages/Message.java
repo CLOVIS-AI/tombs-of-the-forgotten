@@ -17,6 +17,9 @@ public class Message {
     
     private final List<MessagePart> parts;
     
+    /**
+     * Creates a new message.
+     */
     public Message() {
         parts = new ArrayList<>();
     }
@@ -51,16 +54,52 @@ public class Message {
                     + "as any allowed objects.");
     }
     
+    /**
+     * Adds a MessagePart to this Message.
+     * @param m the message part
+     */
+    public void add(MessagePart m) {
+        parts.add(m);
+    }
+    
+    /**
+     * Adds a text to this Message (using the styling {@link Styling#DEFAULT}).
+     * @param text the text
+     */
     public void add(String text){
-        parts.add(new MessagePart(text));
+        add(text, Styling.DEFAULT);
     }
     
+    /**
+     * Adds the mention of an Item to this message (using the styling
+     * {@link Styling#ITEM}).
+     * @param item the item
+     */
     public void add(Item item){
-        parts.add(new MessagePart(item.getName(), Styling.ITEM));
+        add(item.getName(), Styling.ITEM);
     }
     
+    /**
+     * Adds the mention of an Item to this message (using the styling
+     * {@link Styling#ITEM}).
+     * @param item the item
+     * @param includeDescription if {@code true}, the item's description is 
+     * appended between parenthesis. 
+     */
+    public void add(Item item, boolean includeDescription){
+        add(item);
+        
+        if(includeDescription)
+            add(" (" + item.getDescription() + ")");
+    }
+    
+    /**
+     * Adds a text with a styling.
+     * @param text the text
+     * @param styling the styling
+     */
     public void add(String text, Styling styling){
-        parts.add(new MessagePart(text, styling));
+        add(new MessagePart(text, styling));
     }
 
     @Override
