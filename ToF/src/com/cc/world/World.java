@@ -269,4 +269,21 @@ public class World implements Timable {
         else
             System.out.println("Cannot move in this direction.");
     }
+    
+    /**
+     * Adds a message to the queue of messages (story messages...).
+     * @param message the message
+     */
+    public final void newMessage(Message message){
+        messages.add(message);
+    }
+    
+    /**
+     * Gets a message from the queue of messages. That message is then deleted
+     * from the queue.
+     * @return A message from the queue.
+     */
+    public final Message getNextMessage() {
+        return messages.remove();
+    }
 }
