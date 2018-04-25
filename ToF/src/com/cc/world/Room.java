@@ -304,6 +304,10 @@ public class Room {
     public boolean close(Room r, Entity e){
         return close(getDirectionTo(r), e);
     }
+    
+    public ItemContainer getItems() {
+        return items;
+    }
 
     @Override
     public int hashCode() {

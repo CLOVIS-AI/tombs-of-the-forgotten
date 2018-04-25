@@ -22,76 +22,87 @@ import java.util.Optional;
 
 /**
  * A class that represents an Entity.
+ *
  * @author Ivan Canet
  */
 public abstract class Entity implements Timable {
-    
-    /** Health bar. Game over when 0. */
+
+    /**
+     * Health bar. Game over when 0.
+     */
     private Bar health;
-    
-    /** Strength bar. Used for physical attacks. */
+
+    /**
+     * Strength bar. Used for physical attacks.
+     */
     private Bar stamina;
-    
-    /** Mana bar. Used for magical attacks. */
+
+    /**
+     * Mana bar. Used for magical attacks.
+     */
     private Bar mana;
-    
+
     private Location location;
     private World world;
-    
+
     private Optional<Entity> opponent;
-    
+
     private final Inventory inventory;
-    
-    
-    public Entity(int maxHealth, int maxStrength, int maxMana, int maxWeight){
+
+    public Entity(int maxHealth, int maxStrength, int maxMana, int maxWeight) {
         this(maxHealth, maxStrength, maxMana, maxWeight, new Location());
     }
-    
+
     public Entity(int maxHealth, int maxStrength, int maxMana, int maxWeight,
-            Location l){
+            Location l) {
         health = new Bar(LINES.get("health"), 0, maxHealth, maxHealth);
         stamina = new Bar(LINES.get("stamina"), 0, maxStrength, maxStrength);
         mana = new Bar(LINES.get("mana"), 0, maxMana, 0);
         inventory = new Inventory(LINES.get("inventory"), maxWeight);
-        
+
         location = l;
         opponent = Optional.empty();
     }
-    
+
     /**
      * Set the world.
+     *
      * @param w The world.
      */
-    public void setWorld(World w){
-        if(world != null)
+    public void setWorld(World w) {
+        if (world != null) {
             throw new IllegalStateException("This method can only be called once.");
-        
+        }
+
         world = w;
     }
-    
+
     /**
      * Increases the health of the entity.
+     *
      * @param n how much this should heal
      * @throws IllegalArgumentException for negative values
      */
-    public final void heal(int n){
+    public final void heal(int n) {
         health.add(n, ACCEPT);
     }
-    
+
     /**
      * Decreases the health of the entity.
+     *
      * @param n how much this should hurt
      * @throws IllegalArgumentException for negative values
      */
-    public final void hurt(int n){
+    public final void hurt(int n) {
         health.remove(n, ACCEPT);
     }
-    
+
     /**
      * The location of this entity.
+     *
      * @return The location of this entity.
      */
-    public final Location getLocation(){
+    public final Location getLocation() {
         return location;
     }
 
@@ -101,120 +112,134 @@ public abstract class Entity implements Timable {
         stamina.nextTick();
         mana.nextTick();
     }
-    
+
     /**
      * Gets the last opponent of this entity.
+     *
      * @return The last opponent of this entity.
      */
     public Optional<Entity> getOpponent() {
         return opponent;
     }
-    
+
     /**
      * The stamina level of the player.
+     *
      * @return The stamina of the player.
      */
-    public int getStamina(){
+    public int getStamina() {
         return stamina.getCurrent();
     }
-    
+
     /**
      * Uses stamina.
+     *
      * @param value how much stamina is lost
      */
-    public void useStamina(int value){
+    public void useStamina(int value) {
         stamina.remove(value, ACCEPT);
     }
-    
+
     /**
      * Gets the mana amount of the player.
+     *
      * @return The mana of the player.
      */
-    public int getMana(){
+    public int getMana() {
         return mana.getCurrent();
     }
-    
+
     /**
      * Uses mana.
+     *
      * @param amount the amount to remove
      */
-    public void useMana(int amount){
+    public void useMana(int amount) {
         mana.remove(amount, ACCEPT);
     }
-    
+
     /**
      * The Room where the Entity is.
+     *
      * @return The Room where the Entity is.
      * @see #getCurrentRoom() Without Optional
      */
-    public Optional<Room> getCurrentRoomOptional(){
+    public Optional<Room> getCurrentRoomOptional() {
         return world.getRoom(location);
     }
-    
+
     /**
      * The Room where the Entity is.
+     *
      * @return The Room where the Entity is.
      * @see #getCurrentRoomOptional() Using an Optional instead of an exception.
      * @throws IllegalStateException if no Room is found
      */
-    public Room getCurrentRoom(){
+    public Room getCurrentRoom() {
         return getCurrentRoomOptional()
                 .orElseThrow(() -> new IllegalStateException("No room was found"
-                        + " for this entity ("+this+") !"));
+                + " for this entity (" + this + ") !"));
     }
-    
+
     /**
      * Can the Entity move in that Direction?
+     *
      * @param d the direction
-     * @return Whether the Entity can move in that Direction, according to 
-     *         {@link Room#canMove(com.cc.world.Direction) Room.canMove(Direction)}.
+     * @return Whether the Entity can move in that Direction, according to
+     * {@link Room#canMove(com.cc.world.Direction) Room.canMove(Direction)}.
      */
-    public boolean canMoveTo(Direction d){
+    public boolean canMoveTo(Direction d) {
         return getCurrentRoom().canMove(d);
     }
-    
+
     /**
      * Moves this Entity in that Direction (if allowed).
+     *
      * @param d the direction
-     * @throws IllegalStateException if the Entity cannot move in that Direction.
+     * @throws IllegalStateException if the Entity cannot move in that
+     * Direction.
      */
-    public void moveTo(Direction d){
-        if(!canMoveTo(d))
-            throw new IllegalStateException("This Entity ("+this+") located in "
-                    +location+" cannot move in that Direction ("+d+")");
-        
+    public void moveTo(Direction d) {
+        if (!canMoveTo(d)) {
+            throw new IllegalStateException("This Entity (" + this + ") located in "
+                    + location + " cannot move in that Direction (" + d + ")");
+        }
+
         location = getCurrentRoom()
                 .getNeighbor(d)
                 .orElseThrow(() -> new RuntimeException("The call of"
-                        + " Entity#canMoveTo passed but no neighbor was found "
-                        + "by Room#getNeighbor, this shouldn't ever happen."))
+                + " Entity#canMoveTo passed but no neighbor was found "
+                + "by Room#getNeighbor, this shouldn't ever happen."))
                 .getLocation();
-        
+
         stamina.remove(world.getGameState().MOVING_STAMINA_COST, ACCEPT);
     }
-    
+
     /**
-     * Moves this Entity to that Room, only is possible (the Room must be a 
-     * neighbor of the Entity's current room, and must be reachable by the 
+     * Moves this Entity to that Room, only is possible (the Room must be a
+     * neighbor of the Entity's current room, and must be reachable by the
      * Entity (see {@link #canMoveTo(com.cc.world.Room) })).
+     *
      * @param r the Room
      */
-    public void moveTo(Room r){
+    public void moveTo(Room r) {
         moveTo(getCurrentRoom().getDirectionTo(r));
     }
-    
+
     /**
      * Can the Entity move in one move to that Room?
+     *
      * @param r the Room
-     * @return Whether the Entity can move to that Room, according to 
-     *         {@link Room#canMove(com.cc.world.Room) Room.canMove(Room)}.
+     * @return Whether the Entity can move to that Room, according to
+     * {@link Room#canMove(com.cc.world.Room) Room.canMove(Room)}.
      */
-    public boolean canMoveTo(Room r){
+    public boolean canMoveTo(Room r) {
         return getCurrentRoom().canMove(r);
     }
-    
+
     /**
      * Can the item be added to the inventory?
+     *
      * @param item An item.
      * @return Whether one player is strong enough to take this item.
      * @see Inventory#canAdd(com.cc.items.Item) canAdd
@@ -222,32 +247,36 @@ public abstract class Entity implements Timable {
     public boolean canAddItem(Item item) {
         return inventory.canAdd(item);
     }
-    
+
     /**
      * Adds an item to the inventorty.
+     *
      * @param item An item.
      * @see Inventory#add(com.cc.items.Item) add
      */
-    public void addItem (Item item) {
+    public void addItem(Item item) {
         inventory.add(item);
     }
-    
+
     /**
      * How much item can be added to the inventory without exceeding the weight
      * amount.
+     *
      * @param items An item.
-     * @return The items that couldn't be added. If none, an empty list is returned.
+     * @return The items that couldn't be added. If none, an empty list is
+     * returned.
      * @see Inventory#addIfPossible(java.util.Collection) addIfPossible
      */
     public List<Item> addItemIfPossible(Collection<Item> items) {
         return inventory.addIfPossible(items);
     }
-    
+
     /**
      * Returns all the bars of this entity.
+     *
      * @return The bars of this entity.
      */
-    public List<Bar> getBars(){
+    public List<Bar> getBars() {
         ArrayList<Bar> a = new ArrayList<>();
         a.add(health);
         a.add(mana);
@@ -255,13 +284,43 @@ public abstract class Entity implements Timable {
         a.add(inventory.getWeightBar());
         return a;
     }
-    
+
     /**
-     * The world this entity is in.
-     * @return The world this entity is in.
+     * Verifies if a specific item is contained in the player's inventory.
+     * @param item An item.
+     * @return {@code true} if the item is contained in an inventory.
+     * {@code false} otherwise.
      */
-    protected final World getWorld(){
-        return world;
+    public boolean hasItem(Item item) {
+        return inventory.contains(item);
+    }
+
+    /**
+     * Removes an item from the player's inventory.
+     * @param item An item
+     * @throws IllegalArgumentException if the player doesn't have this item in
+     * his inventory.
+     */
+    public void removeItem(Item item) {
+        if (hasItem(item)) {
+            inventory.remove(item);
+        } else {
+            throw new IllegalArgumentException("You can't throw away an item you"
+                    + "don't possess !");
+        }
     }
     
+    public void dropItem(Item item) {
+        inventory.remove(item);
+    }
+
+    /**
+     * The world this entity is in.
+     *
+     * @return The world this entity is in.
+     */
+    protected final World getWorld() {
+        return world;
+    }
+
 }

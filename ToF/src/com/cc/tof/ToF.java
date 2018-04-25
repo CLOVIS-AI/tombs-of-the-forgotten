@@ -11,6 +11,7 @@ import static com.cc.world.GameState.EXPLORE;
 import com.cc.world.Location;
 import com.cc.world.Room;
 import com.cc.world.World;
+import com.eclipsesource.json.JsonObject;
 import java.util.Scanner;
 import java.util.TreeMap;
 
