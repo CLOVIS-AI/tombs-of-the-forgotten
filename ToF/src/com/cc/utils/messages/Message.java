@@ -29,10 +29,13 @@ public class Message {
      * <p>This method is an utility method that calls 
      * {@link #addAuto(java.lang.Object) } in a loop.
      * @param objects the objects
+     * @return this Message itself, to allow method-chaining.
      */
-    public void addAuto(Object... objects){
+    public Message addAuto(Object... objects){
         for(Object o : objects)
             addAuto(o);
+        
+        return this;
     }
     
     /**
@@ -43,8 +46,9 @@ public class Message {
      *  <li>Item</li>
      * </ul> Any other object will produce an IllegalArgumentException.
      * @param o the object
+     * @return this Message itself, to allow method-chaining.
      */
-    public void addAuto(Object o){
+    public Message addAuto(Object o){
         if(o instanceof Item)
             add((Item) o);
         else if(o instanceof String)
@@ -52,31 +56,42 @@ public class Message {
         else
             throw new IllegalArgumentException("Cannot recognize " + o + " "
                     + "as any allowed objects.");
+        
+        return this;
     }
     
     /**
      * Adds a MessagePart to this Message.
      * @param m the message part
+     * @return this Message itself, to allow method-chaining.
      */
-    public void add(MessagePart m) {
+    public Message add(MessagePart m) {
         parts.add(m);
+        
+        return this;
     }
     
     /**
      * Adds a text to this Message (using the styling {@link Styling#DEFAULT}).
      * @param text the text
+     * @return this Message itself, to allow method-chaining.
      */
-    public void add(String text){
+    public Message add(String text){
         add(text, Styling.DEFAULT);
+        
+        return this;
     }
     
     /**
      * Adds the mention of an Item to this message (using the styling
      * {@link Styling#ITEM}).
      * @param item the item
+     * @return this Message itself, to allow method-chaining.
      */
-    public void add(Item item){
+    public Message add(Item item){
         add(item.getName(), Styling.ITEM);
+        
+        return this;
     }
     
     /**
@@ -85,21 +100,27 @@ public class Message {
      * @param item the item
      * @param includeDescription if {@code true}, the item's description is 
      * appended between parenthesis. 
+     * @return this Message itself, to allow method-chaining.
      */
-    public void add(Item item, boolean includeDescription){
+    public Message add(Item item, boolean includeDescription){
         add(item);
         
         if(includeDescription)
             add(" (" + item.getDescription() + ")");
+        
+        return this;
     }
     
     /**
      * Adds a text with a styling.
      * @param text the text
      * @param styling the styling
+     * @return this Message itself, to allow method-chaining.
      */
-    public void add(String text, Styling styling){
+    public Message add(String text, Styling styling){
         add(new MessagePart(text, styling));
+        
+        return this;
     }
 
     @Override
