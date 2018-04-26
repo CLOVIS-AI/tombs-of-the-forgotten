@@ -25,6 +25,7 @@ package com.cc.items;
 import com.cc.players.Entity;
 import com.cc.utils.Save;
 import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.WriterConfig;
 
 /**
  * Represents a generic Item.
@@ -63,4 +64,10 @@ public interface Item extends Save<JsonObject> {
      */
     public Rarity getRarity();
     
+    public static Item loadItem(JsonObject json){
+        if(json.contains("damage")) return new Armor(json);
+        
+        throw new IllegalArgumentException("No Item type was found that matches"
+                + "the JSON data: " + json.toString(WriterConfig.PRETTY_PRINT));
+    }
 }
