@@ -310,8 +310,13 @@ public abstract class Entity implements Timable {
         }
     }
     
+    /**
+     * Drop an item from the player's inventory to the current room.
+     * @param item An item
+     */
     public void dropItem(Item item) {
-        inventory.remove(item);
+        this.removeItem(item);
+        this.getCurrentRoom().getItems().add(item);
     }
 
     /**

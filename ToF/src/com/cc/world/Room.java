@@ -32,16 +32,18 @@ public class Room {
     
     private boolean isGenerated = false;
     
-    private ItemContainer items;
+    private final ItemContainer items;
     
     public Room(String description){
         this.description = description;
+        items = new ItemContainer(description);
     }
     
     public Room(String description, Location location, World world){
         this.description = description;
         this.location = location;
         this.world = world;
+        items = new ItemContainer(description);
     }
     
     /**
