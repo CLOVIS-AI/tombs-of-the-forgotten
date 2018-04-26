@@ -20,18 +20,3 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.cc.world;
-
-/**
- * Represents that an object can be updated according to a time event.
- * @author Ivan Canet
- */
-public interface Timable {
-    
-    /**
-     * Notifies an object that time has passed. This is useful for objects that
-     * have regeneration, or other effects that act over-time.
-     */
-    public void nextTick();
-    
-}
