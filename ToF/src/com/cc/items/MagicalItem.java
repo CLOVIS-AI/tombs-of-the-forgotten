@@ -23,6 +23,7 @@
 package com.cc.items;
 
 import com.cc.players.Entity;
+import com.eclipsesource.json.JsonObject;
 import java.util.function.Consumer;
 
 /**
@@ -34,6 +35,12 @@ public class MagicalItem extends AbstractItem {
 
     protected int manaCost;
     protected Consumer<Entity> action;
+    
+    public MagicalItem(JsonObject json) {
+        super(json);
+        this.manaCost = json.getInt("mana-cost", -1);
+        //this.action = ?
+    }
     
     /**
      * Constructs a Magical Item using a lambda-expression as an effect.
