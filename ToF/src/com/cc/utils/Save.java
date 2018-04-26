@@ -23,12 +23,18 @@
 package com.cc.utils;
 
 /**
- * Proves that the 
+ * This interface is a contract towards an object, that states that it can be 
+ * saved to a format. The implementation is expected to have a constructor that
+ * also uses that format.
  * @author Ivan Canet
- * @param <T>
+ * @param <T> The format in which the object will be saved/loaded.
  */
 public interface Save<T> {
     
+    /**
+     * Saves the object using the specified format.
+     * @return The object, serialized into that format.
+     */
     public T save();
     
 }
