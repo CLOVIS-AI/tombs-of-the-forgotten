@@ -60,6 +60,7 @@ public class World implements Timable {
         
         rooms = map;
         this.player = player;
+        this.player.setWorld(this);
     }
     
     /**

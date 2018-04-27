@@ -22,6 +22,7 @@
  */
 package com.cc.world;
 
+import com.cc.items.ItemContainer;
 import com.cc.players.Entity;
 import com.cc.world.links.Link;
 import java.util.Collection;
@@ -48,14 +49,18 @@ public class Room {
     
     private boolean isGenerated = false;
     
+    private final ItemContainer items;
+    
     public Room(String description){
         this.description = description;
+        items = new ItemContainer(description);
     }
     
     public Room(String description, Location location, World world){
         this.description = description;
         this.location = location;
         this.world = world;
+        items = new ItemContainer(description);
     }
     
     /**
@@ -317,6 +322,10 @@ public class Room {
      */
     public boolean close(Room r, Entity e){
         return close(getDirectionTo(r), e);
+    }
+    
+    public ItemContainer getItems() {
+        return items;
     }
 
     @Override
