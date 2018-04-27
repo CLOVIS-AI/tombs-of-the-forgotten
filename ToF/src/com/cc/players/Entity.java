@@ -318,6 +318,14 @@ public abstract class Entity implements Timable {
         this.removeItem(item);
         this.getCurrentRoom().getItems().add(item);
     }
+    
+    /**
+     * The player's inventory.
+     * @return The player's inventory.
+     */
+    public Inventory getInventory() {
+        return inventory;
+    }
 
     /**
      * The world this entity is in.

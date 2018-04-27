@@ -5,18 +5,12 @@
  */
 package com.cc.players;
 
-import com.cc.items.Inventory;
 import com.cc.items.Item;
 import com.cc.items.Rarity;
 import com.cc.items.Weapon;
-import com.cc.utils.Bar;
-import com.cc.world.Direction;
 import com.cc.world.Location;
 import com.cc.world.Room;
 import com.cc.world.World;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 import java.util.TreeMap;
 import org.junit.After;
 import org.junit.AfterClass;
