@@ -306,7 +306,7 @@ public abstract class Entity implements Timable {
             inventory.remove(item);
         } else {
             throw new IllegalArgumentException("You can't throw away an item you"
-                    + "don't possess !");
+                    + "don't possess: " + item);
         }
     }
     
