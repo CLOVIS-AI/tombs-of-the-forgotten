@@ -24,7 +24,6 @@ package com.cc.items;
 
 import com.cc.utils.Bar;
 import static com.cc.utils.Bar.Behavior.ACCEPT;
-import static com.cc.utils.Translator.LINES;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -40,7 +39,7 @@ public class Inventory extends ItemContainer {
     
     public Inventory(String description, int maxWeight) {
         super(description);
-        weight = new Bar(LINES.get("pods"), 0, maxWeight, 0);
+        weight = new Bar("Pods", 0, maxWeight, 0);
     }
     
      /**
