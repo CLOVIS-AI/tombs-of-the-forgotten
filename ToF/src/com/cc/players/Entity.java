@@ -88,11 +88,14 @@ public abstract class Entity implements Timable {
     
     /**
      * Increases the health of the entity.
-     * @param n how much this should heal
-     * @throws IllegalArgumentException for negative values
+     * @param n how much this should heal. Negative values are allowed (to hurt
+     * the entity)
      */
     public final void heal(int n){
-        health.add(n, ACCEPT);
+        if(n >= 0)
+            health.add(n, ACCEPT);
+        else
+            hurt(n);
     }
     
     /**
