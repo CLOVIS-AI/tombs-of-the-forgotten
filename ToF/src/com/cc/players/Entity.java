@@ -26,7 +26,6 @@ import com.cc.items.Inventory;
 import com.cc.items.Item;
 import com.cc.utils.Bar;
 import static com.cc.utils.Bar.Behavior.ACCEPT;
-import static com.cc.utils.Translator.LINES;
 import com.cc.world.Direction;
 import com.cc.world.Location;
 import com.cc.world.Room;
@@ -72,10 +71,10 @@ public abstract class Entity implements Timable {
 
     public Entity(int maxHealth, int maxStrength, int maxMana, int maxWeight,
             Location l) {
-        health = new Bar(LINES.get("health"), 0, maxHealth, maxHealth);
-        stamina = new Bar(LINES.get("stamina"), 0, maxStrength, maxStrength);
-        mana = new Bar(LINES.get("mana"), 0, maxMana, 0);
-        inventory = new Inventory(LINES.get("inventory"), maxWeight);
+        health = new Bar("Health", 0, maxHealth, maxHealth);
+        stamina = new Bar("Stamina", 0, maxStrength, maxStrength);
+        mana = new Bar("Mana", 0, maxMana, 0);
+        inventory = new Inventory("Inventory", maxWeight);
 
         location = l;
         opponent = Optional.empty();
