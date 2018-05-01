@@ -41,7 +41,7 @@ public class MagicalItem extends AbstractItem {
     public MagicalItem(JsonObject json) {
         super(json);
         this.manaCost = json.getInt("mana-cost", -1);
-        //this.action = ?
+        this.action = new Action(json.get("action").asObject());
     }
     
     /**
@@ -84,6 +84,13 @@ public class MagicalItem extends AbstractItem {
         
         action.execute(entity);
         entity.useMana(manaCost);
+    }
+    
+    @Override
+    public JsonObject save() {
+        return super.save()
+                .add("mana-cost", manaCost)
+                .add("action", action.save());
     }
     
 }
