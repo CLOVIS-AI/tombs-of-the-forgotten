@@ -39,6 +39,13 @@ public class Action implements Save<JsonObject> {
     private final int value;
     private final Operation operation;
     
+    /**
+     * Creates a new Action
+     * @param target the target of the action
+     * @param operation the operation that will be executed on that target
+     * @param stat the stat that will be modified
+     * @param value how much it will be modified
+     */
     public Action(Target target, Operation operation, Stat stat, int value){
         this.target = target;
         this.stat = stat;
@@ -46,6 +53,11 @@ public class Action implements Save<JsonObject> {
         this.operation = operation;
     }
     
+    /**
+     * Creates a new Action
+     * @param target the target of the action
+     * @param operation the operation that will be executed on that target 
+     */
     public Action(Target target, Operation operation){
         this(target, operation, null, 0);
     }
@@ -81,18 +93,36 @@ public class Action implements Save<JsonObject> {
         }
     }
     
+    // ************************************************************* S T A T I C
+    
+    /**
+     * Represents a statistic of an Entity, such as its health.
+     */
     public enum Stat {
+        /** The mana of an Entity. */
         MANA,
+        /** The health of an Entity. */
         HEALTH,
+        /** The stamina of an Entity. */
         STAMINA
     }
     
+    /**
+     * What is targeted by this action?
+     */
     public enum Target {
+        /** The action will do something on the entity that uses the Item. */
         SELF,
+        /** The action will do something on the opponent of the entity that uses
+         the item. */
         OPPONENT
     }
     
+    /**
+     * The operation executed by this action.
+     */
     public enum Operation implements BiConsumer<Entity, Action> {
+        /** Add/remove a value to the player's stats. */
         ADD((e, a) -> a.add(e));
         
         private final BiConsumer<Entity, Action> callback;
