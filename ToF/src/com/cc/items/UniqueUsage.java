@@ -29,10 +29,12 @@ import com.eclipsesource.json.JsonObject;
  * UniqueUsage items cannot be used twice; as soon as they are used they will
  * reject any further call to their {@link #use(com.cc.players.Entity) } method.
  * <p>Note for the devs: when implementing an item than can only be used once
- * that has a very simple action, look at {@link UniqueLambda}.
+ * that has a very simple action, look at {@link UniqueLambda}. This class is
+ * written as package-private because the serialization is not able to load 
+ * direct children.
  * @author Ivan Canet
  */
-public abstract class UniqueUsage extends AbstractItem {
+abstract class UniqueUsage extends AbstractItem {
     
     private boolean hasBeenUsed = false;
     

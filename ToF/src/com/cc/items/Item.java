@@ -65,7 +65,9 @@ public interface Item extends Save<JsonObject> {
     public Rarity getRarity();
     
     public static Item loadItem(JsonObject json){
-        if(json.contains("damage")) return new Armor(json);
+        if(json.contains("damage"))         return new Armor(json);
+        if(json.contains("mana-cost"))      return new MagicalItem(json);
+        if(json.contains("used"))           return new UniqueLambda(json);
         
         throw new IllegalArgumentException("No Item type was found that matches"
                 + "the JSON data: " + json.toString(WriterConfig.PRETTY_PRINT));
