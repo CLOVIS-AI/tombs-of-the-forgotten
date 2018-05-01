@@ -60,11 +60,11 @@ public class Action implements Save<JsonObject> {
     }
     
     public enum Stat {
-        MANA(null),
+        MANA((e,v) -> e.addMana(v)),
         HEALTH((e,v) -> e.heal(v)),
-        STAMINA(null);
+        STAMINA((e,v) -> e.addStamina(v));
         
-        private BiConsumer<Entity,Integer> consumer;
+        private final BiConsumer<Entity,Integer> consumer;
         Stat(BiConsumer<Entity,Integer> c){consumer=c;}
         public void apply(Entity e, int value){consumer.accept(e, value);};
     }

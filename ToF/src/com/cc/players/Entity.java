@@ -139,8 +139,21 @@ public abstract class Entity implements Timable {
     }
     
     /**
+     * Adds stamina to this entity.
+     * @param amount the amount of stamina added (can be negative to remove stamina)
+     * @see #useStamina(int) Remove stamina
+     */
+    public void addStamina(int amount){
+        if(amount >= 0)
+            stamina.add(amount, ACCEPT);
+        else
+            useStamina(amount);
+    }
+    
+    /**
      * Uses stamina.
      * @param value how much stamina is lost
+     * @see #addStamina(int) Add stamina
      */
     public void useStamina(int value){
         stamina.remove(value, ACCEPT);
@@ -155,8 +168,21 @@ public abstract class Entity implements Timable {
     }
     
     /**
+     * Adds mana to this entity.
+     * @param amount the amount of mana added (can be negative to remove mana)
+     * @see #useMana(int) Remove mana
+     */
+    public void addMana(int amount){
+        if(amount >= 0)
+            mana.add(amount, ACCEPT);
+        else
+            useMana(amount);
+    }
+    
+    /**
      * Uses mana.
      * @param amount the amount to remove
+     * @see #addMana(int) Add mana
      */
     public void useMana(int amount){
         mana.remove(amount, ACCEPT);
