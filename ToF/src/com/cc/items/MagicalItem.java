@@ -69,7 +69,7 @@ public class MagicalItem extends AbstractItem {
      * @param rarity the rarity of the weapon
      * @param manaCost the mana cost of using the weapon
      * @param damage the damage dealt by the weapon (see {@link Entity#hurt(int) })
-     * @see #MagicalItem(java.lang.String, int, java.lang.String, com.cc.items.Rarity, int, java.util.function.Consumer) Magical Item
+     * @see #MagicalItem(java.lang.String, int, java.lang.String, com.cc.items.Rarity, int, com.cc.items.Action) Magical Item
      */
     public MagicalItem(String name, int weight, String description, Rarity rarity, 
             int manaCost, int damage) {
