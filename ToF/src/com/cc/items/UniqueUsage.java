@@ -23,6 +23,7 @@
 package com.cc.items;
 
 import com.cc.players.Entity;
+import com.eclipsesource.json.JsonObject;
 
 /**
  * UniqueUsage items cannot be used twice; as soon as they are used they will
@@ -34,6 +35,15 @@ import com.cc.players.Entity;
 public abstract class UniqueUsage extends AbstractItem {
     
     private boolean hasBeenUsed = false;
+    
+    /**
+     * Creates a UniqueUsage item from JSON
+     * @param json the saved data
+     */
+    public UniqueUsage(JsonObject json){
+        super(json);
+        hasBeenUsed = json.getBoolean("used", false);
+    }
 
     /**
      * Creates an item that can only be used once.
@@ -79,6 +89,12 @@ public abstract class UniqueUsage extends AbstractItem {
      */
     public final boolean hasBeenUsed(){
         return hasBeenUsed;
+    }
+    
+    @Override
+    public JsonObject save(){
+        return super.save()
+                .add("used", hasBeenUsed);
     }
     
     /**
