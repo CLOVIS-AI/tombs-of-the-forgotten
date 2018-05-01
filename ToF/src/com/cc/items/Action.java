@@ -62,9 +62,24 @@ public class Action implements Save<JsonObject> {
         this(target, operation, null, 0);
     }
     
+    /**
+     * Creates an Action object from a JSON object.
+     * @param json the saved data
+     */
+    public Action(JsonObject json) {
+        this(Target.valueOf(   json.getString("target", null)),
+             Operation.valueOf(json.getString("operation", null)),
+             Stat.valueOf(     json.getString("stat", null)),
+                               json.getInt("value", 0));
+    }
+    
     @Override
     public JsonObject save() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new JsonObject()
+                .add("target", target.toString())
+                .add("stat", stat.toString())
+                .add("value", value)
+                .add("operation", operation.toString());
     }
     
     /**
