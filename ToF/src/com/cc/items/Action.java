@@ -26,6 +26,7 @@ import static com.cc.items.Action.Target.SELF;
 import com.cc.players.Entity;
 import com.cc.utils.Save;
 import com.eclipsesource.json.JsonObject;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 
 /**
@@ -100,7 +101,7 @@ public class Action implements Save<JsonObject> {
      * Adds/removes the specified value from the target's stat.
      * @param target the target
      */
-    void add(Entity target){
+    void add(Entity target, int value){
         switch(stat){
             case MANA: target.addMana(value); break;
             case HEALTH: target.heal(value); break;
@@ -137,8 +138,10 @@ public class Action implements Save<JsonObject> {
      * The operation executed by this action.
      */
     public enum Operation implements BiConsumer<Entity, Action> {
-        /** Add/remove a value to the player's stats. */
-        ADD((e, a) -> a.add(e));
+        /** Add a value to the player's stats. */
+        ADD((e, a) -> a.add(e, a.value)),
+        /** Remove a value to the player's stats. */
+        REMOVE((e, a) -> a.add(e, -a.value));
         
         private final BiConsumer<Entity, Action> callback;
         Operation(BiConsumer<Entity, Action> bc){callback = bc;}
@@ -146,4 +149,45 @@ public class Action implements Save<JsonObject> {
             callback.accept(t, u);
         }
     }
+    
+    // *************************************************************** O T H E R
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.stat);
+        hash = 37 * hash + Objects.hashCode(this.target);
+        hash = 37 * hash + this.value;
+        hash = 37 * hash + Objects.hashCode(this.operation);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Action other = (Action) obj;
+        if (this.value != other.value) {
+            return false;
+        }
+        if (this.stat != other.stat) {
+            return false;
+        }
+        if (this.target != other.target) {
+            return false;
+        }
+        if (this.operation != other.operation) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 }
