@@ -42,6 +42,8 @@ public class MagicalItem extends AbstractItem {
         super(json);
         this.manaCost = json.getInt("mana-cost", -1);
         this.action = new Action(json.get("action").asObject());
+        
+        if(manaCost <= 0) throw new IllegalArgumentException("The mana cost cannot be negative:" + manaCost);
     }
     
     /**
