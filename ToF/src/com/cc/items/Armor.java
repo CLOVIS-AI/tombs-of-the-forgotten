@@ -23,6 +23,8 @@
 package com.cc.items;
 
 import com.cc.players.Entity;
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.WriterConfig;
 
 /**
  * Armor are objects that protect entities.
@@ -31,6 +33,19 @@ import com.cc.players.Entity;
 public class Armor extends AbstractItem {
     
     protected int damage;
+    
+    /**
+     * Creates an armor object.
+     * @param json the json-saved data
+     */
+    public Armor(JsonObject json) {
+        super(json);
+        this.damage = json.getInt("damage", -1);
+        
+        if(damage == -1)
+            throw new IllegalArgumentException("The damage was missing from"
+                    + "the JSON object: " + json.toString(WriterConfig.PRETTY_PRINT));
+    }
     
     /**
      * Creates an armor object.
@@ -64,6 +79,12 @@ public class Armor extends AbstractItem {
      */
     public int getDamageReduction(){
         return damage;
+    }
+    
+    @Override
+    public JsonObject save() {
+        return super.save()
+                .add("damage", damage);
     }
     
 }

@@ -23,12 +23,15 @@
 package com.cc.items;
 
 import com.cc.players.Entity;
+import com.cc.utils.Save;
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.WriterConfig;
 
 /**
  * Represents a generic Item.
  * @author Ivan Canet
  */
-public interface Item {
+public interface Item extends Save<JsonObject> {
     
     /**
      * Notifies the Item that an entity is using it.
@@ -61,4 +64,13 @@ public interface Item {
      */
     public Rarity getRarity();
     
+    public static Item loadItem(JsonObject json){
+        if(json.contains("stamina-cost"))   return new Weapon(json);
+        if(json.contains("damage"))         return new Armor(json);
+        if(json.contains("mana-cost"))      return new MagicalItem(json);
+        if(json.contains("used"))           return new UniqueLambda(json);
+        
+        throw new IllegalArgumentException("No Item type was found that matches"
+                + "the JSON data: " + json.toString(WriterConfig.PRETTY_PRINT));
+    }
 }

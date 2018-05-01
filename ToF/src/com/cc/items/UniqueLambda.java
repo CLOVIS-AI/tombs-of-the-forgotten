@@ -23,18 +23,21 @@
 package com.cc.items;
 
 import com.cc.players.Entity;
-import java.util.function.Consumer;
+import com.eclipsesource.json.JsonObject;
 
 /**
  * UniqueUsage items cannot be used twice; as soon as they are used they will
  * reject any further call to their {@link #use(com.cc.players.Entity) } method.
- * <p>Note for the devs: when implementing an item than can only be used once
- * that has a complicated action, look at {@link UniqueUsage}.
  * @author Ivan Canet
  */
 public class UniqueLambda extends UniqueUsage {
 
-    protected Consumer<Entity> action;
+    protected Action action;
+    
+    public UniqueLambda(JsonObject json){
+        super(json);
+        action = new Action(json.get("action").asObject());
+    }
     
     /**
      * Constructs a single-use item with a lambda-expression.
@@ -45,14 +48,20 @@ public class UniqueLambda extends UniqueUsage {
      * @param action what happens when an entity uses the item
      */
     public UniqueLambda(String name, int weight, String description, 
-            Rarity rarity, Consumer<Entity> action) {
+            Rarity rarity, Action action) {
         super(name, weight, description, rarity);
         this.action = action;
     }
 
     @Override
     protected void act(Entity entity) {
-        action.accept(entity);
+        action.execute(entity);
+    }
+    
+    @Override
+    public JsonObject save(){
+        return super.save()
+                .add("action", action.save());
     }
     
 }

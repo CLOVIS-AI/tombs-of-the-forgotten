@@ -23,6 +23,7 @@
 package com.cc.items;
 
 import com.cc.players.Entity;
+import com.eclipsesource.json.JsonObject;
 
 /**
  * A Weapon. Weapons attack your enemy using your stamina.
@@ -33,6 +34,20 @@ public class Weapon extends AbstractItem {
     protected int damage;
     protected double effect;
     protected int neededStamina;
+    
+    /**
+     * Creates a weapon from JSON.
+     * @param json the saved data
+     */
+    public Weapon(JsonObject json) {
+        super(json);
+        damage = json.getInt("damage", -1);
+        effect = json.getDouble("effect", 0);
+        neededStamina = json.getInt("stamina-cost", 0);
+        
+        if(damage <= 0) throw new IllegalArgumentException("The damage cannot be negative:" + damage);
+        if(neededStamina < 0) throw new IllegalArgumentException("The stamina cost cannot be negative:" + neededStamina);
+    }
     
     /**
      * Creates a Weapon.
@@ -54,9 +69,9 @@ public class Weapon extends AbstractItem {
         if(damage <= 0)
             throw new IllegalArgumentException("Damage cannot be negative or "
                     + "null: " + damage);
-        if(staminaLevel <= 0)
+        if(staminaLevel < 0)
             throw new IllegalArgumentException("Stamina level cannot be negative"
-                    + " or null: " + staminaLevel);
+                    + ": " + staminaLevel);
         
         this.damage = damage;
         this.effect = effect;
@@ -86,6 +101,14 @@ public class Weapon extends AbstractItem {
                              )
                 ));
         entity.useStamina(weight);
+    }
+    
+    @Override
+    public JsonObject save(){
+        return super.save()
+                .add("damage", damage)
+                .add("effect", effect)
+                .add("stamina-cost", neededStamina);
     }
     
 }

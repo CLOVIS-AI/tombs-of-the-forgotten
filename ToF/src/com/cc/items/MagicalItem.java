@@ -22,8 +22,11 @@
  */
 package com.cc.items;
 
+import static com.cc.items.Action.Operation.REMOVE;
+import static com.cc.items.Action.Stat.HEALTH;
+import static com.cc.items.Action.Target.OPPONENT;
 import com.cc.players.Entity;
-import java.util.function.Consumer;
+import com.eclipsesource.json.JsonObject;
 
 /**
  * A Magical Item.
@@ -33,7 +36,15 @@ import java.util.function.Consumer;
 public class MagicalItem extends AbstractItem {
 
     protected int manaCost;
-    protected Consumer<Entity> action;
+    protected Action action;
+    
+    public MagicalItem(JsonObject json) {
+        super(json);
+        this.manaCost = json.getInt("mana-cost", -1);
+        this.action = new Action(json.get("action").asObject());
+        
+        if(manaCost <= 0) throw new IllegalArgumentException("The mana cost cannot be negative:" + manaCost);
+    }
     
     /**
      * Constructs a Magical Item using a lambda-expression as an effect.
@@ -46,7 +57,7 @@ public class MagicalItem extends AbstractItem {
      * @see #MagicalItem(java.lang.String, int, java.lang.String, com.cc.items.Rarity, int, int) Magical Weapon
      */
     public MagicalItem(String name, int weight, String description, Rarity rarity, 
-            int manaCost, Consumer<Entity> action) {
+            int manaCost, Action action) {
         super(name, weight, description, rarity);
         this.manaCost = manaCost;
         this.action = action;
@@ -60,12 +71,12 @@ public class MagicalItem extends AbstractItem {
      * @param rarity the rarity of the weapon
      * @param manaCost the mana cost of using the weapon
      * @param damage the damage dealt by the weapon (see {@link Entity#hurt(int) })
-     * @see #MagicalItem(java.lang.String, int, java.lang.String, com.cc.items.Rarity, int, java.util.function.Consumer) Magical Item
+     * @see #MagicalItem(java.lang.String, int, java.lang.String, com.cc.items.Rarity, int, com.cc.items.Action) Magical Item
      */
     public MagicalItem(String name, int weight, String description, Rarity rarity, 
             int manaCost, int damage) {
         this(name, weight, description, rarity, manaCost, 
-                e -> e.getOpponent().ifPresent(f -> f.hurt(damage)));
+                new Action(OPPONENT, REMOVE, HEALTH, damage));
     }
 
     @Override
@@ -73,8 +84,15 @@ public class MagicalItem extends AbstractItem {
         if(entity.getMana() < manaCost)
             return;
         
-        action.accept(entity);
+        action.execute(entity);
         entity.useMana(manaCost);
+    }
+    
+    @Override
+    public JsonObject save() {
+        return super.save()
+                .add("mana-cost", manaCost)
+                .add("action", action.save());
     }
     
 }

@@ -22,6 +22,8 @@
  */
 package com.cc.items;
 
+import com.eclipsesource.json.JsonObject;
+
 /**
  * An abstract Item.
  * @author Ivan Canet
@@ -32,6 +34,17 @@ public abstract class AbstractItem implements Item {
     protected String description;
     protected final Rarity rarity;
     protected String name;
+    
+    /**
+     * Creates an Abstract Item.
+     * @param json the saved object
+     */
+    public AbstractItem(JsonObject json) {
+        this(json.getString("name", null),
+             json.getInt("weight", -1),
+             json.getString("description", null),
+             Rarity.valueOf(json.getString("rarity", null)));
+    }
 
     /**
      * Creates an Abstract Item.
@@ -72,6 +85,15 @@ public abstract class AbstractItem implements Item {
     @Override
     public Rarity getRarity() {
         return rarity;
+    }
+    
+    @Override
+    public JsonObject save() {
+        return new JsonObject()
+                .add("name", getName())
+                .add("weight", getWeight())
+                .add("description", getDescription())
+                .add("rarity", getRarity().toString());
     }
     
 }
