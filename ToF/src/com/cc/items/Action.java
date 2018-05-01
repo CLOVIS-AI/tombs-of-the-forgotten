@@ -37,11 +37,17 @@ public class Action implements Save<JsonObject> {
     private final Stat stat;
     private final Target target;
     private final int value;
+    private final Operation operation;
     
-    public Action(Target target, Stat stat, int value){
+    public Action(Target target, Operation operation, Stat stat, int value){
         this.target = target;
         this.stat = stat;
         this.value = value;
+        this.operation = operation;
+    }
+    
+    public Action(Target target, Operation operation){
+        this(target, operation, null, 0);
     }
     
     @Override
@@ -49,6 +55,10 @@ public class Action implements Save<JsonObject> {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+    /**
+     * Executes the action, based on the specified parameters.
+     * @param e the entity that executes this item.
+     */
     public void execute(Entity e){
         Entity entity = target == SELF ?
                       e : e.getOpponent()
@@ -56,17 +66,25 @@ public class Action implements Save<JsonObject> {
                                       + "use this item in this case, the entity"
                                       + " ("+e+") does not have any opponent!"));
         
-        
+        operation.accept(entity, this);
+    }
+    
+    /**
+     * Adds/removes the specified value from the target's stat.
+     * @param target the target
+     */
+    void add(Entity target){
+        switch(stat){
+            case MANA: target.addMana(value); break;
+            case HEALTH: target.heal(value); break;
+            case STAMINA: target.addStamina(value); break;
+        }
     }
     
     public enum Stat {
-        MANA((e,v) -> e.addMana(v)),
-        HEALTH((e,v) -> e.heal(v)),
-        STAMINA((e,v) -> e.addStamina(v));
-        
-        private final BiConsumer<Entity,Integer> consumer;
-        Stat(BiConsumer<Entity,Integer> c){consumer=c;}
-        public void apply(Entity e, int value){consumer.accept(e, value);};
+        MANA,
+        HEALTH,
+        STAMINA
     }
     
     public enum Target {
@@ -74,4 +92,13 @@ public class Action implements Save<JsonObject> {
         OPPONENT
     }
     
+    public enum Operation implements BiConsumer<Entity, Action> {
+        ADD((e, a) -> a.add(e));
+        
+        private final BiConsumer<Entity, Action> callback;
+        Operation(BiConsumer<Entity, Action> bc){callback = bc;}
+        @Override public void accept(Entity t, Action u) {
+            callback.accept(t, u);
+        }
+    }
 }
