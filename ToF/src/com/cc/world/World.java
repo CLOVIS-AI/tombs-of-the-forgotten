@@ -35,7 +35,7 @@ import java.util.Queue;
 import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The world in which the game is taking place.
@@ -60,6 +60,7 @@ public class World implements Timable {
         
         rooms = map;
         this.player = player;
+        this.player.setWorld(this);
     }
     
     /**
@@ -170,52 +171,60 @@ public class World implements Timable {
     /**
      * Get the rooms which location validate a predicate.
      * <p>Note that the rooms are provided in no particular order.
+     * <p>This method returns a Stream that has not yet been executed, meaning
+     * that, thanks to the lazy execution of Streams, this method call is
+     * virtually free.
      * @param p a predicate on the location of each room
      * @return The rooms.
      */
-    public List<Room> selectRoomsByLocation(Predicate<Location> p){
+    public Stream<Room> selectRoomsByLocation(Predicate<Location> p){
         return rooms.keySet()
                 .stream()
                 .filter(p)
-                .map(rooms::get)
-                .collect(Collectors.toList());
+                .map(rooms::get);
     }
     
     /**
      * Get the rooms that validate a predicate.
      * <p>Note that the rooms are provided in no particular order.
+     * <p>This method returns a Stream that has not yet been executed, meaning
+     * that, thanks to the lazy execution of Streams, this method call is
+     * virtually free.
      * @param p a predicate on the room
      * @return The rooms.
      */
-    public List<Room> selectRooms(Predicate<Room> p){
+    public Stream<Room> selectRooms(Predicate<Room> p){
         return rooms.values()
                 .stream()
-                .filter(p)
-                .collect(Collectors.toList());
+                .filter(p);
     }
     
     /**
      * Gets the entities according to a predicate. The player is ignored.
+     * <p>This method returns a Stream that has not yet been executed, meaning
+     * that, thanks to the lazy execution of Streams, this method call is
+     * virtually free.
      * @param p how to choose the entities
      * @return The selected entities.
      */
-    public List<Entity> selectEntities(Predicate<Entity> p){
+    public Stream<Entity> selectEntities(Predicate<Entity> p){
         return entities
                 .stream()
-                .filter(p)
-                .collect(Collectors.toList());
+                .filter(p);
     }
     
     /**
      * Gets the entities that are located in a specific floor.
+     * <p>This method returns a Stream that has not yet been executed, meaning
+     * that, thanks to the lazy execution of Streams, this method call is
+     * virtually free.
      * @param floor the floor you want
      * @return The entities on that floor.
      */
-    public List<Entity> selectEntitiesByFloor(int floor){
+    public Stream<Entity> selectEntitiesByFloor(int floor){
         return entities
                 .stream()
-                .filter(e -> e.getLocation().getZ() == floor)
-                .collect(Collectors.toList());
+                .filter(e -> e.getLocation().getZ() == floor);
     }
     
     /**
