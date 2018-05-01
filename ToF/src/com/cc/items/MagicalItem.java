@@ -22,9 +22,11 @@
  */
 package com.cc.items;
 
+import static com.cc.items.Action.Operation.REMOVE;
+import static com.cc.items.Action.Stat.HEALTH;
+import static com.cc.items.Action.Target.OPPONENT;
 import com.cc.players.Entity;
 import com.eclipsesource.json.JsonObject;
-import java.util.function.Consumer;
 
 /**
  * A Magical Item.
@@ -34,7 +36,7 @@ import java.util.function.Consumer;
 public class MagicalItem extends AbstractItem {
 
     protected int manaCost;
-    protected Consumer<Entity> action;
+    protected Action action;
     
     public MagicalItem(JsonObject json) {
         super(json);
@@ -53,7 +55,7 @@ public class MagicalItem extends AbstractItem {
      * @see #MagicalItem(java.lang.String, int, java.lang.String, com.cc.items.Rarity, int, int) Magical Weapon
      */
     public MagicalItem(String name, int weight, String description, Rarity rarity, 
-            int manaCost, Consumer<Entity> action) {
+            int manaCost, Action action) {
         super(name, weight, description, rarity);
         this.manaCost = manaCost;
         this.action = action;
@@ -72,7 +74,7 @@ public class MagicalItem extends AbstractItem {
     public MagicalItem(String name, int weight, String description, Rarity rarity, 
             int manaCost, int damage) {
         this(name, weight, description, rarity, manaCost, 
-                e -> e.getOpponent().ifPresent(f -> f.hurt(damage)));
+                new Action(OPPONENT, REMOVE, HEALTH, damage));
     }
 
     @Override
@@ -80,7 +82,7 @@ public class MagicalItem extends AbstractItem {
         if(entity.getMana() < manaCost)
             return;
         
-        action.accept(entity);
+        action.execute(entity);
         entity.useMana(manaCost);
     }
     
