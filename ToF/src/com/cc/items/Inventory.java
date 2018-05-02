@@ -24,6 +24,7 @@ package com.cc.items;
 
 import com.cc.utils.Bar;
 import static com.cc.utils.Bar.Behavior.ACCEPT;
+import com.eclipsesource.json.JsonObject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -36,6 +37,15 @@ public class Inventory extends ItemContainer {
     
     /** Weigth bar. Can't add item into the inventory when full.*/
     private final Bar weight;
+    
+    /**
+     * Loads the inventory from JSON
+     * @param json the saved data
+     */
+    public Inventory(JsonObject json) {
+        super(json);
+        weight = new Bar(json.get("weight").asObject());
+    }
     
     public Inventory(String description, int maxWeight) {
         super(description);
@@ -59,6 +69,7 @@ public class Inventory extends ItemContainer {
      * {@link #canAdd(com.cc.items.Item) canAddItem(Item)}.
      * @param item The item to be added.
      */
+    @Override
     public void add(Item item) {
         if (canAdd(item)) {
             super.add(item);
@@ -100,6 +111,12 @@ public class Inventory extends ItemContainer {
      */
     public Bar getWeightBar() {
         return weight;
+    }
+    
+    @Override
+    public JsonObject save() {
+        return super.save()
+                .add("weight", weight.save());
     }
     
 }
