@@ -23,6 +23,9 @@
 package com.cc.utils;
 
 import static com.cc.utils.Bar.Behavior.ACCEPT;
+import com.eclipsesource.json.JsonArray;
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonValue;
 import static java.lang.Integer.min;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +34,7 @@ import java.util.List;
  * Bars are used to represent information about the player (skills, health bar)... 
  * @author Ivan Canet
  */
-public class Bar {
+public class Bar implements Save<JsonObject> {
     
     private int minimum, maximum;
     
@@ -68,6 +71,24 @@ public class Bar {
      */
     public Bar(String name, int minimum, int maximum){
         this(name, minimum, maximum, minimum);
+    }
+    
+    /**
+     * Loads a Bar from JSON.
+     * @param json the saved data
+     */
+    public Bar(JsonObject json){
+        this(json.getString("name", null),
+             json.getInt("min", 0),
+             json.getInt("max", Integer.MAX_VALUE),
+             json.getInt("value", 0));
+        
+        json.get("bonuses").asArray()
+                .forEach(e -> bonuses.add(
+                        new Pair<>(
+                                e.asObject().getInt("time", 0),
+                                e.asObject().getInt("value", 0)
+                        )));
     }
     
     /**
@@ -229,6 +250,23 @@ public class Bar {
      */
     public String getName() {
         return name;
+    }
+
+    @Override
+    public JsonObject save() {
+        JsonArray bonuses = new JsonArray();
+        this.bonuses.forEach(
+                e -> bonuses.add(new JsonObject()
+                        .add("time", e.first)
+                        .add("value", e.second)
+                ));
+        
+        return new JsonObject()
+                .add("name", name)
+                .add("min", minimum)
+                .add("max", maximum)
+                .add("value", real)
+                .add("bonuses", bonuses);
     }
     
     /**
