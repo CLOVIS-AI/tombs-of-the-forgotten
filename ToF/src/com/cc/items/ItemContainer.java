@@ -22,6 +22,9 @@
  */
 package com.cc.items;
 
+import com.cc.utils.Save;
+import com.eclipsesource.json.JsonArray;
+import com.eclipsesource.json.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -31,11 +34,21 @@ import java.util.Optional;
  * Represents a container.
  * @author schourouq
  */
-public class ItemContainer {
+public class ItemContainer implements Save<JsonObject> {
         
     private final List<Item> items;
     
     private final Optional<String> description;
+    
+    /**
+     * Loads an ItemContainer from JSON.
+     * @param json the saved data
+     */
+    public ItemContainer(JsonObject json) {
+        this(json.getString("description", null));
+        json.get("items").asArray()
+                .forEach(i -> items.add(Item.loadItem(i.asObject())));
+    }
     
     /**
      * Creates a chest.
@@ -136,6 +149,16 @@ public class ItemContainer {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public JsonObject save() {
+        JsonArray items = new JsonArray();
+        this.items.forEach(e -> items.add(e.save()));
+        
+        return new JsonObject()
+                .add("description", description.orElse(""))
+                .add("items", items);
     }
     
 }
