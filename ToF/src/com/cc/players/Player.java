@@ -80,5 +80,30 @@ public class Player extends Entity {
         return super.save()
                 .add("luck", searchLuck);
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 53 * hash + this.searchLuck;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Player other = (Player) obj;
+        if (this.searchLuck != other.searchLuck) {
+            return false;
+        }
+        return true;
+    }
     
 }
