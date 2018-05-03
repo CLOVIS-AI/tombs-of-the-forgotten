@@ -20,18 +20,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.cc.world;
+package com.cc.utils;
 
 /**
- * Represents that an object can be updated according to a time event.
+ * This interface is a contract towards an object, that states that it can be 
+ * saved to a format. The implementation is expected to have a constructor that
+ * also uses that format.
  * @author Ivan Canet
+ * @param <T> The format in which the object will be saved/loaded.
  */
-public interface Timable {
+public interface Save<T> {
     
     /**
-     * Notifies an object that time has passed. This is useful for objects that
-     * have regeneration, or other effects that act over-time.
+     * Saves the object using the specified format.
+     * @return The object, serialized into that format.
      */
-    public void nextTick();
+    public T save();
     
 }

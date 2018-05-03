@@ -20,64 +20,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.cc.tof;
+package com.cc.utils.messages;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * An action.
- * @author schourouq
+ * A part of a Message.
+ * @author Ivan Canet
  */
-public class Action {
+public class MessagePart {
     
-    final private String command;
-    final private String[] parameters;
-
+    private final String text;
+    private final Styling styling;
+    
     /**
-     * Constructor.
-     * @param command command for an action
-     * @param parameters parameters of a command
+     * Creates a Message part.
+     * @param text the text of that part.
+     * @param styling the styling of that part.
      */
-    public Action(String command, String[] parameters) {
-        this.command = command;
-        this.parameters = parameters;
-    }
-
-    /**
-     * Get the command.
-     * @return The command.
-     */
-    public String getCommand() {
-        return command;
+    public MessagePart(String text, Styling styling) {
+        this.text = text;
+        this.styling = styling;
     }
     
     /**
-     * Get the parameters.
-     * @return The parameters
+     * Creates a Message part using {@link Styling#DEFAULT the default styling}.
+     * @param text the text of that part.
      */
-    public String[] getParameters() {
-        return parameters;
+    public MessagePart(String text) {
+        this(text, Styling.DEFAULT);
     }
 
-    /**
-     * A hash code value for this object.
-     * @return A hash code value for this object 
-     */
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 73 * hash + Objects.hashCode(this.command);
-        hash = 73 * hash + Arrays.deepHashCode(this.parameters);
+        hash = 83 * hash + Objects.hashCode(this.text);
+        hash = 83 * hash + Objects.hashCode(this.styling);
         return hash;
     }
 
-    /**
-     * Indicates whether some other object is "equal to" this one.
-     * @param obj the reference object with which to compare
-     * @return {@code true} if this object is the same as the obj argument,
-     * false otherwise
-     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -89,29 +70,35 @@ public class Action {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Action other = (Action) obj;
-        if (!Objects.equals(this.command, other.command)) {
+        final MessagePart other = (MessagePart) obj;
+        if (!Objects.equals(this.text, other.text)) {
             return false;
         }
-        if (!Arrays.deepEquals(this.parameters, other.parameters)) {
+        if (!Objects.equals(this.styling, other.styling)) {
             return false;
         }
         return true;
     }
-    
-    /**
-     * A string representation of the object.
-     * @return A string representation of the object
-     */
+
     @Override
-    public String toString(){
-        StringBuilder sb = new StringBuilder();
-        sb.append(command);
-        for(String s : parameters){
-            sb.append(" ");
-            sb.append(s);
-        }
-        return sb.toString();
+    public String toString() {
+        return "[styling:("+styling+")"+text+"]";
+    }
+
+    /**
+     * The text in this MessagePart.
+     * @return the text in this MessagePart.
+     */
+    public String getText() {
+        return text;
+    }
+
+    /**
+     * The styling of this MessagePart.
+     * @return The styling of this MessagePart.
+     */
+    public Styling getStyling() {
+        return styling;
     }
     
 }

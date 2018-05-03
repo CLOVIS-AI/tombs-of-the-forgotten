@@ -1,31 +1,61 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* MIT License
+ *
+ * Copyright (c) 2018 Canet Ivan & Chourouq Sarah
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package com.cc.items;
 
 import com.cc.players.Entity;
+import com.eclipsesource.json.JsonObject;
 
 /**
  * UniqueUsage items cannot be used twice; as soon as they are used they will
  * reject any further call to their {@link #use(com.cc.players.Entity) } method.
  * <p>Note for the devs: when implementing an item than can only be used once
- * that has a very simple action, look at {@link UniqueLambda}.
+ * that has a very simple action, look at {@link UniqueLambda}. This class is
+ * written as package-private because the serialization is not able to load 
+ * direct children.
  * @author Ivan Canet
  */
-public abstract class UniqueUsage extends AbstractItem {
+abstract class UniqueUsage extends AbstractItem {
     
     private boolean hasBeenUsed = false;
+    
+    /**
+     * Creates a UniqueUsage item from JSON
+     * @param json the saved data
+     */
+    public UniqueUsage(JsonObject json){
+        super(json);
+        hasBeenUsed = json.getBoolean("used", false);
+    }
 
     /**
      * Creates an item that can only be used once.
-     * @param weight its item
+     * @param name its name
+     * @param weight its weight
      * @param description its description
      * @param rarity its rarity
      */
-    public UniqueUsage(int weight, String description, Rarity rarity) {
-        super(weight, description, rarity);
+    public UniqueUsage(String name, int weight, String description, Rarity rarity) {
+        super(name, weight, description, rarity);
     }
 
     /**
@@ -61,6 +91,12 @@ public abstract class UniqueUsage extends AbstractItem {
      */
     public final boolean hasBeenUsed(){
         return hasBeenUsed;
+    }
+    
+    @Override
+    public JsonObject save(){
+        return super.save()
+                .add("used", hasBeenUsed);
     }
     
     /**

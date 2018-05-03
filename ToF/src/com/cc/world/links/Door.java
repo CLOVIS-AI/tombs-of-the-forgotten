@@ -20,65 +20,66 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.cc.players;
+package com.cc.world.links;
 
+import com.cc.players.Entity;
+import com.cc.world.Room;
+import com.cc.world.World;
 import com.eclipsesource.json.JsonObject;
-import com.eclipsesource.json.JsonValue;
-
 
 /**
- * A Player.
+ * A Door is a Link that can be opened by any entity.
  * @author Ivan Canet
  */
-public class Player extends Entity {
-        
-    private int searchLuck;
-    
+public class Door extends Link {
+
     /**
-     * Creates a default player with default values.
+     * Creates a closed door.
+     * @param r1 one of the linked rooms
+     * @param r2 the other linked room
      */
-    public Player(){
-        this(20, 2, 5, 10);
+    public Door(Room r1, Room r2) {
+        this(r1, r2, false);
     }
     
     /**
-     * Creates a player.
-     * @param maxHealth The maximum health
-     * @param maxStrength The maximum strength
-     * @param maxMana The maximum mana
-     * @param maxWeight The maximum weight he can carry
+     * Creates a door.
+     * @param r1 one of the linked rooms
+     * @param r2 the other linked room
+     * @param openByDefault {@code true} if the door is opened
      */
-    public Player(int maxHealth, int maxStrength, int maxMana, int maxWeight) {
-        this(maxHealth, maxStrength, maxMana, maxWeight, 0);
+    public Door(Room r1, Room r2, boolean openByDefault) {
+        super(r1, r2, openByDefault);
     }
     
-    /**
-     * Creates a player.
-     * @param maxHealth The maximum health
-     * @param maxStrength The maximum strength
-     * @param maxMana The maximum mana
-     * @param maxWeight The maximum weight he can carry
-     * @param luck The luck of finding a good item
-     */
-    public Player(int maxHealth, int maxStrength, int maxMana, int maxWeight,
-            int luck) {
-        super(maxHealth, maxStrength, maxMana, maxWeight);
-        searchLuck = luck;
+    public Door(World world, JsonObject json){
+        super(world, json);
     }
-    
-    /**
-     * Creates a player from JSON.
-     * @param json the saved data
-     */
-    public Player(JsonObject json) {
-        super(json);
-        searchLuck = json.getInt("luck", 0);
+
+    @Override
+    public boolean canOpen(Entity e) {
+        return true;
+    }
+
+    @Override
+    public boolean canClose(Entity e) {
+        return true;
+    }
+
+    @Override
+    public boolean open(Entity e) {
+        return isOpen = true;
+    }
+
+    @Override
+    public boolean close(Entity e) {
+        return isOpen = false;
     }
     
     @Override
     public JsonObject save() {
         return super.save()
-                .add("luck", searchLuck);
+                .add("type", "door");
     }
     
 }

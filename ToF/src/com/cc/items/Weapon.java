@@ -1,11 +1,29 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* MIT License
+ *
+ * Copyright (c) 2018 Canet Ivan & Chourouq Sarah
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package com.cc.items;
 
 import com.cc.players.Entity;
+import com.eclipsesource.json.JsonObject;
 
 /**
  * A Weapon. Weapons attack your enemy using your stamina.
@@ -18,7 +36,22 @@ public class Weapon extends AbstractItem {
     protected int neededStamina;
     
     /**
+     * Creates a weapon from JSON.
+     * @param json the saved data
+     */
+    public Weapon(JsonObject json) {
+        super(json);
+        damage = json.getInt("damage", -1);
+        effect = json.getDouble("effect", 0);
+        neededStamina = json.getInt("stamina-cost", 0);
+        
+        if(damage <= 0) throw new IllegalArgumentException("The damage cannot be negative:" + damage);
+        if(neededStamina < 0) throw new IllegalArgumentException("The stamina cost cannot be negative:" + neededStamina);
+    }
+    
+    /**
      * Creates a Weapon.
+     * @param name the weapon's name
      * @param weight the weight of the weapon
      * @param description the description of the weapon
      * @param rarity the rarity of the weapon
@@ -29,16 +62,16 @@ public class Weapon extends AbstractItem {
      * @see #use(com.cc.players.Entity) More information on the effect and 
      *      staminaLevel
      */
-    public Weapon(int weight, String description, Rarity rarity, int damage,
-            double effect, int staminaLevel) {
-        super(weight, description, rarity);
+    public Weapon(String name, int weight, String description, Rarity rarity, 
+            int damage, double effect, int staminaLevel) {
+        super(name, weight, description, rarity);
         
         if(damage <= 0)
             throw new IllegalArgumentException("Damage cannot be negative or "
                     + "null: " + damage);
-        if(staminaLevel <= 0)
+        if(staminaLevel < 0)
             throw new IllegalArgumentException("Stamina level cannot be negative"
-                    + " or null: " + staminaLevel);
+                    + ": " + staminaLevel);
         
         this.damage = damage;
         this.effect = effect;
@@ -68,6 +101,14 @@ public class Weapon extends AbstractItem {
                              )
                 ));
         entity.useStamina(weight);
+    }
+    
+    @Override
+    public JsonObject save(){
+        return super.save()
+                .add("damage", damage)
+                .add("effect", effect)
+                .add("stamina-cost", neededStamina);
     }
     
 }

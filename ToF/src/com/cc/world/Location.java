@@ -1,9 +1,29 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* MIT License
+ *
+ * Copyright (c) 2018 Canet Ivan & Chourouq Sarah
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package com.cc.world;
+
+import com.cc.utils.Save;
+import com.eclipsesource.json.JsonObject;
 
 /**
  * A location in the map. Immutable data class.
@@ -16,7 +36,7 @@ package com.cc.world;
  * </ul>
  * @author Ivan Canet
  */
-public class Location implements Comparable<Location> {
+public class Location implements Comparable<Location>, Save<JsonObject> {
     
     private final int X, Y, Z;
 
@@ -42,6 +62,16 @@ public class Location implements Comparable<Location> {
     }
     
     /**
+     * Loads the location from JSON
+     * @param json the saved data
+     */
+    public Location(JsonObject json){
+        this(json.getInt("x", 0),
+             json.getInt("y", 0),
+             json.getInt("z", 0));
+    }
+    
+    /**
      * Adds this location with an other one, and returns the result. Neither
      * location is modified.
      * @param l the other location
@@ -62,6 +92,27 @@ public class Location implements Comparable<Location> {
      */
     public Location add(Direction d){
         return add(d.getDirection());
+    }
+    
+    /**
+     * Removes this location to an other one, and returns the result. Neither
+     * location is modified.
+     * @param l the other location
+     * @return The result of a difference between this location and an other one.
+     */
+    public Location remove(Location l){
+        return new Location(X - l.X, 
+                            Y - l.Y, 
+                            Z - l.Z);
+    }
+    
+    /**
+     * The opposite location.
+     * <p>For every location (x, y, z), it's opposite is (-x, -y, -z).
+     * @return The opposite location.
+     */
+    public Location getOpposite(){
+        return new Location(-X, -Y, -Z);
     }
 
     /**
@@ -150,6 +201,14 @@ public class Location implements Comparable<Location> {
     @Override
     public String toString() {
         return String.format("(%d, %d, %d)", X, Y, Z);
+    }
+
+    @Override
+    public JsonObject save() {
+        return new JsonObject()
+                .add("x", X)
+                .add("y", Y)
+                .add("z", Z);
     }
     
 }

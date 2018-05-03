@@ -20,18 +20,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.cc.world;
+package com.cc.world.links;
+
+import com.cc.players.Entity;
+import com.cc.world.Room;
+import com.cc.world.World;
+import com.eclipsesource.json.JsonObject;
 
 /**
- * Represents that an object can be updated according to a time event.
+ * An opening is a Link that is always open.
  * @author Ivan Canet
  */
-public interface Timable {
+public final class Opening extends Link {
+
+    public Opening(Room r1, Room r2) {
+        super(r1, r2, true);
+    }
     
-    /**
-     * Notifies an object that time has passed. This is useful for objects that
-     * have regeneration, or other effects that act over-time.
-     */
-    public void nextTick();
+    public Opening(World world, JsonObject json) {
+        super(world, json);
+        isOpen = true;
+    }
+
+    @Override
+    public boolean canOpen(Entity e) {
+        return false;
+    }
+
+    @Override
+    public boolean canClose(Entity e) {
+        return false;
+    }
+
+    @Override
+    public boolean open(Entity e) {
+        return true;
+    }
+
+    @Override
+    public boolean close(Entity e) {
+        return true;
+    }
+    
+    @Override
+    public JsonObject save() {
+        return super.save()
+                .add("type", "openning");
+    }
     
 }

@@ -1,20 +1,40 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* MIT License
+ *
+ * Copyright (c) 2018 Canet Ivan & Chourouq Sarah
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 package com.cc.utils;
 
 import static com.cc.utils.Bar.Behavior.ACCEPT;
+import com.eclipsesource.json.JsonArray;
+import com.eclipsesource.json.JsonObject;
 import static java.lang.Integer.min;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Bars are used to represent information about the player (skills, health bar)... 
  * @author Ivan Canet
  */
-public class Bar {
+public class Bar implements Save<JsonObject> {
     
     private int minimum, maximum;
     
@@ -51,6 +71,40 @@ public class Bar {
      */
     public Bar(String name, int minimum, int maximum){
         this(name, minimum, maximum, minimum);
+    }
+    
+    /**
+     * Loads a Bar from JSON.
+     * @param json the saved data
+     */
+    public Bar(JsonObject json){
+        this(json.getString("name", null),
+             json.getInt("min", 0),
+             json.getInt("max", Integer.MAX_VALUE),
+             json.getInt("value", 0));
+        
+        json.get("bonuses").asArray()
+                .forEach(e -> bonuses.add(
+                        new Pair<>(
+                                e.asObject().getInt("time", 0),
+                                e.asObject().getInt("value", 0)
+                        )));
+        
+        updateBonus();
+    }
+
+    /**
+     * Copies a bar.
+     * @param other the origin of the copy
+     */
+    public Bar(Bar other) {
+        this(other.name,
+             other.minimum,
+             other.maximum,
+             other.real);
+        
+        bonuses.addAll(other.bonuses);
+        updateBonus();
     }
     
     /**
@@ -212,6 +266,67 @@ public class Bar {
      */
     public String getName() {
         return name;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + this.minimum;
+        hash = 97 * hash + this.maximum;
+        hash = 97 * hash + this.real;
+        hash = 97 * hash + this.bonusTotal;
+        hash = 97 * hash + Objects.hashCode(this.name);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Bar other = (Bar) obj;
+        if (this.minimum != other.minimum) {
+            return false;
+        }
+        if (this.maximum != other.maximum) {
+            return false;
+        }
+        if (this.real != other.real) {
+            return false;
+        }
+        if (this.bonusTotal != other.bonusTotal) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.bonuses, other.bonuses)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public JsonObject save() {
+        JsonArray bonuses = new JsonArray();
+        this.bonuses.forEach(
+                e -> bonuses.add(new JsonObject()
+                        .add("time", e.first)
+                        .add("value", e.second)
+                ));
+        
+        return new JsonObject()
+                .add("name", name)
+                .add("min", minimum)
+                .add("max", maximum)
+                .add("value", real)
+                .add("bonuses", bonuses);
     }
     
     /**
