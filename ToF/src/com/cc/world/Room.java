@@ -358,7 +358,6 @@ public class Room implements Save<JsonObject> {
         hash = 79 * hash + Objects.hashCode(this.neighbors);
         hash = 79 * hash + Objects.hashCode(this.description);
         hash = 79 * hash + Objects.hashCode(this.location);
-        hash = 79 * hash + Objects.hashCode(this.world);
         return hash;
     }
 
@@ -381,9 +380,6 @@ public class Room implements Save<JsonObject> {
             return false;
         }
         if (!Objects.equals(this.location, other.location)) {
-            return false;
-        }
-        if (!Objects.equals(this.world, other.world)) {
             return false;
         }
         return true;
