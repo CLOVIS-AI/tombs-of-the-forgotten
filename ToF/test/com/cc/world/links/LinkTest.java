@@ -61,8 +61,8 @@ public class LinkTest {
         Room r2 = new Room("e").setLocation(new Location(0, 1, 0));
         Link l = new LinkImpl(r1, r2, true);
         l.autoLink();
-        assertTrue(r1.getAllNeighbors().contains(r2));
-        assertTrue(r2.getAllNeighbors().contains(r1));
+        assertTrue(r1.getAllNeighbors().anyMatch(e -> e.equals(r2)));
+        assertTrue(r2.getAllNeighbors().anyMatch(e -> e.equals(r1)));
     }
 
     /**
