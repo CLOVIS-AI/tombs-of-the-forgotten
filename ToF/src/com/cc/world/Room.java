@@ -27,7 +27,6 @@ import com.cc.players.Entity;
 import com.cc.utils.Save;
 import com.cc.world.links.Link;
 import com.eclipsesource.json.JsonObject;
-import com.eclipsesource.json.JsonValue;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +34,7 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * An ingame room.
@@ -179,11 +179,10 @@ public class Room implements Save<JsonObject> {
      * @see #getOpenNeighbors() The neighbors that are opened
      * @see #getReachableNeighbors(com.cc.players.Entity) The neighbors that an entity can go to
      */
-    public Collection<Room> getAllNeighbors() {
+    public Stream<Room> getAllNeighbors() {
         return neighbors.values()
                 .stream()
-                .map(l -> l.getOtherRoom(this))
-                .collect(Collectors.toList());
+                .map(l -> l.getOtherRoom(this));
     }
     
     /**
