@@ -67,10 +67,25 @@ public abstract class Entity implements Timable {
 
     private final Inventory inventory;
 
+    /**
+     * Constructs a new Entity.
+     * @param maxHealth the maximum health
+     * @param maxStrength the maximum strength
+     * @param maxMana the maximum mana
+     * @param maxWeight the maximum weight it can carry
+     */
     public Entity(int maxHealth, int maxStrength, int maxMana, int maxWeight) {
         this(maxHealth, maxStrength, maxMana, maxWeight, new Location());
     }
 
+    /**
+     * Constructs a new Entity.
+     * @param maxHealth the maximum health
+     * @param maxStrength the maximum strength
+     * @param maxMana the maximum mana
+     * @param maxWeight the maximum weight it can carry
+     * @param l its position in the world
+     */
     public Entity(int maxHealth, int maxStrength, int maxMana, int maxWeight,
             Location l) {
         
@@ -82,6 +97,15 @@ public abstract class Entity implements Timable {
              new Inventory("Inventory", maxWeight));
     }
     
+    /**
+     * Constructs a new Entity
+     * @param health its health
+     * @param stamina its stamina
+     * @param mana its mana
+     * @param location its location in the World
+     * @param opponent its opponent if any (or {@code null})
+     * @param inventory its inventory
+     */
     public Entity(Bar health, Bar stamina, Bar mana, Location location, 
             Entity opponent, Inventory inventory) {
         this.health = new Bar(health);
