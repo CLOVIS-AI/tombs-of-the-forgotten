@@ -28,7 +28,6 @@ import static com.cc.world.GameState.EXPLORE;
 import com.cc.world.Location;
 import com.cc.world.Room;
 import com.cc.world.World;
-import com.eclipsesource.json.JsonObject;
 import java.util.Scanner;
 import java.util.TreeMap;
 
@@ -103,6 +102,7 @@ public class ToF {
      * @param time amount of time
      * @throws InterruptedException 
      */
+    @SuppressWarnings("SleepWhileInLoop")
     public void rest(int turns, long time) throws InterruptedException {
         for (int i = 0; i < turns; i++) {
             world.getPlayer().restATick();
