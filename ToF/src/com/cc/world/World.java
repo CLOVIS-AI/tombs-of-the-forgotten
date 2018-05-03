@@ -53,7 +53,7 @@ public class World implements Timable, Save<JsonObject> {
     
     private final List<Entity> entities;
     
-    private GameState gameState;
+    private GameState gameState = GameState.EXPLORE;
     
     private Queue<Message> messages;
     
@@ -367,6 +367,7 @@ public class World implements Timable, Save<JsonObject> {
                 .add("rooms", jrooms)
                 .add("links", jlinks)
                 .add("player", player.save())
+                .add("state", gameState.toString())
                 .add("entities", jentities);
     }
 }
