@@ -11,10 +11,12 @@ apply plugin: 'java'
 
 repositories {
     jcenter()
+    mavenCentral()
 }
 
 dependencies {
     testCompile 'junit:junit:4.12'
+    compile 'com.eclipsesource.minimal-json:minimal-json:0.9.5'
 }
 
 version = '0.0.0'
@@ -22,7 +24,7 @@ version = '0.0.0'
 sourceSets {
     main {
         java {
-            srcDirs = ['ToF/src', 'json/com.eclipsesource.json/src/main/java']
+            srcDirs = ['ToF/src']
         }
     }
     test {
