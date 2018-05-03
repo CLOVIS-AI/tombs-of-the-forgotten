@@ -26,11 +26,13 @@ import com.cc.items.Inventory;
 import com.cc.items.Item;
 import com.cc.utils.Bar;
 import static com.cc.utils.Bar.Behavior.ACCEPT;
+import com.cc.utils.Save;
 import com.cc.world.Direction;
 import com.cc.world.Location;
 import com.cc.world.Room;
 import com.cc.world.Timable;
 import com.cc.world.World;
+import com.eclipsesource.json.JsonObject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -71,13 +73,23 @@ public abstract class Entity implements Timable {
 
     public Entity(int maxHealth, int maxStrength, int maxMana, int maxWeight,
             Location l) {
-        health = new Bar("Health", 0, maxHealth, maxHealth);
-        stamina = new Bar("Stamina", 0, maxStrength, maxStrength);
-        mana = new Bar("Mana", 0, maxMana, 0);
-        inventory = new Inventory("Inventory", maxWeight);
-
-        location = l;
-        opponent = Optional.empty();
+        
+        this(new Bar("Health", 0, maxHealth, maxHealth),
+             new Bar("Stamina", 0, maxStrength, maxStrength),
+             new Bar("Mana", 0, maxMana, 0),
+             l,
+             null,
+             new Inventory("Inventory", maxWeight));
+    }
+    
+    public Entity(Bar health, Bar stamina, Bar mana, Location location, 
+            Entity opponent, Inventory inventory) {
+        this.health = new Bar(health);
+        this.stamina = new Bar(stamina);
+        this.mana = new Bar(mana);
+        this.location = location;
+        this.opponent = Optional.ofNullable(opponent);
+        this.inventory = inventory;
     }
 
     /**
@@ -379,5 +391,4 @@ public abstract class Entity implements Timable {
     protected final World getWorld() {
         return world;
     }
-
 }
