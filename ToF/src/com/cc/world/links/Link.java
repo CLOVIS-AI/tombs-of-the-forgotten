@@ -181,8 +181,8 @@ public abstract class Link implements Save<JsonObject> {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = hash + Objects.hashCode(this.room1) * 89;
-        hash = hash + Objects.hashCode(this.room2) * 89;
+        hash = hash + Objects.hashCode(this.room1.getLocation()) * 89;
+        hash = hash + Objects.hashCode(this.room2.getLocation()) * 89;
         return hash;
     }
 
