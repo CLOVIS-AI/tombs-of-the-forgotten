@@ -24,12 +24,20 @@ package com.cc.world;
 
 import com.cc.players.Entity;
 import com.cc.players.Player;
+import com.cc.utils.Save;
 import com.cc.utils.messages.Message;
+import com.cc.world.links.Link;
+import com.eclipsesource.json.JsonArray;
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonValue;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Queue;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -38,7 +46,7 @@ import java.util.stream.Stream;
  * The world in which the game is taking place.
  * @author Ivan Canet
  */
-public class World implements Timable {
+public class World implements Timable, Save<JsonObject> {
     
     private final TreeMap<Location, Room> rooms;
     
@@ -59,6 +67,52 @@ public class World implements Timable {
         rooms = map;
         this.player = player;
         this.player.setWorld(this);
+    }
+    
+    /**
+     * Creates a World object from JSON.
+     * @param json the saved data
+     */
+    public World(JsonObject json){
+        rooms = extractRooms(json.get("rooms").asArray());
+        extractAndIncludeLinks(json.get("links").asArray());
+        
+        player = new Player(json.get("player").asObject());
+        entities = extractEntities(json.get("entities").asArray());
+        
+        gameState = GameState.valueOf(json.getString("state", null));
+        
+        concludeLoading();
+    }
+    
+    final void concludeLoading(){
+        rooms.values().forEach(Room::endGeneration);
+        player.setWorld(this);
+        entities.forEach(e -> e.setWorld(this));
+    }
+    
+    final TreeMap<Location, Room> extractRooms(JsonArray json){
+        TreeMap<Location, Room> map = new TreeMap<>();
+        for(JsonValue j : json.values()){
+            Room r = new Room(j.asObject());
+            r.setWorld(this);
+            map.put(r.getLocation(), r);
+        }
+        return map;
+    }
+    
+    final List<Entity> extractEntities(JsonArray json){
+        List<Entity> list = new ArrayList<>(json.size());
+        for(JsonValue j : json.values()){
+            // @TODO in #78: Add the entity
+        }
+        return list;
+    }
+    
+    final void extractAndIncludeLinks(JsonArray json){
+        json.values().stream()
+                .map(JsonValue::asObject)
+                .forEach(j -> Link.loadLink(this, j));
     }
     
     // ****************************************************** G A M E  L O G I C
@@ -252,5 +306,27 @@ public class World implements Timable {
      */
     public final Message getNextMessage() {
         return messages.remove();
+    }
+
+    @Override
+    public JsonObject save() {
+        JsonArray jrooms = new JsonArray();
+        rooms.values().forEach(r -> jrooms.add(r.save()));
+        
+        JsonArray jlinks = new JsonArray();
+        rooms.values()
+                .stream()
+                .flatMap(r -> r.getAllLinks())
+                .distinct()
+                .forEach(l -> jlinks.add(l.save()));
+        
+        JsonArray jentities = new JsonArray();
+        entities.forEach(e -> jentities.add(e.save()));
+        
+        return new JsonObject()
+                .add("rooms", jrooms)
+                .add("links", jlinks)
+                .add("player", player.save())
+                .add("entities", jentities);
     }
 }
