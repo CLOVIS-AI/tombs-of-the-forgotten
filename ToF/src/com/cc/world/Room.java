@@ -27,6 +27,7 @@ import com.cc.players.Entity;
 import com.cc.utils.Save;
 import com.cc.world.links.Link;
 import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonValue;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -75,6 +76,7 @@ public class Room implements Save<JsonObject> {
     public Room(JsonObject json){
         this(json.getString("desc", null));
         this.items = new ItemContainer(json.get("items").asObject());
+        this.location = new Location(json.get("location").asObject());
     }
     
     /**
@@ -383,7 +385,8 @@ public class Room implements Save<JsonObject> {
     public JsonObject save() {
         return new JsonObject()
                 .add("desc", description)
-                .add("items", items.save());
+                .add("items", items.save())
+                .add("location", location.save());
     }
     
 }
