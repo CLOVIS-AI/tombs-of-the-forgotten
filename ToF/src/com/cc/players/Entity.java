@@ -33,6 +33,7 @@ import com.cc.world.Room;
 import com.cc.world.Timable;
 import com.cc.world.World;
 import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonValue;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -43,7 +44,7 @@ import java.util.Optional;
  *
  * @author Ivan Canet
  */
-public abstract class Entity implements Timable {
+public abstract class Entity implements Timable, Save<JsonObject> {
 
     /**
      * Health bar. Game over when 0.
@@ -114,6 +115,19 @@ public abstract class Entity implements Timable {
         this.location = location;
         this.opponent = Optional.ofNullable(opponent);
         this.inventory = inventory;
+    }
+    
+    /**
+     * Creates an Entity from a JSON object.
+     * @param json the saved data
+     */
+    public Entity(JsonObject json) {
+        this(new Bar(json.get("health").asObject()),
+             new Bar(json.get("stamina").asObject()),
+             new Bar(json.get("mana").asObject()),
+             new Location(json.get("location").asObject()),
+             null,
+             new Inventory(json.get("inventory").asObject()));
     }
 
     /**
@@ -414,5 +428,15 @@ public abstract class Entity implements Timable {
      */
     protected final World getWorld() {
         return world;
+    }
+
+    @Override
+    public JsonObject save() {
+        return new JsonObject()
+                .add("health",      health.save())
+                .add("stamina",     stamina.save())
+                .add("mana",        mana.save())
+                .add("location",    location.save())
+                .add("inventory",   inventory.save());
     }
 }
