@@ -25,10 +25,10 @@ package com.cc.utils;
 import static com.cc.utils.Bar.Behavior.ACCEPT;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
-import com.eclipsesource.json.JsonValue;
 import static java.lang.Integer.min;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Bars are used to represent information about the player (skills, health bar)... 
@@ -89,6 +89,22 @@ public class Bar implements Save<JsonObject> {
                                 e.asObject().getInt("time", 0),
                                 e.asObject().getInt("value", 0)
                         )));
+        
+        updateBonus();
+    }
+
+    /**
+     * Copies a bar.
+     * @param other the origin of the copy
+     */
+    public Bar(Bar other) {
+        this(other.name,
+             other.minimum,
+             other.maximum,
+             other.real);
+        
+        bonuses.addAll(other.bonuses);
+        updateBonus();
     }
     
     /**
@@ -250,6 +266,50 @@ public class Bar implements Save<JsonObject> {
      */
     public String getName() {
         return name;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + this.minimum;
+        hash = 97 * hash + this.maximum;
+        hash = 97 * hash + this.real;
+        hash = 97 * hash + this.bonusTotal;
+        hash = 97 * hash + Objects.hashCode(this.name);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Bar other = (Bar) obj;
+        if (this.minimum != other.minimum) {
+            return false;
+        }
+        if (this.maximum != other.maximum) {
+            return false;
+        }
+        if (this.real != other.real) {
+            return false;
+        }
+        if (this.bonusTotal != other.bonusTotal) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.bonuses, other.bonuses)) {
+            return false;
+        }
+        return true;
     }
 
     @Override

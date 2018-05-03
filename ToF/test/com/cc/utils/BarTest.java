@@ -145,4 +145,18 @@ public class BarTest {
             assertTrue(true);
         }
     }
+    
+    @Test
+    public void copy() {
+        System.out.println("Bar#copy");
+        Bar a = new Bar("Bonjour", 1, 5, 2);
+        a.add(2, ACCEPT);
+        a.addBonus(12, 4);
+        a.decreaseMinimum(1);
+        a.nextTick();
+        Bar b = new Bar(a);
+        
+        assertTrue(a.equals(b));
+        assertTrue(b.equals(a));
+    }
 }
