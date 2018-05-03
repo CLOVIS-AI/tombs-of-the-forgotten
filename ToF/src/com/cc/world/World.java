@@ -47,7 +47,8 @@ import java.util.stream.Stream;
  */
 public class World implements Timable, Save<JsonObject> {
     
-    private final TreeMap<Location, Room> rooms;
+    // Package private to enable access for the tests
+    final TreeMap<Location, Room> rooms;
     
     private final Player player;
     
