@@ -22,6 +22,9 @@
  */
 package com.cc.players;
 
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonValue;
+
 
 /**
  * A Player.
@@ -46,8 +49,36 @@ public class Player extends Entity {
      * @param maxWeight The maximum weight he can carry
      */
     public Player(int maxHealth, int maxStrength, int maxMana, int maxWeight) {
+        this(maxHealth, maxStrength, maxMana, maxWeight, 0);
+    }
+    
+    /**
+     * Creates a player.
+     * @param maxHealth The maximum health
+     * @param maxStrength The maximum strength
+     * @param maxMana The maximum mana
+     * @param maxWeight The maximum weight he can carry
+     * @param luck The luck of finding a good item
+     */
+    public Player(int maxHealth, int maxStrength, int maxMana, int maxWeight,
+            int luck) {
         super(maxHealth, maxStrength, maxMana, maxWeight);
-        searchLuck = 0;        
-    }   
+        searchLuck = luck;
+    }
+    
+    /**
+     * Creates a player from JSON.
+     * @param json the saved data
+     */
+    public Player(JsonObject json) {
+        super(json);
+        searchLuck = json.getInt("luck", 0);
+    }
+    
+    @Override
+    public JsonObject save() {
+        return super.save()
+                .add("luck", searchLuck);
+    }
     
 }
