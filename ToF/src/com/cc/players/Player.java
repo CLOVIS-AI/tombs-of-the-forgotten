@@ -28,6 +28,8 @@ package com.cc.players;
  * @author Ivan Canet
  */
 public class Player extends Entity {
+    
+    private static final int STAMINA_PER_TICK = 1;
         
     private int searchLuck;
     
@@ -47,7 +49,11 @@ public class Player extends Entity {
      */
     public Player(int maxHealth, int maxStrength, int maxMana, int maxWeight) {
         super(maxHealth, maxStrength, maxMana, maxWeight);
-        searchLuck = 0;        
+        searchLuck = 0;
     }   
+    
+    public void restATick() {
+        addStamina(STAMINA_PER_TICK);
+    }
     
 }
