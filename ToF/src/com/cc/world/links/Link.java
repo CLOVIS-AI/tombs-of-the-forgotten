@@ -119,12 +119,18 @@ public abstract class Link implements Save<JsonObject> {
     
     /**
      * Links this Link to both of its Rooms.
+     * @return the direction that was found to reach the two rooms (not that 
+     * there is no specified order, that is, for one of the rooms, the direction
+     * needed to go from it to the next one is either the returned direction or
+     * {@link Direction#getOpposite() its opposite}).
      */
-    public final void autoLink(){
+    public final Direction autoLink(){
         Direction d = fromCoordinates(room2.getLocation().remove(room1.getLocation()));
         
         room1.addLink(d, this);
         room2.addLink(d.getOpposite(), this);
+        
+        return d;
     }
     
     /**
