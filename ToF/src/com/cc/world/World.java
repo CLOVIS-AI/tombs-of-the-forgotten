@@ -32,12 +32,11 @@ import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Queue;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -306,6 +305,43 @@ public class World implements Timable, Save<JsonObject> {
      */
     public final Message getNextMessage() {
         return messages.remove();
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 71 * hash + Objects.hashCode(this.rooms);
+        hash = 71 * hash + Objects.hashCode(this.player);
+        hash = 71 * hash + Objects.hashCode(this.entities);
+        hash = 71 * hash + Objects.hashCode(this.gameState);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final World other = (World) obj;
+        if (!Objects.equals(this.rooms, other.rooms)) {
+            return false;
+        }
+        if (!Objects.equals(this.player, other.player)) {
+            return false;
+        }
+        if (!Objects.equals(this.entities, other.entities)) {
+            return false;
+        }
+        if (this.gameState != other.gameState) {
+            return false;
+        }
+        return true;
     }
 
     @Override
