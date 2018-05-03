@@ -23,9 +23,14 @@
 package com.cc.world.links;
 
 import com.cc.players.Entity;
+import com.cc.utils.Save;
 import com.cc.world.Direction;
 import static com.cc.world.Direction.fromCoordinates;
+import com.cc.world.Location;
 import com.cc.world.Room;
+import com.cc.world.World;
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.WriterConfig;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -37,7 +42,7 @@ import java.util.Objects;
  * links that share the same two Rooms (no matter the order).
  * @author Ivan Canet
  */
-public abstract class Link {
+public abstract class Link implements Save<JsonObject> {
     
     private final Room room1,
                        room2;
@@ -60,6 +65,31 @@ public abstract class Link {
         room1 = r1;
         room2 = r2;
         isOpen = openByDefault;
+    }
+    
+    /**
+     * Loads a link from a JSON object, and auto-links itself with both rooms.
+     * To avoid cross-references, the JSON data of a link only contains the
+     * location of both rooms it is linked to, therefore you need to provide the
+     * world object to find the actual room object. It is expected that the
+     * rooms were loaded first, so they are already contained by the World object.
+     * @param world the world object
+     * @param json the saved data of this link
+     */
+    public Link(World world, JsonObject json){
+        this(world.getRoom(new Location(json.get("room1").asObject()))
+                    .orElseThrow(() ->  new IllegalArgumentException("No room "
+                            + "was found where room1 was expected: "
+                            + json.toString(WriterConfig.PRETTY_PRINT))),
+                
+             world.getRoom(new Location(json.get("room2").asObject()))
+                    .orElseThrow(() ->  new IllegalArgumentException("No room "
+                            + "was found where room2 was expected: " 
+                            + json.toString(WriterConfig.PRETTY_PRINT))),
+             
+             json.getBoolean("isOpen", false));
+        
+        autoLink();
     }
     
     /**
@@ -168,6 +198,14 @@ public abstract class Link {
         if(room1.equals(other.room2) && room2.equals(other.room1))
             return true;
         return false;
+    }
+
+    @Override
+    public JsonObject save() {
+        return new JsonObject()
+                .add("room1", room1.getLocation().save())
+                .add("room2", room2.getLocation().save())
+                .add("isOpen", isOpen);
     }
     
     
