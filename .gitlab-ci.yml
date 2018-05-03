@@ -7,6 +7,4 @@ stages:
 ant:
   stage: build
   script:
-    - cd ToF 
-    - ant
-
+    - gradle build
