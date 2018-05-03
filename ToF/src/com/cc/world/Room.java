@@ -186,6 +186,15 @@ public class Room implements Save<JsonObject> {
     }
     
     /**
+     * Gets all the links of this Room. To get the neighbors, 
+     * see {@link #getAllNeighbors() getAllNeighbors}.
+     * @return A stream of all the links of this Room.
+     */
+    public Stream<Link> getAllLinks() {
+        return neighbors.values().stream();
+    }
+    
+    /**
      * Gets the neighbors of this Room that are opened (any entity can go there).
      * @return The neighbors that are open.
      * @see #getAllNeighbors() All the neighbors
