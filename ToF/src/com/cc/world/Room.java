@@ -24,7 +24,9 @@ package com.cc.world;
 
 import com.cc.items.ItemContainer;
 import com.cc.players.Entity;
+import com.cc.utils.Save;
 import com.cc.world.links.Link;
+import com.eclipsesource.json.JsonObject;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +39,7 @@ import java.util.stream.Collectors;
  * An ingame room.
  * @author Ivan Canet
  */
-public class Room {
+public class Room implements Save<JsonObject> {
     
     private final Map<Direction, Link> neighbors
             = new HashMap<>();
@@ -49,18 +51,30 @@ public class Room {
     
     private boolean isGenerated = false;
     
-    private final ItemContainer items;
+    private ItemContainer items;
     
     public Room(String description){
-        this.description = description;
-        items = new ItemContainer(description);
+        this(description, null, null);
+        isGenerated = false;
     }
     
     public Room(String description, Location location, World world){
         this.description = description;
         this.location = location;
         this.world = world;
+        isGenerated = true;
         items = new ItemContainer(description);
+    }
+    
+    /**
+     * Loads a room from JSON. Do not forget that this doesn't load 
+     * cross-references, so you have to call methods {@link #setLocation(com.cc.world.Location) }
+     * and {@link #setWorld(com.cc.world.World) }.
+     * @param json the saved data
+     */
+    public Room(JsonObject json){
+        this(json.getString("desc", null));
+        this.items = new ItemContainer(json.get("items").asObject());
     }
     
     /**
@@ -363,6 +377,13 @@ public class Room {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public JsonObject save() {
+        return new JsonObject()
+                .add("desc", description)
+                .add("items", items.save());
     }
     
 }

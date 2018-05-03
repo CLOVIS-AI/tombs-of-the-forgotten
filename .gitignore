@@ -1,2 +1,6 @@
 .~lock*
 *.zip
+
+build/
+.gradle/
+/.nb-gradle/

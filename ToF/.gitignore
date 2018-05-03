@@ -1,9 +1,0 @@
-build.xml
-manifest.mf
-dist/
-build/
-nbproject/private/
-*.xml
-*.properties
-!nbproject/project.properties
-!nbproject/project.xml

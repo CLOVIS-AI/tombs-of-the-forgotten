@@ -26,11 +26,14 @@ import com.cc.items.Inventory;
 import com.cc.items.Item;
 import com.cc.utils.Bar;
 import static com.cc.utils.Bar.Behavior.ACCEPT;
+import com.cc.utils.Save;
 import com.cc.world.Direction;
 import com.cc.world.Location;
 import com.cc.world.Room;
 import com.cc.world.Timable;
 import com.cc.world.World;
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonValue;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -41,7 +44,7 @@ import java.util.Optional;
  *
  * @author Ivan Canet
  */
-public abstract class Entity implements Timable {
+public abstract class Entity implements Timable, Save<JsonObject> {
 
     /**
      * Health bar. Game over when 0.
@@ -65,19 +68,66 @@ public abstract class Entity implements Timable {
 
     private final Inventory inventory;
 
+    /**
+     * Constructs a new Entity.
+     * @param maxHealth the maximum health
+     * @param maxStrength the maximum strength
+     * @param maxMana the maximum mana
+     * @param maxWeight the maximum weight it can carry
+     */
     public Entity(int maxHealth, int maxStrength, int maxMana, int maxWeight) {
         this(maxHealth, maxStrength, maxMana, maxWeight, new Location());
     }
 
+    /**
+     * Constructs a new Entity.
+     * @param maxHealth the maximum health
+     * @param maxStrength the maximum strength
+     * @param maxMana the maximum mana
+     * @param maxWeight the maximum weight it can carry
+     * @param l its position in the world
+     */
     public Entity(int maxHealth, int maxStrength, int maxMana, int maxWeight,
             Location l) {
-        health = new Bar("Health", 0, maxHealth, maxHealth);
-        stamina = new Bar("Stamina", 0, maxStrength, maxStrength);
-        mana = new Bar("Mana", 0, maxMana, 0);
-        inventory = new Inventory("Inventory", maxWeight);
-
-        location = l;
-        opponent = Optional.empty();
+        
+        this(new Bar("Health", 0, maxHealth, maxHealth),
+             new Bar("Stamina", 0, maxStrength, maxStrength),
+             new Bar("Mana", 0, maxMana, 0),
+             l,
+             null,
+             new Inventory("Inventory", maxWeight));
+    }
+    
+    /**
+     * Constructs a new Entity
+     * @param health its health
+     * @param stamina its stamina
+     * @param mana its mana
+     * @param location its location in the World
+     * @param opponent its opponent if any (or {@code null})
+     * @param inventory its inventory
+     */
+    public Entity(Bar health, Bar stamina, Bar mana, Location location, 
+            Entity opponent, Inventory inventory) {
+        this.health = new Bar(health);
+        this.stamina = new Bar(stamina);
+        this.mana = new Bar(mana);
+        this.location = location;
+        this.opponent = Optional.ofNullable(opponent);
+        this.inventory = inventory;
+    }
+    
+    /**
+     * Creates an Entity from a JSON object.
+     * @param json the saved data
+     */
+    public Entity(JsonObject json) {
+        this(new Bar(json.get("health").asObject()),
+             new Bar(json.get("stamina").asObject()),
+             new Bar(json.get("mana").asObject()),
+             new Location(json.get("location").asObject()),
+             null,
+             new Inventory(json.get("inventory").asObject()));
     }
 
     /**
@@ -380,4 +430,13 @@ public abstract class Entity implements Timable {
         return world;
     }
 
+    @Override
+    public JsonObject save() {
+        return new JsonObject()
+                .add("health",      health.save())
+                .add("stamina",     stamina.save())
+                .add("mana",        mana.save())
+                .add("location",    location.save())
+                .add("inventory",   inventory.save());
+    }
 }

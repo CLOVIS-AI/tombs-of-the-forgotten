@@ -52,6 +52,15 @@ public class EventBar extends Bar {
     public EventBar(String name, int minimum, int maximum) {
         super(name, minimum, maximum);
     }
+    
+    /**
+     * Creates an EventBar from the contents an other bar.
+     * <p>If the other bar is also an EventBar, the events are ommited.
+     * @param other the other bar
+     */
+    public EventBar(Bar other) {
+        super(other);
+    }
 
     /**
      * Sets the action to be taken on the event of the bar being full.
