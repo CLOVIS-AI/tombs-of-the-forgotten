@@ -199,9 +199,11 @@ public abstract class Link implements Save<JsonObject> {
         if (getClass() != obj.getClass()) return false;
         
         final Link other = (Link) obj;
-        if(room1.equals(other.room1) && room2.equals(other.room2))
+        if(room1.getLocation().equals(other.room1.getLocation())
+        && room2.getLocation().equals(other.room2.getLocation()))
             return true;
-        if(room1.equals(other.room2) && room2.equals(other.room1))
+        if(room1.getLocation().equals(other.room2.getLocation())
+        && room2.getLocation().equals(other.room1.getLocation()))
             return true;
         return false;
     }

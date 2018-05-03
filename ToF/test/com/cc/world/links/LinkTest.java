@@ -84,9 +84,9 @@ public class LinkTest {
     @Test
     public void testEqualsHashCode() {
         System.out.println("Link#equals & Link#hashCode");
-        Room r1 = new Room("d");
-        Room r2 = new Room("e");
-        Room r3 = new Room("f");
+        Room r1 = new Room("d").setLocation(new Location(0, 0, 0));
+        Room r2 = new Room("e").setLocation(new Location(0, 1, 0));
+        Room r3 = new Room("f").setLocation(new Location(0, 2, 1));
         
         Link l1 = new LinkImpl(r1, r2, true);
         Link l2 = new LinkImpl(r2, r1, true);
