@@ -24,6 +24,8 @@ package com.cc.world.links;
 
 import com.cc.players.Entity;
 import com.cc.world.Room;
+import com.cc.world.World;
+import com.eclipsesource.json.JsonObject;
 
 /**
  * A Door is a Link that can be opened by any entity.
@@ -49,6 +51,10 @@ public class Door extends Link {
     public Door(Room r1, Room r2, boolean openByDefault) {
         super(r1, r2, openByDefault);
     }
+    
+    public Door(World world, JsonObject json){
+        super(world, json);
+    }
 
     @Override
     public boolean canOpen(Entity e) {
@@ -68,6 +74,12 @@ public class Door extends Link {
     @Override
     public boolean close(Entity e) {
         return isOpen = false;
+    }
+    
+    @Override
+    public JsonObject save() {
+        return super.save()
+                .add("type", "door");
     }
     
 }

@@ -24,6 +24,8 @@ package com.cc.world.links;
 
 import com.cc.players.Entity;
 import com.cc.world.Room;
+import com.cc.world.World;
+import com.eclipsesource.json.JsonObject;
 
 /**
  * An opening is a Link that is always open.
@@ -33,6 +35,11 @@ public final class Opening extends Link {
 
     public Opening(Room r1, Room r2) {
         super(r1, r2, true);
+    }
+    
+    public Opening(World world, JsonObject json) {
+        super(world, json);
+        isOpen = true;
     }
 
     @Override
@@ -53,6 +60,12 @@ public final class Opening extends Link {
     @Override
     public boolean close(Entity e) {
         return true;
+    }
+    
+    @Override
+    public JsonObject save() {
+        return super.save()
+                .add("type", "openning");
     }
     
 }
