@@ -52,6 +52,9 @@ public class Player extends Entity {
         searchLuck = 0;
     }   
     
+    /**
+     * Replenishes player's stamina per tick.
+     */
     public void restATick() {
         addStamina(STAMINA_PER_TICK);
     }

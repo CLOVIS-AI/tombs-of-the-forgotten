@@ -98,6 +98,20 @@ public class ToF {
     }
     
     /**
+     * The player rests.
+     * @param turns number of turns
+     * @param time amount of time
+     * @throws InterruptedException 
+     */
+    public void rest(int turns, long time) throws InterruptedException {
+        for (int i = 0; i < turns; i++) {
+            world.getPlayer().restATick();
+            world.nextTick();
+            Thread.sleep(time);
+        }
+    }
+    
+    /**
      * Prompts the user for input.
      * @return The input
      */
@@ -113,7 +127,7 @@ public class ToF {
      * @param input the input
      * @return An action object
      */
-    public static Action analyseInput(String input){
+    public static Action analyseInput(String input) {
         String[] s = input.split(" ");
         String[] parameters = new String[s.length - 1];
         
