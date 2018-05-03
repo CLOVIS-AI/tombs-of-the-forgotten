@@ -1,10 +1,9 @@
 image: java:latest
-image: frekele/ant:latest
 
 stages:
   - build
 
-ant:
+gradle:
   stage: build
   script:
-    - gradle build
+    - ./gradlew build
