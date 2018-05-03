@@ -51,7 +51,7 @@ public class World implements Timable, Save<JsonObject> {
     
     private final Player player;
     
-    private List<Entity> entities;
+    private final List<Entity> entities;
     
     private GameState gameState;
     
@@ -61,11 +61,15 @@ public class World implements Timable, Save<JsonObject> {
     
     @SuppressWarnings("LeakingThisInConstructor")
     public World(TreeMap<Location, Room> map, Player player){
-        map.forEach((l, r) -> r.setWorld(this));
+        map.forEach((l, r) -> {
+            r.setWorld(this);
+            r.setLocation(l);
+        });
         
         rooms = map;
         this.player = player;
         this.player.setWorld(this);
+        this.entities = new ArrayList();
     }
     
     /**
