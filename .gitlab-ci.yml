@@ -1,0 +1,9 @@
+image: java:latest
+
+stages:
+  - build
+
+gradle:
+  stage: build
+  script:
+    - ./gradlew build
