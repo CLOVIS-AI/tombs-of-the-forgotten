@@ -22,6 +22,9 @@
  */
 package com.cc.world;
 
+import com.cc.utils.Save;
+import com.eclipsesource.json.JsonObject;
+
 /**
  * A location in the map. Immutable data class.
  * <p>In effect, this class is very similar to a 3-Vector in a mathematical sense.
@@ -33,7 +36,7 @@ package com.cc.world;
  * </ul>
  * @author Ivan Canet
  */
-public class Location implements Comparable<Location> {
+public class Location implements Comparable<Location>, Save<JsonObject> {
     
     private final int X, Y, Z;
 
@@ -56,6 +59,16 @@ public class Location implements Comparable<Location> {
      */
     public Location(){
         this(0, 0, 0);
+    }
+    
+    /**
+     * Loads the location from JSON
+     * @param json the saved data
+     */
+    public Location(JsonObject json){
+        this(json.getInt("x", 0),
+             json.getInt("y", 0),
+             json.getInt("z", 0));
     }
     
     /**
@@ -188,6 +201,14 @@ public class Location implements Comparable<Location> {
     @Override
     public String toString() {
         return String.format("(%d, %d, %d)", X, Y, Z);
+    }
+
+    @Override
+    public JsonObject save() {
+        return new JsonObject()
+                .add("x", X)
+                .add("y", Y)
+                .add("z", Z);
     }
     
 }
