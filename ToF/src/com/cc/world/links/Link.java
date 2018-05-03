@@ -76,7 +76,7 @@ public abstract class Link implements Save<JsonObject> {
      * @param world the world object
      * @param json the saved data of this link
      */
-    public Link(World world, JsonObject json){
+    protected Link(World world, JsonObject json){
         this(world.getRoom(new Location(json.get("room1").asObject()))
                     .orElseThrow(() ->  new IllegalArgumentException("No room "
                             + "was found where room1 was expected: "
@@ -199,6 +199,16 @@ public abstract class Link implements Save<JsonObject> {
             return true;
         return false;
     }
+    
+    public static Link loadLink(World world, JsonObject json){
+        switch(json.getString("type", null)){
+            case "door":        return new Door(world, json);
+            case "openning":    return new Opening(world, json);
+            default:
+                throw new IllegalArgumentException("Cannot find the field 'type'"
+                        + "in the provided JSON: " + json);
+        }
+    }
 
     @Override
     public JsonObject save() {
@@ -207,6 +217,5 @@ public abstract class Link implements Save<JsonObject> {
                 .add("room2", room2.getLocation().save())
                 .add("isOpen", isOpen);
     }
-    
     
 }
