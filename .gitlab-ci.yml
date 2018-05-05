@@ -3,7 +3,8 @@ image: java:latest
 stages:
   - build
 
-gradle:
+build:
   stage: build
   script:
     - ./gradlew build
+    - ./gradlew javadoc
