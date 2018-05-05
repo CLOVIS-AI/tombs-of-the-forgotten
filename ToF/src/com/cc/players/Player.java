@@ -23,7 +23,6 @@
 package com.cc.players;
 
 import com.eclipsesource.json.JsonObject;
-import com.eclipsesource.json.JsonValue;
 
 
 /**
@@ -31,8 +30,6 @@ import com.eclipsesource.json.JsonValue;
  * @author Ivan Canet
  */
 public class Player extends Entity {
-    
-    private static final int STAMINA_PER_TICK = 1;
         
     private int searchLuck;
     
@@ -112,7 +109,7 @@ public class Player extends Entity {
      * Replenishes player's stamina per tick.
      */
     public void restATick() {
-        addStamina(STAMINA_PER_TICK);
+        addStamina(getWorld().getGameState().MOVING_STAMINA_COST);
     }
     
 }
