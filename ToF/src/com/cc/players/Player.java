@@ -31,6 +31,8 @@ import com.eclipsesource.json.JsonValue;
  * @author Ivan Canet
  */
 public class Player extends Entity {
+    
+    private static final int STAMINA_PER_TICK = 1;
         
     private int searchLuck;
     
@@ -104,6 +106,13 @@ public class Player extends Entity {
             return false;
         }
         return true;
+    }
+    
+    /**
+     * Replenishes player's stamina per tick.
+     */
+    public void restATick() {
+        addStamina(STAMINA_PER_TICK);
     }
     
 }

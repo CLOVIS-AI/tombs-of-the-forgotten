@@ -28,9 +28,10 @@ import static com.cc.world.GameState.EXPLORE;
 import com.cc.world.Location;
 import com.cc.world.Room;
 import com.cc.world.World;
-import com.eclipsesource.json.JsonObject;
 import java.util.Scanner;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -98,6 +99,29 @@ public class ToF {
     }
     
     /**
+     * The player rests.
+     * @param turns number of turns
+     * @param time amount of time 
+     */
+    @SuppressWarnings("SleepWhileInLoop")
+    public void rest(int turns, long time) {
+        if(turns <= 0)
+            throw new IllegalArgumentException("'turns' shouldn't be negative "
+                    + "or null: " + turns);
+        if(time <= 0)
+            throw new IllegalArgumentException("'time' shouldn't be negative or"
+                    + " null: " + time);
+        
+        try {
+            for (int i = 0; i < turns; i++) {
+                world.getPlayer().restATick();
+                world.nextTick();
+                Thread.sleep(time);
+            }
+        } catch (InterruptedException ex) {}
+    }
+    
+    /**
      * Prompts the user for input.
      * @return The input
      */
@@ -113,7 +137,7 @@ public class ToF {
      * @param input the input
      * @return An action object
      */
-    public static Action analyseInput(String input){
+    public static Action analyseInput(String input) {
         String[] s = input.split(" ");
         String[] parameters = new String[s.length - 1];
         
