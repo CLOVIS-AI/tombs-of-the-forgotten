@@ -27,8 +27,10 @@ import com.cc.players.Entity;
 import com.cc.utils.Save;
 import com.cc.world.links.Link;
 import com.eclipsesource.json.JsonObject;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -255,6 +257,28 @@ public class Room implements Save<JsonObject> {
         return canMove(getDirectionTo(r)
                 .orElseThrow(()->new IllegalArgumentException("The provided"
                         + "room is not a neighbor of this room!")));
+    }
+    
+    public boolean canMove(Room target, int dist, Entity e){
+        return canMove(target, dist, new ArrayList(), e);
+    }
+    
+    private boolean canMove(Room target, int dist, List<Room> visited, Entity e){
+        if(dist < 0)
+            return false;
+        
+        else if(dist == 1){
+            Optional<Direction> d = getDirectionTo(target);
+            return d.isPresent() ? canMove(d.get()) : false;
+        }
+        
+        else
+            for(Room r : getReachableNeighbors(e).collect(Collectors.toList()))
+                if(!visited.contains(r))
+                    if(r.canMove(target, dist-1, visited, e))
+                        return true;
+        
+        return false;
     }
     
     /**

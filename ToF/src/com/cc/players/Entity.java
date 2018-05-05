@@ -317,7 +317,11 @@ public abstract class Entity implements Timable, Save<JsonObject> {
      * @param r the Room
      */
     public void moveTo(Room r) {
-        moveTo(getCurrentRoom().getDirectionTo(r));
+        moveTo(getCurrentRoom().getDirectionTo(r).orElseThrow(
+                ()->new IllegalArgumentException("The given room ("
+                        +r.getLocation()+") is not in a distance of 1 from the "
+                        +"Entity ("+getLocation()+")")
+        ));
     }
 
     /**

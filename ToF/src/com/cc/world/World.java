@@ -316,6 +316,18 @@ public class World implements Timable, Save<JsonObject> {
     public final Message getNextMessage() {
         return messages.remove();
     }
+    
+    /**
+     * Converts a list of Rooms that have a specified location to a TreeMap.
+     * @param rooms the rooms
+     * @return The treemap
+     */
+    public static TreeMap<Location, Room> createTreeMap(Iterable<Room> rooms){
+        TreeMap<Location, Room> map = new TreeMap<>();
+        for(Room r : rooms)
+            map.put(r.getLocation(), r);
+        return map;
+    }
 
     @Override
     public int hashCode() {
