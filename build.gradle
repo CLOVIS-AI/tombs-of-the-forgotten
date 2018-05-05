@@ -8,6 +8,7 @@
  */
 
 apply plugin: 'java'
+apply plugin: 'application'
 
 repositories {
     jcenter()
@@ -20,6 +21,11 @@ dependencies {
 }
 
 version = '0.0.0'
+mainClassName = 'com.cc.tof.ToF'
+
+run {
+    standardInput = System.in
+}
 
 sourceSets {
     main {
