@@ -2,8 +2,13 @@ image: java:latest
 
 stages:
   - build
+  - javadoc
 
-gradle:
+build:
   stage: build
   script:
     - ./gradlew build
+
+javadoc:
+  stage: javadoc
+    - ./gradlew javadoc
