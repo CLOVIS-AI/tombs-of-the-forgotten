@@ -24,15 +24,19 @@ package com.cc.world;
 
 import com.cc.players.Entity;
 import com.cc.players.Player;
+import com.cc.utils.Save;
 import com.cc.utils.messages.Message;
-import java.io.File;
-import java.io.FileNotFoundException;
+import com.cc.world.links.Link;
+import com.eclipsesource.json.JsonArray;
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.JsonValue;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Queue;
-import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -41,83 +45,78 @@ import java.util.stream.Stream;
  * The world in which the game is taking place.
  * @author Ivan Canet
  */
-public class World implements Timable {
+public class World implements Timable, Save<JsonObject> {
     
-    private TreeMap<Location, Room> rooms;
+    // Package private to enable access for the tests
+    final TreeMap<Location, Room> rooms;
     
-    private Player player;
+    private final Player player;
     
-    private List<Entity> entities;
+    private final List<Entity> entities;
     
-    private GameState gameState;
+    private GameState gameState = GameState.EXPLORE;
     
     private Queue<Message> messages;
     
     // ************************************************* C O N S T R U C T O R S
     
+    @SuppressWarnings("LeakingThisInConstructor")
     public World(TreeMap<Location, Room> map, Player player){
-        map.forEach((l, r) -> r.setWorld(this));
+        map.forEach((l, r) -> {
+            r.setWorld(this);
+            r.setLocation(l);
+        });
         
         rooms = map;
         this.player = player;
         this.player.setWorld(this);
+        this.entities = new ArrayList();
     }
     
     /**
-     * Creates a new World (random generation).
+     * Creates a World object from JSON.
+     * @param json the saved data
      */
-    public World(){
-        this(System.currentTimeMillis());
-    }
-    
-    /**
-     * Creates a new World (random generation) based on a seed.
-     * @param seed The generation seed.
-     */
-    public World(final long seed){
-        throw new UnsupportedOperationException();
-    }
-    
-    /**
-     * Loads a World object from a file.
-     * <p>Note that this contructor is meant for the Prototype only, it will
-     * marked as deprecated in any other releases (JSON will be used instead).
-     * @param f the file
-     */
-    public World(File f){
-        rooms = new TreeMap<>();
+    public World(JsonObject json){
+        rooms = extractRooms(json.get("rooms").asArray());
+        extractAndIncludeLinks(json.get("links").asArray());
         
-        System.out.println("Loading world from file " + f.getAbsolutePath());
-        try {
-            Scanner s = new Scanner(f);
-            
-            int y = 0, 
-                z = 0;
-            
-            while(s.hasNextLine()){
-                String line = s.nextLine();
-                
-                switch(line){
-                    case "-":   y=0; z++; break;
-                    case "":    continue;
-                }
-                
-                int x = 0;
-                for(char c : line.toCharArray()){
-                    switch(c){
-                        case '@':
-                            player = new Player();
-                        case '+':
-                            rooms.put(new Location(x, y, z), new Room("+").setWorld(this));
-                            break;
-                        default:
-                    }
-                    x++;
-                }
-            }
-        } catch (FileNotFoundException ex) {
-            throw new IllegalArgumentException("The file doesn't exist: " + f.getAbsolutePath());
+        player = new Player(json.get("player").asObject());
+        entities = extractEntities(json.get("entities").asArray());
+        
+        gameState = GameState.valueOf(json.getString("state", null));
+        
+        concludeLoading();
+    }
+    
+    final void concludeLoading(){
+        rooms.values().forEach(Room::endGeneration);
+        player.setWorld(this);
+        entities.forEach(e -> e.setWorld(this));
+    }
+    
+    final TreeMap<Location, Room> extractRooms(JsonArray json){
+        TreeMap<Location, Room> map = new TreeMap<>();
+        for(JsonValue j : json.values()){
+            Room r = new Room(j.asObject());
+            r.setWorld(this);
+            map.put(r.getLocation(), r);
         }
+        return map;
+    }
+    
+    final List<Entity> extractEntities(JsonArray json){
+        List<Entity> list = new ArrayList<>(json.size());
+        for(JsonValue j : json.values()){
+            // @TODO in #78: Add the entity
+        }
+        return list;
+    }
+    
+    final void extractAndIncludeLinks(JsonArray json){
+        json.values().stream()
+                .map(JsonValue::asObject)
+                .forEach(j -> Link.loadLink(this, j));
     }
     
     // ****************************************************** G A M E  L O G I C
@@ -311,5 +310,65 @@ public class World implements Timable {
      */
     public final Message getNextMessage() {
         return messages.remove();
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 71 * hash + Objects.hashCode(this.rooms);
+        hash = 71 * hash + Objects.hashCode(this.player);
+        hash = 71 * hash + Objects.hashCode(this.entities);
+        hash = 71 * hash + Objects.hashCode(this.gameState);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final World other = (World) obj;
+        if (!Objects.equals(this.rooms, other.rooms)) {
+            return false;
+        }
+        if (!Objects.equals(this.player, other.player)) {
+            return false;
+        }
+        if (!Objects.equals(this.entities, other.entities)) {
+            return false;
+        }
+        if (this.gameState != other.gameState) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public JsonObject save() {
+        JsonArray jrooms = new JsonArray();
+        rooms.values().forEach(r -> jrooms.add(r.save()));
+        
+        JsonArray jlinks = new JsonArray();
+        rooms.values()
+                .stream()
+                .flatMap(r -> r.getAllLinks())
+                .distinct()
+                .forEach(l -> jlinks.add(l.save()));
+        
+        JsonArray jentities = new JsonArray();
+        entities.forEach(e -> jentities.add(e.save()));
+        
+        return new JsonObject()
+                .add("rooms", jrooms)
+                .add("links", jlinks)
+                .add("player", player.save())
+                .add("state", gameState.toString())
+                .add("entities", jentities);
     }
 }

@@ -33,10 +33,10 @@ import com.cc.world.Room;
 import com.cc.world.Timable;
 import com.cc.world.World;
 import com.eclipsesource.json.JsonObject;
-import com.eclipsesource.json.JsonValue;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -438,5 +438,46 @@ public abstract class Entity implements Timable, Save<JsonObject> {
                 .add("mana",        mana.save())
                 .add("location",    location.save())
                 .add("inventory",   inventory.save());
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 53 * hash + Objects.hashCode(this.health);
+        hash = 53 * hash + Objects.hashCode(this.stamina);
+        hash = 53 * hash + Objects.hashCode(this.mana);
+        hash = 53 * hash + Objects.hashCode(this.location);
+        hash = 53 * hash + Objects.hashCode(this.inventory);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Entity other = (Entity) obj;
+        if (!Objects.equals(this.health, other.health)) {
+            return false;
+        }
+        if (!Objects.equals(this.stamina, other.stamina)) {
+            return false;
+        }
+        if (!Objects.equals(this.mana, other.mana)) {
+            return false;
+        }
+        if (!Objects.equals(this.location, other.location)) {
+            return false;
+        }
+        if (!Objects.equals(this.inventory, other.inventory)) {
+            return false;
+        }
+        return true;
     }
 }

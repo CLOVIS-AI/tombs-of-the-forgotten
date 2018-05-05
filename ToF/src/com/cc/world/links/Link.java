@@ -119,12 +119,18 @@ public abstract class Link implements Save<JsonObject> {
     
     /**
      * Links this Link to both of its Rooms.
+     * @return the direction that was found to reach the two rooms (not that 
+     * there is no specified order, that is, for one of the rooms, the direction
+     * needed to go from it to the next one is either the returned direction or
+     * {@link Direction#getOpposite() its opposite}).
      */
-    public final void autoLink(){
+    public final Direction autoLink(){
         Direction d = fromCoordinates(room2.getLocation().remove(room1.getLocation()));
         
         room1.addLink(d, this);
         room2.addLink(d.getOpposite(), this);
+        
+        return d;
     }
     
     /**
@@ -181,8 +187,8 @@ public abstract class Link implements Save<JsonObject> {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = hash + Objects.hashCode(this.room1) * 89;
-        hash = hash + Objects.hashCode(this.room2) * 89;
+        hash = hash + Objects.hashCode(this.room1.getLocation()) * 89;
+        hash = hash + Objects.hashCode(this.room2.getLocation()) * 89;
         return hash;
     }
 
@@ -193,9 +199,11 @@ public abstract class Link implements Save<JsonObject> {
         if (getClass() != obj.getClass()) return false;
         
         final Link other = (Link) obj;
-        if(room1.equals(other.room1) && room2.equals(other.room2))
+        if(room1.getLocation().equals(other.room1.getLocation())
+        && room2.getLocation().equals(other.room2.getLocation()))
             return true;
-        if(room1.equals(other.room2) && room2.equals(other.room1))
+        if(room1.getLocation().equals(other.room2.getLocation())
+        && room2.getLocation().equals(other.room1.getLocation()))
             return true;
         return false;
     }

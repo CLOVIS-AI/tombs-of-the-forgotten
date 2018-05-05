@@ -34,6 +34,7 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * An ingame room.
@@ -75,6 +76,7 @@ public class Room implements Save<JsonObject> {
     public Room(JsonObject json){
         this(json.getString("desc", null));
         this.items = new ItemContainer(json.get("items").asObject());
+        this.location = new Location(json.get("location").asObject());
     }
     
     /**
@@ -177,11 +179,19 @@ public class Room implements Save<JsonObject> {
      * @see #getOpenNeighbors() The neighbors that are opened
      * @see #getReachableNeighbors(com.cc.players.Entity) The neighbors that an entity can go to
      */
-    public Collection<Room> getAllNeighbors() {
+    public Stream<Room> getAllNeighbors() {
         return neighbors.values()
                 .stream()
-                .map(l -> l.getOtherRoom(this))
-                .collect(Collectors.toList());
+                .map(l -> l.getOtherRoom(this));
+    }
+    
+    /**
+     * Gets all the links of this Room. To get the neighbors, 
+     * see {@link #getAllNeighbors() getAllNeighbors}.
+     * @return A stream of all the links of this Room.
+     */
+    public Stream<Link> getAllLinks() {
+        return neighbors.values().stream();
     }
     
     /**
@@ -348,7 +358,6 @@ public class Room implements Save<JsonObject> {
         hash = 79 * hash + Objects.hashCode(this.neighbors);
         hash = 79 * hash + Objects.hashCode(this.description);
         hash = 79 * hash + Objects.hashCode(this.location);
-        hash = 79 * hash + Objects.hashCode(this.world);
         return hash;
     }
 
@@ -373,9 +382,6 @@ public class Room implements Save<JsonObject> {
         if (!Objects.equals(this.location, other.location)) {
             return false;
         }
-        if (!Objects.equals(this.world, other.world)) {
-            return false;
-        }
         return true;
     }
 
@@ -383,7 +389,8 @@ public class Room implements Save<JsonObject> {
     public JsonObject save() {
         return new JsonObject()
                 .add("desc", description)
-                .add("items", items.save());
+                .add("items", items.save())
+                .add("location", location.save());
     }
     
 }

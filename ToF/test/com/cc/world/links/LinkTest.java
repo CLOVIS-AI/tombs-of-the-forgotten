@@ -61,8 +61,8 @@ public class LinkTest {
         Room r2 = new Room("e").setLocation(new Location(0, 1, 0));
         Link l = new LinkImpl(r1, r2, true);
         l.autoLink();
-        assertTrue(r1.getAllNeighbors().contains(r2));
-        assertTrue(r2.getAllNeighbors().contains(r1));
+        assertTrue(r1.getAllNeighbors().anyMatch(e -> e.equals(r2)));
+        assertTrue(r2.getAllNeighbors().anyMatch(e -> e.equals(r1)));
     }
 
     /**
@@ -84,9 +84,9 @@ public class LinkTest {
     @Test
     public void testEqualsHashCode() {
         System.out.println("Link#equals & Link#hashCode");
-        Room r1 = new Room("d");
-        Room r2 = new Room("e");
-        Room r3 = new Room("f");
+        Room r1 = new Room("d").setLocation(new Location(0, 0, 0));
+        Room r2 = new Room("e").setLocation(new Location(0, 1, 0));
+        Room r3 = new Room("f").setLocation(new Location(0, 2, 1));
         
         Link l1 = new LinkImpl(r1, r2, true);
         Link l2 = new LinkImpl(r2, r1, true);
