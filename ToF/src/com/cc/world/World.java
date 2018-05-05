@@ -280,8 +280,13 @@ public class World implements Timable, Save<JsonObject> {
         return sb.toString();
     }
     
-    public final boolean canMove(Location location, Direction direction){
-        return rooms.containsKey(location.add(direction));
+    /**
+     * Can the player move in that direction?
+     * @param direction the direction
+     * @return {@code true} if the player can move in that direction.
+     */
+    public final boolean canMove(Direction direction){
+        return player.canMoveTo(direction);
     }
     
     /**
@@ -289,7 +294,7 @@ public class World implements Timable, Save<JsonObject> {
      * @param direction the direction
      */
     public final void movePlayer(Direction direction){
-        if(canMove(player.getLocation(), direction))
+        if(canMove(direction))
             player.moveTo(direction);
         else
             System.out.println("Cannot move in this direction.");
