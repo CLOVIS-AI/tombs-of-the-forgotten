@@ -105,6 +105,13 @@ public class ToF {
      */
     @SuppressWarnings("SleepWhileInLoop")
     public void rest(int turns, long time) {
+        if(turns <= 0)
+            throw new IllegalArgumentException("'turns' shouldn't be negative "
+                    + "or null: " + turns);
+        if(time <= 0)
+            throw new IllegalArgumentException("'time' shouldn't be negative or"
+                    + " null: " + time);
+        
         try {
             for (int i = 0; i < turns; i++) {
                 world.getPlayer().restATick();
