@@ -30,6 +30,8 @@ import com.cc.world.Room;
 import com.cc.world.World;
 import java.util.Scanner;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -99,16 +101,17 @@ public class ToF {
     /**
      * The player rests.
      * @param turns number of turns
-     * @param time amount of time
-     * @throws InterruptedException 
+     * @param time amount of time 
      */
     @SuppressWarnings("SleepWhileInLoop")
-    public void rest(int turns, long time) throws InterruptedException {
-        for (int i = 0; i < turns; i++) {
-            world.getPlayer().restATick();
-            world.nextTick();
-            Thread.sleep(time);
-        }
+    public void rest(int turns, long time) {
+        try {
+            for (int i = 0; i < turns; i++) {
+                world.getPlayer().restATick();
+                world.nextTick();
+                Thread.sleep(time);
+            }
+        } catch (InterruptedException ex) {}
     }
     
     /**
