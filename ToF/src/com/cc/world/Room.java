@@ -200,12 +200,11 @@ public class Room implements Save<JsonObject> {
      * @see #getAllNeighbors() All the neighbors
      * @see #getReachableNeighbors(com.cc.players.Entity) The neighbors that an entity can go to
      */
-    public Collection<Room> getOpenNeighbors() {
+    public Stream<Room> getOpenNeighbors() {
         return neighbors.values()
                 .stream()
                 .filter(l -> l.isOpenned())
-                .map(l -> l.getOtherRoom(this))
-                .collect(Collectors.toList());
+                .map(l -> l.getOtherRoom(this));
     }
     
     /**
@@ -216,12 +215,11 @@ public class Room implements Save<JsonObject> {
      * @see #getAllNeighbors() All the neighbors
      * @see #getOpenNeighbors() The neighbors that are opened
      */
-    public Collection<Room> getReachableNeighbors(Entity e) {
+    public Stream<Room> getReachableNeighbors(Entity e) {
         return neighbors.values()
                 .stream()
                 .filter(l -> l.isOpenned() || l.canOpen(e))
-                .map(l -> l.getOtherRoom(this))
-                .collect(Collectors.toList());
+                .map(l -> l.getOtherRoom(this));
     }
     
     /**
