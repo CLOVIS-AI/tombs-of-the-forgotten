@@ -5,10 +5,8 @@
  */
 package com.cc.world;
 
-import com.cc.players.Entity;
 import com.cc.world.links.Link;
 import com.cc.world.links.LinkTest;
-import java.util.Collection;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -51,7 +49,7 @@ public class RoomTest {
         Room r2 = new Room("2").setLocation(new Location(0, 1, 0));
         Link l = new LinkTest.LinkImpl(r1, r2, true);
         l.autoLink();
-        Direction d = r1.getDirectionTo(r2);
+        Direction d = r1.getDirectionTo(r2).get();
         assertEquals(Direction.fromCoordinates(0, 1, 0), d);
     }
 }

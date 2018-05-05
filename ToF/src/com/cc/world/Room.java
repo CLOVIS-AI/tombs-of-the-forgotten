@@ -228,13 +228,12 @@ public class Room implements Save<JsonObject> {
      * @param r the given room
      * @return The Direction you should take to get to the given Room.
      */
-    public Direction getDirectionTo(Room r){
+    public Optional<Direction> getDirectionTo(Room r){
         for(Entry<Direction, Link> entry : neighbors.entrySet())
             if(entry.getValue().getOtherRoom(this).equals(r))
-                return entry.getKey();
+                return Optional.of(entry.getKey());
         
-        throw new IllegalArgumentException("You provided a room that is not a "
-                + "neighbor of this room.");
+        return Optional.empty();
     }
     
     /**
@@ -253,7 +252,9 @@ public class Room implements Save<JsonObject> {
      * @return {@code true} if it can 
      */
     public boolean canMove(Room r){
-        return canMove(getDirectionTo(r));
+        return canMove(getDirectionTo(r)
+                .orElseThrow(()->new IllegalArgumentException("The provided"
+                        + "room is not a neighbor of this room!")));
     }
     
     /**
@@ -274,7 +275,8 @@ public class Room implements Save<JsonObject> {
      * @return {@code true} if it can
      */
     public boolean canOpen(Room r, Entity e){
-        return canOpen(getDirectionTo(r), e);
+        return canOpen(getDirectionTo(r).orElseThrow(()->new IllegalArgumentException("The provided"
+                        + "room is not a neighbor of this room!")), e);
     }
     
     /**
@@ -295,7 +297,8 @@ public class Room implements Save<JsonObject> {
      * @return {@code true} if it can
      */
     public boolean canClose(Room r, Entity e){
-        return canClose(getDirectionTo(r), e);
+        return canClose(getDirectionTo(r).orElseThrow(()->new IllegalArgumentException("The provided"
+                        + "room is not a neighbor of this room!")), e);
     }
     
     /**
@@ -310,6 +313,16 @@ public class Room implements Save<JsonObject> {
                     + "Direction: " + d);
         
         return neighbors.get(d).open(e);
+    }
+    
+    /**
+     * Opens the link in a direction.
+     * @param d the direction
+     * @param e the entity that wants to open the link
+     * @return The state of the link after the call.
+     */
+    public boolean open(Optional<Direction> d, Entity e){
+        return open(d.get(), e);
     }
     
     /**
@@ -334,6 +347,16 @@ public class Room implements Save<JsonObject> {
                     + "Direction: " + d);
         
         return neighbors.get(d).close(e);
+    }
+    
+    /**
+     * Closes the link in a direction.
+     * @param d the direction
+     * @param e the entity that wants to close the link
+     * @return The state of the link after the call.
+     */
+    public boolean close(Optional<Direction> d, Entity e){
+        return close(d.get(), e);
     }
     
     /**
