@@ -180,6 +180,14 @@ public abstract class Entity implements Timable, Save<JsonObject> {
         stamina.nextTick();
         mana.nextTick();
     }
+    
+    /**
+     * Is this entity currently fighting?
+     * @return {@code true} if this entity is fighting.
+     */
+    public boolean isFighting() {
+        return opponent.isPresent();
+    }
 
     /**
      * Gets the last opponent of this entity.
