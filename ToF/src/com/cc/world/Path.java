@@ -44,10 +44,14 @@ public class Path {
         
     }
     
+    public Room moveToNext(){
+        return rooms.pop();
+    }
+    
     public static Path createPath(World world, Room departure, Room arrival, Entity entity) throws UnreachableRoomException{
         // Initilization of costs (any=Infinity, first=0)
         Map<Room, Integer> costs = new HashMap<>();
-        world.getRooms().forEach(r -> costs.put(r, Integer.MAX_VALUE));
+        world.getRooms().forEach(r -> costs.put(r, 99));
         costs.put(departure, 0);
         
         // Initilization of predecessors (any=itself)
@@ -56,7 +60,11 @@ public class Path {
         
         // Search for shortcuts
         List<Room> unterminated = new ArrayList<>(world.getRooms());
-        for(int i = 0; i < unterminated.size(); i++){
+        while(!unterminated.isEmpty()){
+            
+            //System.out.println("r          \tcost\tpred    \tterm");
+            //world.getRooms().forEach(r -> System.out.println(r+"\t"+costs.get(r)+"\t"+predecessors.get(r)+"\t"+(unterminated.contains(r) ? "" : "x")));
+            
             Room min = unterminated.stream()
                     .min((r1, r2) -> costs.get(r1) - costs.get(r2))
                     .orElseThrow(UnknownError::new);
@@ -72,8 +80,11 @@ public class Path {
             unterminated.remove(min);
         }
         
+        //System.out.println("Analyzing path...");
+        
         Stack path = new Stack();
         do{
+            //System.out.println("> " + arrival);
             path.add(arrival);
             
             if(arrival == predecessors.get(arrival))
@@ -83,15 +94,19 @@ public class Path {
         }while(arrival != null);
         
         if(path.peek() != departure)
-            throw new UnreachableRoomException("Cannot reach room " 
-                    +arrival+" from room "+departure);
+            throw new UnreachableRoomException(departure, arrival, path);
         
         return new Path(path);
     }
     
     public static class UnreachableRoomException extends Exception {
-        public UnreachableRoomException(String reason){
-            super(reason);
+        public UnreachableRoomException(Room depart, Room target, Stack<Room> path){
+            super("Cannot go from "+depart+" to "+target+"; path found:"+printStack(path));
+        }
+        public static String printStack(Stack<Room> stack){
+            StringBuilder sb = new StringBuilder();
+            stack.forEach(e -> sb.append(e));
+            return sb.toString();
         }
     }
 }
