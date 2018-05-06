@@ -48,6 +48,15 @@ public class Path {
         return rooms.pop();
     }
     
+    /**
+     * Creates a path using the Dijsktra algorithm.
+     * @param world the world
+     * @param departure the room you'd like to go from
+     * @param arrival the room you'd like to go to
+     * @param entity the entity that will take the path
+     * @return The shortest path from the first room to the target.
+     * @throws com.cc.world.Path.UnreachableRoomException If no path is found.
+     */
     public static Path createPath(World world, Room departure, Room arrival, Entity entity) throws UnreachableRoomException{
         // Initilization of costs (any=Infinity, first=0)
         Map<Room, Integer> costs = new HashMap<>();
@@ -99,11 +108,14 @@ public class Path {
         return new Path(path);
     }
     
+    /**
+     * Is thrown when no path is found between two rooms.
+     */
     public static class UnreachableRoomException extends Exception {
         public UnreachableRoomException(Room depart, Room target, Stack<Room> path){
             super("Cannot go from "+depart+" to "+target+"; path found:"+printStack(path));
         }
-        public static String printStack(Stack<Room> stack){
+        private static String printStack(Stack<Room> stack){
             StringBuilder sb = new StringBuilder();
             stack.forEach(e -> sb.append(e));
             return sb.toString();
