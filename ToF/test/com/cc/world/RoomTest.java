@@ -66,9 +66,9 @@ public class RoomTest {
         Room r4 = new Room("4").setLocation(new Location(0, 0, 3));
         Room r5 = new Room("5").setLocation(new Location(0, 0, 5));
         
-        /*World w = new World(World.createTreeMap(Arrays.asList(
+        World w = new World(World.createTreeMap(Arrays.asList(
                 r1, r2, r3, r4, r5
-        )), new Player(1, 1, 1, 1));*/
+        )), new Player(1, 1, 1, 1));
         
         new Opening(r1, r2).autoLink();
         new Opening(r2, r3).autoLink();
@@ -76,12 +76,11 @@ public class RoomTest {
         
         Entity e = new Player(1, 1, 1, 1);
         assertEquals(true, r1.canMove(r2));
-        assertEquals(true, r1.canMove(r2, 1, e));
-        assertEquals(true, r1.canMove(r3, 2, e));
-        assertEquals(true, r1.canMove(r3, 3, e));
-        assertEquals(false, r1.canMove(r4, 2, e));
-        assertEquals(true, r1.canMove(r4, 4, e));
-        assertEquals(false, r1.canMove(r5, 2, e));
-        assertEquals(false, r1.canMove(r5, 12, e));
+        assertEquals(true, r1.canMove(r2, e));
+        assertEquals(true, r1.canMove(r3, e));
+        assertEquals(true, r1.canMove(r3, e));
+        assertEquals(true, r1.canMove(r4, e));
+        assertEquals(true, r1.canMove(r4, e));
+        assertEquals(false, r1.canMove(r5, e));
     }
 }
