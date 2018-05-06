@@ -306,7 +306,7 @@ public abstract class Entity implements Timable, Save<JsonObject> {
                 + "by Room#getNeighbor, this shouldn't ever happen."))
                 .getLocation();
 
-        stamina.remove(world.getGameState().MOVING_STAMINA_COST, ACCEPT);
+        stamina.remove(1, ACCEPT);
     }
 
     /**

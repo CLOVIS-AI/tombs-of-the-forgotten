@@ -24,14 +24,11 @@ package com.cc.tof;
 
 import com.cc.players.Player;
 import com.cc.world.Direction;
-import static com.cc.world.GameState.EXPLORE;
 import com.cc.world.Location;
 import com.cc.world.Room;
 import com.cc.world.World;
 import java.util.Scanner;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 /**
@@ -91,11 +88,7 @@ public class ToF {
             throw new IllegalStateException("This method should not be called "
                     + "when no world is loaded.");
         
-        if(world.getGameState() == EXPLORE){
-            world.nextTick();
-        }else{
-            
-        }
+        world.nextTick();
     }
     
     /**

@@ -109,7 +109,7 @@ public class Player extends Entity {
      * Replenishes player's stamina per tick.
      */
     public void restATick() {
-        addStamina(getWorld().getGameState().MOVING_STAMINA_COST);
+        addStamina(2);
     }
     
 }
