@@ -276,6 +276,9 @@ public class Room implements Save<JsonObject> {
      * between the two rooms.
      */
     public Path pathTo(Room target, Entity entity) throws UnreachableRoomException {
+        if(world == null)
+            throw new NullPointerException("The world has not assigned. See Room#setWorld.");
+        
         return Path.createPath(world, this, target, entity);
     }
     
