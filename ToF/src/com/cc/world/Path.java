@@ -44,7 +44,7 @@ public class Path {
         
     }
     
-    public static Path createPath(World world, Room departure, Room arrival, Entity entity){
+    public static Path createPath(World world, Room departure, Room arrival, Entity entity) throws UnreachableRoomException{
         // Initilization of costs (any=Infinity, first=0)
         Map<Room, Integer> costs = new HashMap<>();
         world.getRooms().forEach(r -> costs.put(r, Integer.MAX_VALUE));
@@ -75,10 +75,23 @@ public class Path {
         Stack path = new Stack();
         do{
             path.add(arrival);
+            
+            if(arrival == predecessors.get(arrival))
+                break;
+            
             arrival = predecessors.get(arrival);
         }while(arrival != null);
+        
+        if(path.peek() != departure)
+            throw new UnreachableRoomException("Cannot reach room " 
+                    +arrival+" from room "+departure);
         
         return new Path(path);
     }
     
+    public static class UnreachableRoomException extends Exception {
+        public UnreachableRoomException(String reason){
+            super(reason);
+        }
+    }
 }
