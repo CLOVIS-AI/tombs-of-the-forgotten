@@ -307,6 +307,14 @@ public abstract class Entity implements Timable, Save<JsonObject> {
                 .getLocation();
 
         stamina.remove(1, ACCEPT);
+        opponent = findHere();
+    }
+    
+    private Optional<Entity> findHere(){
+        return world
+                .getEntities()
+                .filter(e -> e.getLocation().equals(location))
+                .findAny();
     }
 
     /**
