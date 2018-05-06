@@ -23,9 +23,7 @@
  */
 package com.cc.world;
 
-import com.cc.players.Entity;
 import com.cc.players.Player;
-import com.cc.world.links.Link;
 import com.cc.world.links.Opening;
 import java.util.Arrays;
 import java.util.List;
@@ -149,6 +147,26 @@ public class PathTest {
             assertEquals(r1, from5to1.moveToNext());
         } catch (Path.UnreachableRoomException ex) {
             fail("The path r5-r1 should have been reachable:"+ex.getMessage());
+        }
+        
+        try {
+            Path from1to0 = r1.pathTo(r0, p);
+            assertEquals(r1, from1to0.moveToNext());
+            assertEquals(r2, from1to0.moveToNext());
+            assertEquals(r3, from1to0.moveToNext());
+            assertEquals(r4, from1to0.moveToNext());
+            assertEquals(r8, from1to0.moveToNext());
+            assertEquals(r9, from1to0.moveToNext());
+            assertEquals(r0, from1to0.moveToNext());
+        } catch (Path.UnreachableRoomException ex) {
+            fail("The path r1-r0 should have been reachable:"+ex.getMessage());
+        }
+        
+        try {
+            Path from4toa = r4.pathTo(ra, p);
+            fail("There is no path between r4 and ra!");
+        } catch (Path.UnreachableRoomException ex) {
+            assertTrue(true);
         }
     }
     
