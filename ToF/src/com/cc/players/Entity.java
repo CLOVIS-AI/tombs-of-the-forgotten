@@ -164,6 +164,14 @@ public abstract class Entity implements Timable, Save<JsonObject> {
     public final void hurt(int n) {
         health.remove(n, ACCEPT);
     }
+    
+    /**
+     * Is this entity dead?
+     * @return {@code true} if the entity is dead.
+     */
+    public final boolean isDead() {
+        return health.getCurrent() <= 0;
+    }
 
     /**
      * The location of this entity.
@@ -179,6 +187,10 @@ public abstract class Entity implements Timable, Save<JsonObject> {
         health.nextTick();
         stamina.nextTick();
         mana.nextTick();
+        
+        if(opponent.isPresent())
+            if(opponent.get().isDead())
+                opponent = Optional.empty();
     }
     
     /**
