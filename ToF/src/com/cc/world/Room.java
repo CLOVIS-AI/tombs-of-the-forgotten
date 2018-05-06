@@ -25,14 +25,20 @@ package com.cc.world;
 import com.cc.items.ItemContainer;
 import com.cc.players.Entity;
 import com.cc.utils.Save;
+import com.cc.world.Path.UnreachableRoomException;
 import com.cc.world.links.Link;
 import com.eclipsesource.json.JsonObject;
-import java.util.Collection;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Queue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -100,8 +106,10 @@ public class Room implements Save<JsonObject> {
      * @return This room itself, to allow method-chaining.
      */
     public Room setLocation(Location l){
-        if(location != null && !isGenerated)
-            throw new IllegalStateException("This method should only be called once.");
+        if(location != null && !isGenerated){
+            System.err.println("Warning: Room#setLocation should only be called once.");
+            return this;
+        }
         
         location = l;
         return this;
@@ -228,13 +236,12 @@ public class Room implements Save<JsonObject> {
      * @param r the given room
      * @return The Direction you should take to get to the given Room.
      */
-    public Direction getDirectionTo(Room r){
+    public Optional<Direction> getDirectionTo(Room r){
         for(Entry<Direction, Link> entry : neighbors.entrySet())
             if(entry.getValue().getOtherRoom(this).equals(r))
-                return entry.getKey();
+                return Optional.of(entry.getKey());
         
-        throw new IllegalArgumentException("You provided a room that is not a "
-                + "neighbor of this room.");
+        return Optional.empty();
     }
     
     /**
@@ -253,7 +260,69 @@ public class Room implements Save<JsonObject> {
      * @return {@code true} if it can 
      */
     public boolean canMove(Room r){
-        return canMove(getDirectionTo(r));
+        return canMove(getDirectionTo(r)
+                .orElseThrow(()->new IllegalArgumentException("The provided"
+                        + "room is not a neighbor of this room!")));
+    }
+    
+    /**
+     * Can an entity reach the room in that direction?
+     * <p>An entity can reach the room if it's openned or if it can open it.
+     * @param d the direction
+     * @param e the entity
+     * @return {@code true} if it can 
+     */
+    public boolean canReach(Direction d, Entity e){
+        return neighbors.containsKey(d) 
+            && (neighbors.get(d).isOpenned() || neighbors.get(d).canOpen(e));
+    }
+    
+    /**
+     * Can an entity reach that Room?
+     * <p>An entity can reach the room if it's openned or if it can open it.
+     * @param r the room (must be a neighboring room)
+     * @return {@code true} if it can 
+     */
+    public boolean canReach(Room r, Entity e){
+        return canReach(getDirectionTo(r)
+                .orElseThrow(()->new IllegalArgumentException("The provided"
+                        + "room is not a neighbor of this room!")), e);
+    }
+    
+    /**
+     * Creates a path to an other room.
+     * <p>This method uses the Dijsktra algorithm to find the shortest path, see
+     * {@link Path#createPath(com.cc.world.World, com.cc.world.Room, com.cc.world.Room, com.cc.players.Entity) Path.createPath}.
+     * @param target the room the path will lead to
+     * @param entity the entity that takes this path
+     * @return A path to the other room.
+     * @throws com.cc.world.Path.UnreachableRoomException If no path exists
+     * between the two rooms.
+     */
+    public Path pathTo(Room target, Entity entity) throws UnreachableRoomException {
+        if(world == null)
+            throw new NullPointerException("The world has not assigned. See Room#setWorld.");
+        
+        return Path.createPath(world, this, target, entity);
+    }
+    
+    /**
+     * Can the entity move from this room to the other one?
+     * <p>This method tries to generate a path from this Room to the other one
+     * using {@link #pathTo(com.cc.world.Room, com.cc.players.Entity) pathTo},
+     * and returns {@code true} or {@code false} whether it succeeded or not.
+     * @param target the target room
+     * @param e the entity
+     * @return {@code true} if the specified entity can move from this room to
+     * the other one.
+     */
+    public boolean canMove(Room target, Entity e){
+        try {
+            pathTo(target, e);
+            return true;
+        } catch (UnreachableRoomException ex) {
+            return false;
+        }
     }
     
     /**
@@ -274,7 +343,8 @@ public class Room implements Save<JsonObject> {
      * @return {@code true} if it can
      */
     public boolean canOpen(Room r, Entity e){
-        return canOpen(getDirectionTo(r), e);
+        return canOpen(getDirectionTo(r).orElseThrow(()->new IllegalArgumentException("The provided"
+                        + "room is not a neighbor of this room!")), e);
     }
     
     /**
@@ -295,7 +365,8 @@ public class Room implements Save<JsonObject> {
      * @return {@code true} if it can
      */
     public boolean canClose(Room r, Entity e){
-        return canClose(getDirectionTo(r), e);
+        return canClose(getDirectionTo(r).orElseThrow(()->new IllegalArgumentException("The provided"
+                        + "room is not a neighbor of this room!")), e);
     }
     
     /**
@@ -310,6 +381,16 @@ public class Room implements Save<JsonObject> {
                     + "Direction: " + d);
         
         return neighbors.get(d).open(e);
+    }
+    
+    /**
+     * Opens the link in a direction.
+     * @param d the direction
+     * @param e the entity that wants to open the link
+     * @return The state of the link after the call.
+     */
+    public boolean open(Optional<Direction> d, Entity e){
+        return open(d.get(), e);
     }
     
     /**
@@ -334,6 +415,16 @@ public class Room implements Save<JsonObject> {
                     + "Direction: " + d);
         
         return neighbors.get(d).close(e);
+    }
+    
+    /**
+     * Closes the link in a direction.
+     * @param d the direction
+     * @param e the entity that wants to close the link
+     * @return The state of the link after the call.
+     */
+    public boolean close(Optional<Direction> d, Entity e){
+        return close(d.get(), e);
     }
     
     /**
@@ -381,6 +472,11 @@ public class Room implements Save<JsonObject> {
             return false;
         }
         return true;
+    }
+    
+    @Override
+    public String toString() {
+        return description + " " + location;
     }
 
     @Override
