@@ -29,7 +29,6 @@ import com.cc.world.links.Link;
 import com.eclipsesource.json.JsonObject;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -428,6 +427,11 @@ public class Room implements Save<JsonObject> {
             return false;
         }
         return true;
+    }
+    
+    @Override
+    public String toString() {
+        return description + " " + location;
     }
 
     @Override
