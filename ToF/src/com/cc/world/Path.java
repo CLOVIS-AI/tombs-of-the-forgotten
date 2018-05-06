@@ -29,6 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This class represents a path from a Room to an other. It is represented as a
@@ -39,13 +41,40 @@ public class Path {
     
     private final Stack<Room> rooms;
     
-    public Path(Stack<Room> stack){
+    private Path(Stack<Room> stack){
         rooms = stack;
         
     }
     
+    /**
+     * Removes the next room from this path and returns it.
+     * @return The next step.
+     */
     public Room moveToNext(){
         return rooms.pop();
+    }
+    
+    /**
+     * Returns a stream of the Rooms of this Path.
+     * @return A stream of the Rooms of this Path.
+     */
+    public Stream<Room> seePath(){
+        return rooms.stream();
+    }
+    
+    /**
+     * Verifies that this Path is still valid.
+     * <p>A path can become invalid if the entity cannot open doors, and that this
+     * path goes through an open door that has been closed since the path's generation.
+     * @param entity the entity
+     * @return {@code true} if this path is still valid.
+     */
+    public boolean checkPathValidity(Entity entity){
+        List<Room> list = rooms.subList(0, rooms.size());
+        for(int i = 0; i < list.size()-1; i++)
+            if(!list.get(i).canReach(list.get(i+1), entity))
+                return false;
+        return true;
     }
     
     /**
