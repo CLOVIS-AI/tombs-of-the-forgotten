@@ -187,6 +187,14 @@ public class World implements Timable, Save<JsonObject> {
     }
     
     /**
+     * Returns a Stream of all the Entities in this world (except the player).
+     * @return All the Entities in this world.
+     */
+    public Stream<Entity> getEntities(){
+        return entities.stream();
+    }
+    
+    /**
      * Gets the entities according to a predicate. The player is ignored.
      * <p>This method returns a Stream that has not yet been executed, meaning
      * that, thanks to the lazy execution of Streams, this method call is
