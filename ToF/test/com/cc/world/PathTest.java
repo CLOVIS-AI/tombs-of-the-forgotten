@@ -102,7 +102,6 @@ public class PathTest {
         Player p = new Player(1, 1, 1, 1);
         World world = new World(World.createTreeMap(rooms), p);
         
-        System.out.println("\n\n\n\n===============\n\n\n\n");
         try {
             Path from1to2 = r1.pathTo(r2, p);
             assertEquals(r1, from1to2.moveToNext());
@@ -111,7 +110,6 @@ public class PathTest {
             fail("The path r1-r2 should have been reachable:"+ex.getMessage());
         }
         
-        System.out.println("\n\n\n\n===============\n\n\n\n");
         try {
             Path from1to4 = r1.pathTo(r4, p);
             assertEquals(r1, from1to4.moveToNext());
@@ -122,7 +120,6 @@ public class PathTest {
             fail("The path r1-r4 should have been reachable:"+ex.getMessage());
         }
         
-        System.out.println("\n\n\n\n===============\n\n\n\n");
         try {
             Path from6to5 = r6.pathTo(r5, p);
             assertEquals(r6, from6to5.moveToNext());
@@ -131,7 +128,6 @@ public class PathTest {
             fail("The path r6-r5 should have been reachable:"+ex.getMessage());
         }
         
-        System.out.println("\n\n\n\n===============\n\n\n\n");
         try {
             Path from4to5 = r4.pathTo(r5, p);
             assertEquals(r4, from4to5.moveToNext());
@@ -142,7 +138,6 @@ public class PathTest {
             fail("The path r4-r5 should have been reachable:"+ex.getMessage());
         }
         
-        System.out.println("\n\n\n\n===============\n\n\n\n");
         try {
             Path from5to1 = r5.pathTo(r1, p);
             assertEquals(r5, from5to1.moveToNext());
