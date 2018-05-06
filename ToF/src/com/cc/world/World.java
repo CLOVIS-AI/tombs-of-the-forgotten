@@ -365,6 +365,17 @@ public class World implements Timable, Save<JsonObject> {
         }
         return true;
     }
+    
+    /**
+     * Returns all the links of this World.
+     * @return All the links of this World.
+     */
+    public Stream<Link> getAllLinks(){
+        return rooms.values()
+                .stream()
+                .flatMap(r -> r.getAllLinks())
+                .distinct();
+    }
 
     @Override
     public JsonObject save() {
@@ -372,10 +383,7 @@ public class World implements Timable, Save<JsonObject> {
         rooms.values().forEach(r -> jrooms.add(r.save()));
         
         JsonArray jlinks = new JsonArray();
-        rooms.values()
-                .stream()
-                .flatMap(r -> r.getAllLinks())
-                .distinct()
+        getAllLinks()
                 .forEach(l -> jlinks.add(l.save()));
         
         JsonArray jentities = new JsonArray();
