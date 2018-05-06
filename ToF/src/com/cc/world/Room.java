@@ -266,6 +266,30 @@ public class Room implements Save<JsonObject> {
     }
     
     /**
+     * Can an entity reach the room in that direction?
+     * <p>An entity can reach the room if it's openned or if it can open it.
+     * @param d the direction
+     * @param e the entity
+     * @return {@code true} if it can 
+     */
+    public boolean canReach(Direction d, Entity e){
+        return neighbors.containsKey(d) 
+            && (neighbors.get(d).isOpenned() || neighbors.get(d).canOpen(e));
+    }
+    
+    /**
+     * Can an entity reach that Room?
+     * <p>An entity can reach the room if it's openned or if it can open it.
+     * @param r the room (must be a neighboring room)
+     * @return {@code true} if it can 
+     */
+    public boolean canReach(Room r, Entity e){
+        return canReach(getDirectionTo(r)
+                .orElseThrow(()->new IllegalArgumentException("The provided"
+                        + "room is not a neighbor of this room!")), e);
+    }
+    
+    /**
      * Creates a path to an other room.
      * <p>This method uses the Dijsktra algorithm to find the shortest path, see
      * {@link Path#createPath(com.cc.world.World, com.cc.world.Room, com.cc.world.Room, com.cc.players.Entity) Path.createPath}.
