@@ -25,6 +25,7 @@ package com.cc.world;
 import com.cc.items.ItemContainer;
 import com.cc.players.Entity;
 import com.cc.utils.Save;
+import com.cc.world.Path.UnreachableRoomException;
 import com.cc.world.links.Link;
 import com.eclipsesource.json.JsonObject;
 import java.util.ArrayDeque;
@@ -36,6 +37,8 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Queue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -262,24 +265,37 @@ public class Room implements Save<JsonObject> {
                         + "room is not a neighbor of this room!")));
     }
     
-    public boolean canMove(Room target, int dist, Entity e){
-        Queue<Room> queue = new ArrayDeque<>();
-        queue.add(this);
-        List<Room> visited = new ArrayList();
-        
-        while(!queue.isEmpty()){
-            Room current = queue.remove();
-            visited.add(current);
-            
-            if(current.equals(target))
-                return true;
-            
-            for(Room r : current.getReachableNeighbors(e).collect(Collectors.toList()))
-                if(!visited.contains(r))
-                    queue.add(r);
+    /**
+     * Creates a path to an other room.
+     * <p>This method uses the Dijsktra algorithm to find the shortest path, see
+     * {@link Path#createPath(com.cc.world.World, com.cc.world.Room, com.cc.world.Room, com.cc.players.Entity) Path.createPath}.
+     * @param target the room the path will lead to
+     * @param entity the entity that takes this path
+     * @return A path to the other room.
+     * @throws com.cc.world.Path.UnreachableRoomException If no path exists
+     * between the two rooms.
+     */
+    public Path pathTo(Room target, Entity entity) throws UnreachableRoomException {
+        return Path.createPath(world, this, target, entity);
+    }
+    
+    /**
+     * Can the entity move from this room to the other one?
+     * <p>This method tries to generate a path from this Room to the other one
+     * using {@link #pathTo(com.cc.world.Room, com.cc.players.Entity) pathTo},
+     * and returns {@code true} or {@code false} whether it succeeded or not.
+     * @param target the target room
+     * @param e the entity
+     * @return {@code true} if the specified entity can move from this room to
+     * the other one.
+     */
+    public boolean canMove(Room target, Entity e){
+        try {
+            pathTo(target, e);
+            return true;
+        } catch (UnreachableRoomException ex) {
+            return false;
         }
-        
-        return false;
     }
     
     /**
