@@ -103,8 +103,10 @@ public class Room implements Save<JsonObject> {
      * @return This room itself, to allow method-chaining.
      */
     public Room setLocation(Location l){
-        if(location != null && !isGenerated)
-            throw new IllegalStateException("This method should only be called once.");
+        if(location != null && !isGenerated){
+            System.err.println("Warning: Room#setLocation should only be called once.");
+            return this;
+        }
         
         location = l;
         return this;
