@@ -48,6 +48,7 @@ public class SamePair<T> extends Pair<T,T> {
      * @throws ArrayIndexOutOfBoundsException if less than 2 elements are provided.
      * @throws IllegalArgumentException if more than 2 elements are provided.
      */
+    @SafeVarargs
     public SamePair(T... elements){
         super(elements[0], elements[1]);
         
