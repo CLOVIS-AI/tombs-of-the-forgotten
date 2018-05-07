@@ -27,7 +27,7 @@ import com.eclipsesource.json.JsonObject;
 
 /**
  * UniqueUsage items cannot be used twice; as soon as they are used they will
- * reject any further call to their {@link #use(com.cc.players.Entity) } method.
+ * reject any further call to their {@link UniqueUsage#use(com.cc.players.Entity) } method.
  * @author Ivan Canet
  */
 public class UniqueLambda extends UniqueUsage {
