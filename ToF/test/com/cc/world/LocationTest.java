@@ -116,7 +116,7 @@ public class LocationTest {
         
         // -----------------------------------------
         
-        TreeMap<Location, Integer> iii = new TreeMap();
+        TreeMap<Location, Integer> iii = new TreeMap<>();
         iii.put(new Location(0, 0, 0), 1);
         iii.put(new Location(-1, 0, 0), 0);
         iii.put(new Location(1, 0, 0), 3);

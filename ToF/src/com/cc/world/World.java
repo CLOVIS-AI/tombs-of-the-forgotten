@@ -70,7 +70,7 @@ public class World implements Timable, Save<JsonObject> {
         rooms = map;
         this.player = player;
         this.player.setWorld(this);
-        this.entities = new ArrayList();
+        this.entities = new ArrayList<>();
     }
     
     /**
@@ -240,9 +240,9 @@ public class World implements Timable, Save<JsonObject> {
                 .stream()
                 .filter(e -> e.getKey().getZ() == floor)
                 .collect(
-                        TreeMap::new, 
-                        (TreeMap m, Entry e) -> m.put(e.getKey(), e.getValue()), 
-                        TreeMap::putAll);
+                        TreeMap<Location, Room>::new, 
+                        (m, e) -> m.put(e.getKey(), e.getValue()), 
+                        TreeMap<Location, Room>::putAll);
     }
     
     public String floorToString(final int floor){
