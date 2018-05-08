@@ -54,8 +54,6 @@ public class World implements Timable, Save<JsonObject> {
     
     private final List<Entity> entities;
     
-    private GameState gameState = GameState.EXPLORE;
-    
     private Queue<Message> messages;
     
     // ************************************************* C O N S T R U C T O R S
@@ -73,6 +71,12 @@ public class World implements Timable, Save<JsonObject> {
         this.entities = new ArrayList<>();
     }
     
+    public World(TreeMap<Location, Room> map, Player player, Collection<Entity> entities){
+        this(map, player);
+        this.entities.addAll(entities);
+        entities.forEach(e -> e.setWorld(this));
+    }
+    
     /**
      * Creates a World object from JSON.
      * @param json the saved data
@@ -83,8 +87,6 @@ public class World implements Timable, Save<JsonObject> {
         
         player = new Player(json.get("player").asObject());
         entities = extractEntities(json.get("entities").asArray());
-        
-        gameState = GameState.valueOf(json.getString("state", null));
         
         concludeLoading();
     }
@@ -127,7 +129,8 @@ public class World implements Timable, Save<JsonObject> {
     @Override
     public void nextTick(){
         player.nextTick();
-        entities.forEach(e -> e.nextTick());
+        entities.forEach(Entity::nextTick);
+        entities.removeIf(Entity::isDead);
     }
     
     // *********************************************************** G E T T E R S
@@ -138,14 +141,6 @@ public class World implements Timable, Save<JsonObject> {
      */
     public Player getPlayer(){
         return player;
-    }
-    
-    /**
-     * The state of the game.
-     * @return The state of the game.
-     */
-    public GameState getGameState(){
-        return gameState;
     }
     
     /**
@@ -196,6 +191,17 @@ public class World implements Timable, Save<JsonObject> {
         return rooms.values()
                 .stream()
                 .filter(p);
+    }
+    
+    /**
+     * Returns a Stream of all the Entities in this world.
+     * @param includePlayer {@code true} to include the player
+     * @return All the Entities in this world.
+     */
+    public Stream<Entity> getEntities(boolean includePlayer){
+        Stream<Entity> entities = this.entities.stream();
+        return includePlayer ? Stream.concat(entities, Stream.of(player))
+                             : entities;
     }
     
     /**
@@ -335,7 +341,6 @@ public class World implements Timable, Save<JsonObject> {
         hash = 71 * hash + Objects.hashCode(this.rooms);
         hash = 71 * hash + Objects.hashCode(this.player);
         hash = 71 * hash + Objects.hashCode(this.entities);
-        hash = 71 * hash + Objects.hashCode(this.gameState);
         return hash;
     }
 
@@ -358,9 +363,6 @@ public class World implements Timable, Save<JsonObject> {
             return false;
         }
         if (!Objects.equals(this.entities, other.entities)) {
-            return false;
-        }
-        if (this.gameState != other.gameState) {
             return false;
         }
         return true;
@@ -393,7 +395,6 @@ public class World implements Timable, Save<JsonObject> {
                 .add("rooms", jrooms)
                 .add("links", jlinks)
                 .add("player", player.save())
-                .add("state", gameState.toString())
                 .add("entities", jentities);
     }
 }

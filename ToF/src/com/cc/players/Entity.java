@@ -49,20 +49,22 @@ public abstract class Entity implements Timable, Save<JsonObject> {
     /**
      * Health bar. Game over when 0.
      */
-    private Bar health;
+    private final Bar health;
 
     /**
      * Strength bar. Used for physical attacks.
      */
-    private Bar stamina;
+    private final Bar stamina;
 
     /**
      * Mana bar. Used for magical attacks.
      */
-    private Bar mana;
-
+    private final Bar mana;
+    
     private Location location;
     private World world;
+    
+    private final String name;
 
     private Optional<Entity> opponent;
 
@@ -70,27 +72,30 @@ public abstract class Entity implements Timable, Save<JsonObject> {
 
     /**
      * Constructs a new Entity.
+     * @param name its name
      * @param maxHealth the maximum health
      * @param maxStrength the maximum strength
      * @param maxMana the maximum mana
      * @param maxWeight the maximum weight it can carry
      */
-    public Entity(int maxHealth, int maxStrength, int maxMana, int maxWeight) {
-        this(maxHealth, maxStrength, maxMana, maxWeight, new Location());
+    public Entity(String name, int maxHealth, int maxStrength, int maxMana, int maxWeight) {
+        this(name, maxHealth, maxStrength, maxMana, maxWeight, new Location());
     }
 
     /**
      * Constructs a new Entity.
+     * @param name its name
      * @param maxHealth the maximum health
      * @param maxStrength the maximum strength
      * @param maxMana the maximum mana
      * @param maxWeight the maximum weight it can carry
      * @param l its position in the world
      */
-    public Entity(int maxHealth, int maxStrength, int maxMana, int maxWeight,
+    public Entity(String name, int maxHealth, int maxStrength, int maxMana, int maxWeight,
             Location l) {
         
-        this(new Bar("Health", 0, maxHealth, maxHealth),
+        this(name,
+             new Bar("Health", 0, maxHealth, maxHealth),
              new Bar("Stamina", 0, maxStrength, maxStrength),
              new Bar("Mana", 0, maxMana, 0),
              l,
@@ -100,6 +105,7 @@ public abstract class Entity implements Timable, Save<JsonObject> {
     
     /**
      * Constructs a new Entity
+     * @param name its name
      * @param health its health
      * @param stamina its stamina
      * @param mana its mana
@@ -107,8 +113,9 @@ public abstract class Entity implements Timable, Save<JsonObject> {
      * @param opponent its opponent if any (or {@code null})
      * @param inventory its inventory
      */
-    public Entity(Bar health, Bar stamina, Bar mana, Location location, 
+    public Entity(String name, Bar health, Bar stamina, Bar mana, Location location, 
             Entity opponent, Inventory inventory) {
+        this.name = name;
         this.health = new Bar(health);
         this.stamina = new Bar(stamina);
         this.mana = new Bar(mana);
@@ -122,7 +129,8 @@ public abstract class Entity implements Timable, Save<JsonObject> {
      * @param json the saved data
      */
     public Entity(JsonObject json) {
-        this(new Bar(json.get("health").asObject()),
+        this(json.getString("name", null),
+             new Bar(json.get("health").asObject()),
              new Bar(json.get("stamina").asObject()),
              new Bar(json.get("mana").asObject()),
              new Location(json.get("location").asObject()),
@@ -164,6 +172,14 @@ public abstract class Entity implements Timable, Save<JsonObject> {
     public final void hurt(int n) {
         health.remove(n, ACCEPT);
     }
+    
+    /**
+     * Is this entity dead?
+     * @return {@code true} if the entity is dead.
+     */
+    public final boolean isDead() {
+        return health.getCurrent() <= 0;
+    }
 
     /**
      * The location of this entity.
@@ -179,6 +195,20 @@ public abstract class Entity implements Timable, Save<JsonObject> {
         health.nextTick();
         stamina.nextTick();
         mana.nextTick();
+        
+        opponent = findHere();
+        
+        if(opponent.isPresent())
+            if(opponent.get().isDead())
+                opponent = Optional.empty();
+    }
+    
+    /**
+     * Is this entity currently fighting?
+     * @return {@code true} if this entity is fighting.
+     */
+    public boolean isFighting() {
+        return opponent.isPresent();
     }
 
     /**
@@ -306,9 +336,16 @@ public abstract class Entity implements Timable, Save<JsonObject> {
                 + "by Room#getNeighbor, this shouldn't ever happen."))
                 .getLocation();
 
-        stamina.remove(world.getGameState().MOVING_STAMINA_COST, ACCEPT);
+        stamina.remove(1, ACCEPT);
     }
-
+    
+    private Optional<Entity> findHere(){
+        return world
+                .getEntities(true)
+                .filter(e -> !e.equals(this) && e.getLocation().equals(location))
+                .findAny();
+    }
+    
     /**
      * Moves this Entity to that Room, only is possible (the Room must be a
      * neighbor of the Entity's current room, and must be reachable by the
@@ -437,6 +474,7 @@ public abstract class Entity implements Timable, Save<JsonObject> {
     @Override
     public JsonObject save() {
         return new JsonObject()
+                .add("name",        name)
                 .add("health",      health.save())
                 .add("stamina",     stamina.save())
                 .add("mana",        mana.save())
@@ -452,6 +490,7 @@ public abstract class Entity implements Timable, Save<JsonObject> {
         hash = 53 * hash + Objects.hashCode(this.mana);
         hash = 53 * hash + Objects.hashCode(this.location);
         hash = 53 * hash + Objects.hashCode(this.inventory);
+        hash = 53 * hash + Objects.hashCode(this.name);
         return hash;
     }
 
@@ -467,6 +506,9 @@ public abstract class Entity implements Timable, Save<JsonObject> {
             return false;
         }
         final Entity other = (Entity) obj;
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
         if (!Objects.equals(this.health, other.health)) {
             return false;
         }
@@ -483,5 +525,10 @@ public abstract class Entity implements Timable, Save<JsonObject> {
             return false;
         }
         return true;
+    }
+    
+    @Override
+    public String toString(){
+        return name + " " + location;
     }
 }

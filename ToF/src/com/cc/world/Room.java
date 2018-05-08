@@ -28,18 +28,11 @@ import com.cc.utils.Save;
 import com.cc.world.Path.UnreachableRoomException;
 import com.cc.world.links.Link;
 import com.eclipsesource.json.JsonObject;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Queue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -477,7 +470,19 @@ public class Room implements Save<JsonObject> {
     
     @Override
     public String toString() {
-        return description + " " + location;
+        StringBuilder sb = new StringBuilder()
+                .append(description)
+                .append(" ")
+                .append(location)
+                .append(" [neighbors:");
+        
+        neighbors.forEach((d,l) -> sb
+                .append(" ")
+                .append(d)
+                .append(" ")
+                .append(l.getOtherRoom(this).location));
+        
+        return sb.append("]").toString();
     }
 
     @Override

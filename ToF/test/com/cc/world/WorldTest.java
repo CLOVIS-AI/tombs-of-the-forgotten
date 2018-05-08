@@ -23,20 +23,11 @@
  */
 package com.cc.world;
 
-import com.cc.players.Entity;
 import com.cc.players.Player;
-import com.cc.utils.messages.Message;
 import com.cc.world.links.Door;
 import com.cc.world.links.Link;
-import com.eclipsesource.json.JsonArray;
-import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.WriterConfig;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 import java.util.TreeMap;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -81,14 +72,13 @@ public class WorldTest {
         map.put(new Location(0, 0, 0), r1);
         map.put(new Location(0, 0, 1), r2);
         Link l = new Door(r1, r2);
-        Player p = new Player(20, 1, 5, 5);
+        Player p = new Player("p", 20, 1, 5, 5);
         World w = new World(map, p);
         l.autoLink();
         System.out.println(w.save().toString(WriterConfig.MINIMAL));
         World ww = new World(w.save());
         System.out.println(ww.save().toString(WriterConfig.MINIMAL));
         
-        assertEquals(w.getGameState(), ww.getGameState());
         assertEquals(w.getPlayer(), ww.getPlayer());
         assertEquals(w.rooms, ww.rooms);
         assertTrue(w.equals(ww));

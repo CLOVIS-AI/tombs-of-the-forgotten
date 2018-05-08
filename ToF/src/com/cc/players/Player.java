@@ -37,31 +37,33 @@ public class Player extends Entity {
      * Creates a default player with default values.
      */
     public Player(){
-        this(20, 2, 5, 10);
+        this("Player", 20, 2, 5, 10);
     }
     
     /**
      * Creates a player.
+     * @param name Its name
      * @param maxHealth The maximum health
      * @param maxStrength The maximum strength
      * @param maxMana The maximum mana
      * @param maxWeight The maximum weight he can carry
      */
-    public Player(int maxHealth, int maxStrength, int maxMana, int maxWeight) {
-        this(maxHealth, maxStrength, maxMana, maxWeight, 0);
+    public Player(String name, int maxHealth, int maxStrength, int maxMana, int maxWeight) {
+        this(name, maxHealth, maxStrength, maxMana, maxWeight, 0);
     }
     
     /**
      * Creates a player.
+     * @param name Its name
      * @param maxHealth The maximum health
      * @param maxStrength The maximum strength
      * @param maxMana The maximum mana
      * @param maxWeight The maximum weight he can carry
      * @param luck The luck of finding a good item
      */
-    public Player(int maxHealth, int maxStrength, int maxMana, int maxWeight,
+    public Player(String name, int maxHealth, int maxStrength, int maxMana, int maxWeight,
             int luck) {
-        super(maxHealth, maxStrength, maxMana, maxWeight);
+        super(name, maxHealth, maxStrength, maxMana, maxWeight);
         searchLuck = luck;
     }
     
@@ -109,7 +111,7 @@ public class Player extends Entity {
      * Replenishes player's stamina per tick.
      */
     public void restATick() {
-        addStamina(getWorld().getGameState().MOVING_STAMINA_COST);
+        addStamina(2);
     }
     
 }

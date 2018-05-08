@@ -27,8 +27,6 @@ import com.cc.players.Player;
 import com.cc.world.links.Opening;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -97,7 +95,7 @@ public class PathTest {
         List<Room> rooms = Arrays.asList(
                 r0, r1, r2, r3, r4, r5, r6, r7, r8, r9
         );
-        Player p = new Player(1, 1, 1, 1);
+        Player p = new Player("p", 1, 1, 1, 1);
         World world = new World(World.createTreeMap(rooms), p);
         
         try {

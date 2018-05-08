@@ -68,13 +68,13 @@ public class RoomTest {
         
         World w = new World(World.createTreeMap(Arrays.asList(
                 r1, r2, r3, r4, r5
-        )), new Player(1, 1, 1, 1));
+        )), new Player("p", 1, 1, 1, 1));
         
         new Opening(r1, r2).autoLink();
         new Opening(r2, r3).autoLink();
         new Opening(r3, r4).autoLink();
         
-        Entity e = new Player(1, 1, 1, 1);
+        Entity e = new Player("p", 1, 1, 1, 1);
         assertEquals(true, r1.canMove(r2));
         assertEquals(true, r1.canMove(r2, e));
         assertEquals(true, r1.canMove(r3, e));
