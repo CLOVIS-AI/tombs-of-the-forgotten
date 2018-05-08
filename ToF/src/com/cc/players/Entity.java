@@ -341,7 +341,7 @@ public abstract class Entity implements Timable, Save<JsonObject> {
     
     private Optional<Entity> findHere(){
         return world
-                .getEntities()
+                .getEntities(true)
                 .filter(e -> !e.equals(this) && e.getLocation().equals(location))
                 .findAny();
     }

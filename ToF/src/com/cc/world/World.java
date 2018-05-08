@@ -194,11 +194,14 @@ public class World implements Timable, Save<JsonObject> {
     }
     
     /**
-     * Returns a Stream of all the Entities in this world (except the player).
+     * Returns a Stream of all the Entities in this world.
+     * @param includePlayer {@code true} to include the player
      * @return All the Entities in this world.
      */
-    public Stream<Entity> getEntities(){
-        return entities.stream();
+    public Stream<Entity> getEntities(boolean includePlayer){
+        Stream<Entity> entities = this.entities.stream();
+        return includePlayer ? Stream.concat(entities, Stream.of(player))
+                             : entities;
     }
     
     /**
