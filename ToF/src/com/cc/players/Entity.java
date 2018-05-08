@@ -188,6 +188,8 @@ public abstract class Entity implements Timable, Save<JsonObject> {
         stamina.nextTick();
         mana.nextTick();
         
+        opponent = findHere();
+        
         if(opponent.isPresent())
             if(opponent.get().isDead())
                 opponent = Optional.empty();
@@ -327,7 +329,6 @@ public abstract class Entity implements Timable, Save<JsonObject> {
                 .getLocation();
 
         stamina.remove(1, ACCEPT);
-        opponent = findHere();
     }
     
     private Optional<Entity> findHere(){
