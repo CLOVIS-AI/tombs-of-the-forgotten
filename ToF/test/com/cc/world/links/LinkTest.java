@@ -6,8 +6,17 @@
 package com.cc.world.links;
 
 import com.cc.players.Entity;
+import com.cc.players.Player;
+import com.cc.world.Direction;
 import com.cc.world.Location;
 import com.cc.world.Room;
+import com.cc.world.World;
+import static java.util.Arrays.asList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Stream;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -56,13 +65,47 @@ public class LinkTest {
      */
     @Test
     public void testAutoLink() {
-        System.out.println("autoLink");
-        Room r1 = new Room("d").setLocation(new Location(0, 0, 0));
-        Room r2 = new Room("e").setLocation(new Location(0, 1, 0));
-        Link l = new LinkImpl(r1, r2, true);
-        l.autoLink();
-        assertTrue(r1.getAllNeighbors().anyMatch(e -> e.equals(r2)));
-        assertTrue(r2.getAllNeighbors().anyMatch(e -> e.equals(r1)));
+        Map<Direction, List<Location>> tests = new HashMap<>();
+        tests.put(Direction.UP, asList(
+                new Location(0, 0, 0), 
+                new Location(0, 0, 1)));
+        tests.put(Direction.DOWN, asList(
+                new Location(0, 0, 0), 
+                new Location(0, 0, -1)));
+        tests.put(Direction.EAST, asList(
+                new Location(0, 0, 0), 
+                new Location(0, 1, 0)));
+        tests.put(Direction.WEST, asList(
+                new Location(0, 0, 0), 
+                new Location(0, -1, 0)));
+        tests.put(Direction.NORTH, asList(
+                new Location(0, 0, 0), 
+                new Location(-1, 0, 0)));
+        tests.put(Direction.SOUTH, asList(
+                new Location(0, 0, 0), 
+                new Location(1, 0, 0)));
+        
+        for(Entry<Direction, List<Location>> e : tests.entrySet()){
+            Direction d = e.getKey();
+            System.out.println("Link#autoLink:" + d);
+            Location departure = e.getValue().get(0);
+            Location arrival = e.getValue().get(1);
+            
+            Room r1 = new Room("departure").setLocation(departure);
+            Room r2 = new Room("arrival").setLocation(arrival);
+            Link l = new LinkImpl(r1, r2, true);
+            l.autoLink();
+            
+            Player p = new Player(1, 1, 1, 1);
+            World w = new World(World.createTreeMap(asList(r1, r2)), p);
+            assertTrue(p.canMoveTo(r2));
+            
+            assertTrue(p.canMoveTo(d));
+            
+            Stream.of(Direction.values())
+                    .filter(dir -> !dir.equals(d))
+                    .forEach(dir -> assertFalse(p.canMoveTo(dir)));
+        }
     }
 
     /**
