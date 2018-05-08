@@ -60,7 +60,7 @@ public abstract class Entity implements Timable, Save<JsonObject> {
      * Mana bar. Used for magical attacks.
      */
     private Bar mana;
-
+    
     private Location location;
     private World world;
 
@@ -334,10 +334,10 @@ public abstract class Entity implements Timable, Save<JsonObject> {
     private Optional<Entity> findHere(){
         return world
                 .getEntities()
-                .filter(e -> e.getLocation().equals(location))
+                .filter(e -> !e.equals(this) && e.getLocation().equals(location))
                 .findAny();
     }
-
+    
     /**
      * Moves this Entity to that Room, only is possible (the Room must be a
      * neighbor of the Entity's current room, and must be reachable by the
