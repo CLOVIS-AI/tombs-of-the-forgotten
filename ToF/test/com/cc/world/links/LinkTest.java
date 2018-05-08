@@ -96,7 +96,7 @@ public class LinkTest {
             Link l = new LinkImpl(r1, r2, true);
             l.autoLink();
             
-            Player p = new Player(1, 1, 1, 1);
+            Player p = new Player("p", 1, 1, 1, 1);
             World w = new World(World.createTreeMap(asList(r1, r2)), p);
             assertTrue(p.canMoveTo(r2));
             

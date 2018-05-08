@@ -59,7 +59,7 @@ public class ToF {
         rooms.put(new Location(0, 2, 0), new Room(""));
         rooms.put(new Location(2, 2, 0), new Room(""));
         
-        Player p = new Player(1, 1, 1, 1);
+        Player p = new Player("p", 1, 1, 1, 1);
         
         world = new World(rooms, p);
         gameLoop();

@@ -72,7 +72,7 @@ public class WorldTest {
         map.put(new Location(0, 0, 0), r1);
         map.put(new Location(0, 0, 1), r2);
         Link l = new Door(r1, r2);
-        Player p = new Player(20, 1, 5, 5);
+        Player p = new Player("p", 20, 1, 5, 5);
         World w = new World(map, p);
         l.autoLink();
         System.out.println(w.save().toString(WriterConfig.MINIMAL));
