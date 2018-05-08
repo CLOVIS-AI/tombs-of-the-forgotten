@@ -88,6 +88,14 @@ public class MagicalItem extends AbstractItem {
         entity.useMana(manaCost);
     }
     
+    /**
+     * The mana cost of this item.
+     * @return The mana cost of this item.
+     */
+    public int getManaCost() {
+        return manaCost;
+    }
+    
     @Override
     public JsonObject save() {
         return super.save()
