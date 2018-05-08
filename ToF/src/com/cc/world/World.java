@@ -123,7 +123,8 @@ public class World implements Timable, Save<JsonObject> {
     @Override
     public void nextTick(){
         player.nextTick();
-        entities.forEach(e -> e.nextTick());
+        entities.forEach(Entity::nextTick);
+        entities.removeIf(Entity::isDead);
     }
     
     // *********************************************************** G E T T E R S
