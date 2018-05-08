@@ -34,7 +34,7 @@ import com.eclipsesource.json.JsonObject;
  * direct children.
  * @author Ivan Canet
  */
-abstract class UniqueUsage extends AbstractItem {
+public abstract class UniqueUsage extends AbstractItem {
     
     private boolean hasBeenUsed = false;
     
