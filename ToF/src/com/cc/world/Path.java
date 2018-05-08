@@ -29,7 +29,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -120,7 +119,7 @@ public class Path {
         
         //System.out.println("Analyzing path...");
         
-        Stack path = new Stack();
+        Stack<Room> path = new Stack<>();
         do{
             //System.out.println("> " + arrival);
             path.add(arrival);

@@ -281,6 +281,7 @@ public class Room implements Save<JsonObject> {
      * Can an entity reach that Room?
      * <p>An entity can reach the room if it's openned or if it can open it.
      * @param r the room (must be a neighboring room)
+     * @param e the entity
      * @return {@code true} if it can 
      */
     public boolean canReach(Room r, Entity e){
