@@ -71,6 +71,12 @@ public class World implements Timable, Save<JsonObject> {
         this.entities = new ArrayList<>();
     }
     
+    public World(TreeMap<Location, Room> map, Player player, Collection<Entity> entities){
+        this(map, player);
+        this.entities.addAll(entities);
+        entities.forEach(e -> e.setWorld(this));
+    }
+    
     /**
      * Creates a World object from JSON.
      * @param json the saved data
