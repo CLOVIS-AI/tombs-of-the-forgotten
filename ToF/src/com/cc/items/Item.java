@@ -24,8 +24,10 @@ package com.cc.items;
 
 import com.cc.players.Entity;
 import com.cc.utils.Save;
+import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
-import com.eclipsesource.json.WriterConfig;
+import com.eclipsesource.json.JsonValue;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,54 +37,82 @@ import java.util.List;
 public final class Item implements Save<JsonObject> {
     
     private final List<Action> actions;
+    private final String name;
+    private final String description;
+    private final Rarity rarity;
+    private final int weight;
+    
+    public Item(String name, String description, Rarity rarity, int weight){
+        this.name = name;
+        this.description = description;
+        this.rarity = rarity;
+        this.weight = weight;
+        actions = new ArrayList<>();
+    }
     
     public Item(JsonObject json){
+        this(json.getString("name", null),
+             json.getString("description", null),
+             Rarity.valueOf(json.getString("rarity", null)),
+             json.getInt("weight", 0));
         
+        JsonArray acts = json.get("actions").asArray();
+        for(JsonValue j : acts){
+            actions.add(new Action(j.asObject()));
+        }
     }
     
     /**
      * Notifies the Item that an entity is using it.
      * @param entity the entity that uses the Item
      */
-    public void use(Entity entity);
+    public void use(Entity entity){
+        actions.forEach(a -> a.execute(entity));
+    }
     
     /**
      * The weight of this Item, in grams.
      * <p>Note that the weight of an Item is a constant, and can NOT change.
      * @return The weight of this Item.
      */
-    public int getWeight();
+    public int getWeight(){
+        return weight;
+    }
     
     /**
      * The name of this Item.
      * @return The name of this Item.
      */
-    public String getName();
+    public String getName(){
+        return name;
+    }
     
     /**
      * The description of this Item.
      * @return The description of this Item.
      */
-    public String getDescription();
+    public String getDescription(){
+        return description;
+    }
     
     /**
      * The rarity of an Item.
      * @return The rarity of an Item.
      */
-    public Rarity getRarity();
-    
-    public static Item loadItem(JsonObject json){
-        if(json.get("stamina-cost")!=null)   return new Weapon(json);
-        if(json.get("damage")!=null)         return new Armor(json);
-        if(json.get("mana-cost")!=null)      return new MagicalItem(json);
-        if(json.get("used")!=null)           return new UniqueLambda(json);
-        
-        throw new IllegalArgumentException("No Item type was found that matches"
-                + "the JSON data: " + json.toString(WriterConfig.PRETTY_PRINT));
+    public Rarity getRarity(){
+        return rarity;
     }
 
     @Override
     public JsonObject save() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        JsonArray acts = new JsonArray();
+        actions.forEach(a -> acts.add(a.save()));
+        
+        return new JsonObject()
+                .add("name", name)
+                .add("description", name)
+                .add("rarity", rarity.name())
+                .add("weight", weight)
+                .add("actions", acts);
     }
 }
