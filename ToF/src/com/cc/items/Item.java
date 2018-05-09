@@ -26,12 +26,19 @@ import com.cc.players.Entity;
 import com.cc.utils.Save;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.WriterConfig;
+import java.util.List;
 
 /**
  * Represents a generic Item.
  * @author Ivan Canet
  */
-public interface Item extends Save<JsonObject> {
+public final class Item implements Save<JsonObject> {
+    
+    private final List<Action> actions;
+    
+    public Item(JsonObject json){
+        
+    }
     
     /**
      * Notifies the Item that an entity is using it.
@@ -72,5 +79,10 @@ public interface Item extends Save<JsonObject> {
         
         throw new IllegalArgumentException("No Item type was found that matches"
                 + "the JSON data: " + json.toString(WriterConfig.PRETTY_PRINT));
+    }
+
+    @Override
+    public JsonObject save() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
