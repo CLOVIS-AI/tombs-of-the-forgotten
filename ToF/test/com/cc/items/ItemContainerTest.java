@@ -8,10 +8,10 @@ package com.cc.items;
 import java.util.Optional;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -58,7 +58,7 @@ public class ItemContainerTest {
     @Test
     public void testEquals() {
         System.out.println("equals");
-        Item i = new Weapon("d", 1, "d", Rarity.RARE, 1, 0, 1);
+        Item i = new Item("d", "d", Rarity.RARE, 1, 0);
         ItemContainer c1 = new ItemContainer("d");
         c1.add(i);
         
@@ -74,7 +74,7 @@ public class ItemContainerTest {
     @Test
     public void testRemoveItem() {
         System.out.println("remove, add, contains");
-        Item i = new Weapon("d", 1, "d", Rarity.RARE, 1, 0, 1);
+        Item i = new Item("d", "d", Rarity.RARE, 1, 0);
         
         ItemContainer c1 = new ItemContainer("d");
         c1.add(i);

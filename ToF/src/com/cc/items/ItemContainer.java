@@ -47,7 +47,7 @@ public class ItemContainer implements Save<JsonObject> {
     public ItemContainer(JsonObject json) {
         this(json.getString("description", null));
         json.get("items").asArray()
-                .forEach(i -> items.add(Item.loadItem(i.asObject())));
+                .forEach(i -> items.add(new Item(i.asObject())));
     }
     
     /**

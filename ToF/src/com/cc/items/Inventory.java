@@ -22,6 +22,7 @@
  */
 package com.cc.items;
 
+import com.cc.players.Entity;
 import com.cc.utils.Bar;
 import static com.cc.utils.Bar.Behavior.ACCEPT;
 import com.eclipsesource.json.JsonObject;
@@ -111,6 +112,24 @@ public class Inventory extends ItemContainer {
      */
     public Bar getWeightBar() {
         return weight;
+    }
+    
+    /**
+     * Uses an Item.
+     * @param item the item
+     * @param entity the entity
+     * @throws IllegalArgumentException if the provided item is not a part of
+     * this inventory.
+     */
+    public void use(Item item, Entity entity) {
+        if(!contains(item))
+            throw new IllegalArgumentException("This item ("+item+") is not contained"
+                    + "by this inventory ("+this+")");
+        
+        item.use(entity);
+        
+        if(item.isBroken())
+            remove(item);
     }
     
     @Override

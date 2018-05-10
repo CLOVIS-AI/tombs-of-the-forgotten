@@ -23,6 +23,7 @@
 package com.cc.utils.messages;
 
 import com.cc.items.Item;
+import com.cc.players.Entity.Stat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +71,8 @@ public class Message {
             add((Item) o);
         else if(o instanceof String)
             add((String) o);
+        else if(o instanceof Stat)
+            add((Stat) o);
         else
             throw new IllegalArgumentException("Cannot recognize " + o + " "
                     + "as any allowed objects.");
@@ -95,6 +98,29 @@ public class Message {
      */
     public Message add(String text){
         add(text, Styling.DEFAULT);
+        
+        return this;
+    }
+    
+    /**
+     * Adds a stat to this Message (using the styling {@link Styling#STAT}).
+     * @param stat the stat
+     * @return this Message itself, to allow method-chaining.
+     */
+    public Message add(Stat stat){
+        add(stat.toString(), Styling.STAT);
+        
+        return this;
+    }
+    
+    /**
+     * Adds a value to this message (using the styling
+     * {@link Styling#NUMBER}).
+     * @param value the value
+     * @return this Message itself, to allow method-chaining.
+     */
+    public Message add(int value){
+        add(""+value, Styling.NUMBER);
         
         return this;
     }

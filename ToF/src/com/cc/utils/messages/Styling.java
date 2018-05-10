@@ -197,4 +197,16 @@ public class Styling {
             .setColor(Color.RED)
             .lock();
     
+    /** The styling used by the application to display a stat (HP, mana...).
+     *  This styling is locked, you can not modify it. */
+    public static final Styling STAT = new Styling()
+            .setBold()
+            .setColor(Color.BLUE)
+            .lock();
+    
+    public static final Styling NUMBER = new Styling()
+            .setBold()
+            .setColor(Color.blue)
+            .lock();
+    
 }

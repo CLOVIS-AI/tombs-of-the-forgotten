@@ -23,54 +23,160 @@
 package com.cc.items;
 
 import com.cc.players.Entity;
+import com.cc.utils.Bar;
+import static com.cc.utils.Bar.Behavior.ACCEPT;
 import com.cc.utils.Save;
+import com.cc.utils.messages.Message;
+import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
-import com.eclipsesource.json.WriterConfig;
+import com.eclipsesource.json.JsonValue;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Represents a generic Item.
+ * Represents an Item.
  * @author Ivan Canet
  */
-public interface Item extends Save<JsonObject> {
+public final class Item implements Save<JsonObject> {
+    
+    private final List<Action> actions;
+    private final String name;
+    private final String description;
+    private final Rarity rarity;
+    private final int weight;
+    private final Bar durability;
     
     /**
-     * Notifies the Item that an entity is using it.
+     * Creates a new Item.
+     * @param name its name
+     * @param description its description
+     * @param rarity its rarity
+     * @param weight its weight (in grams)
+     * @param durability its durability
+     */
+    public Item(String name, String description, Rarity rarity, int weight,
+            Bar durability){
+        this.name = name;
+        this.description = description;
+        this.rarity = rarity;
+        this.weight = weight;
+        this.durability = new Bar(durability);
+        actions = new ArrayList<>();
+    }
+    
+    /**
+     * Creates an Item.
+     * @param name its name
+     * @param description its description
+     * @param rarity its rarity
+     * @param weight its weight (in grams)
+     * @param maxDurability its maximum durability
+     */
+    public Item(String name, String description, Rarity rarity, int weight,
+            int maxDurability){
+        this(name, description, rarity, weight,
+             new Bar("Durability", 0, maxDurability, maxDurability));
+    }
+    
+    /**
+     * Loads an Item from JSON data.
+     * @param json the saved data
+     */
+    public Item(JsonObject json){
+        this(               json.getString("name", null),
+                            json.getString("description", null),
+             Rarity.valueOf(json.getString("rarity", null)),
+                            json.getInt("weight", 0),
+                    new Bar(json.get("durability").asObject()));
+        
+        JsonArray acts = json.get("actions").asArray();
+        for(JsonValue j : acts){
+            actions.add(Action.load(j.asObject()));
+        }
+    }
+    
+    /**
+     * Uses this item.
      * @param entity the entity that uses the Item
      */
-    public void use(Entity entity);
+    void use(Entity entity){
+        if(isBroken())
+            return;
+        
+        actions.forEach(a -> a.execute(entity));
+        durability.remove(1, ACCEPT);
+    }
+    
+    /**
+     * Gets the effects of this Item.
+     * @return the effects of this Item.
+     */
+    public List<Message> getEffects(){
+        ArrayList<Message> messages = new ArrayList<>();
+        actions.forEach(a -> a.addEffects(messages));
+        return messages;
+    }
     
     /**
      * The weight of this Item, in grams.
      * <p>Note that the weight of an Item is a constant, and can NOT change.
      * @return The weight of this Item.
      */
-    public int getWeight();
+    public int getWeight(){
+        return weight;
+    }
     
     /**
      * The name of this Item.
      * @return The name of this Item.
      */
-    public String getName();
+    public String getName(){
+        return name;
+    }
     
     /**
      * The description of this Item.
      * @return The description of this Item.
      */
-    public String getDescription();
+    public String getDescription(){
+        return description;
+    }
     
     /**
      * The rarity of an Item.
      * @return The rarity of an Item.
      */
-    public Rarity getRarity();
+    public Rarity getRarity(){
+        return rarity;
+    }
     
-    public static Item loadItem(JsonObject json){
-        if(json.get("stamina-cost")!=null)   return new Weapon(json);
-        if(json.get("damage")!=null)         return new Armor(json);
-        if(json.get("mana-cost")!=null)      return new MagicalItem(json);
-        if(json.get("used")!=null)           return new UniqueLambda(json);
+    /**
+     * Is this item broken?
+     * @return {@code true} if the item's durability is lesser or equal 0.
+     */
+    public boolean isBroken(){
+        return durability.getCurrent() <= 0;
+    }
+    
+    /**
+     * The durability of this Item.
+     * @return How many times can this item be used?
+     */
+    public int getDurability(){
+        return durability.getCurrent();
+    }
+
+    @Override
+    public JsonObject save() {
+        JsonArray acts = new JsonArray();
+        actions.forEach(a -> acts.add(a.save()));
         
-        throw new IllegalArgumentException("No Item type was found that matches"
-                + "the JSON data: " + json.toString(WriterConfig.PRETTY_PRINT));
+        return new JsonObject()
+                .add("name", name)
+                .add("description", name)
+                .add("rarity", rarity.name())
+                .add("weight", weight)
+                .add("actions", acts)
+                .add("durability", durability.save());
     }
 }
