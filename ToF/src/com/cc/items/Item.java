@@ -23,6 +23,7 @@
 package com.cc.items;
 
 import com.cc.players.Entity;
+import com.cc.utils.Bar;
 import com.cc.utils.Save;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
@@ -41,12 +42,15 @@ public final class Item implements Save<JsonObject> {
     private final String description;
     private final Rarity rarity;
     private final int weight;
+    private final Bar durability;
     
-    public Item(String name, String description, Rarity rarity, int weight){
+    public Item(String name, String description, Rarity rarity, int weight,
+            Bar durability){
         this.name = name;
         this.description = description;
         this.rarity = rarity;
         this.weight = weight;
+        this.durability = new Bar(durability);
         actions = new ArrayList<>();
     }
     
@@ -54,7 +58,8 @@ public final class Item implements Save<JsonObject> {
         this(json.getString("name", null),
              json.getString("description", null),
              Rarity.valueOf(json.getString("rarity", null)),
-             json.getInt("weight", 0));
+             json.getInt("weight", 0),
+             new Bar(json.get("durability").asObject()));
         
         JsonArray acts = json.get("actions").asArray();
         for(JsonValue j : acts){
