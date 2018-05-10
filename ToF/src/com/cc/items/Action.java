@@ -24,17 +24,35 @@
 package com.cc.items;
 
 import com.cc.players.Entity;
+import com.cc.utils.Save;
 import com.cc.utils.messages.Message;
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.WriterConfig;
 import java.util.List;
 
 /**
- *
+ * An action is a part of something done by the user.
  * @author Ivan Canet
  */
-public interface Action {
+public interface Action extends Save<JsonObject> {
     
     public void execute(Entity entity);
     
     public void addEffects(List<Message> effects);
+    
+    /**
+     * Creates an Action object from the JSON data.
+     * @param json the saved data
+     * @return An Action object.
+     */
+    public static Action load(JsonObject json) {
+        switch(json.getString("type", null)){
+            case "entity": return new EntityAction(json);
+            default:
+                throw new IllegalArgumentException("The provided JSON data cannot"
+                        + "be recognized as an Action (invalid or missing type):\n"
+                        + json.toString(WriterConfig.PRETTY_PRINT));
+        }
+    }
     
 }

@@ -26,7 +26,6 @@ import static com.cc.items.EntityAction.Operation.ADD;
 import static com.cc.items.EntityAction.Target.SELF;
 import com.cc.players.Entity;
 import com.cc.players.Entity.Stat;
-import com.cc.utils.Save;
 import com.cc.utils.messages.Message;
 import com.eclipsesource.json.JsonObject;
 import java.util.List;
@@ -36,7 +35,7 @@ import java.util.Objects;
  * The action that is executed when an Item is used (for instance).
  * @author Ivan Canet
  */
-public class EntityAction implements Action, Save<JsonObject> {
+public class EntityAction implements Action {
 
     private final Stat stat;
     private final Target target;
