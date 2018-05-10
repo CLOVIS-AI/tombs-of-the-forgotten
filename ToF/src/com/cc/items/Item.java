@@ -133,6 +133,22 @@ public final class Item implements Save<JsonObject> {
     public Rarity getRarity(){
         return rarity;
     }
+    
+    /**
+     * Is this item broken?
+     * @return {@code true} if the item's durability is lesser or equal 0.
+     */
+    public boolean isBroken(){
+        return durability.getCurrent() <= 0;
+    }
+    
+    /**
+     * The durability of this Item.
+     * @return How many times can this item be used?
+     */
+    public int getDurability(){
+        return durability.getCurrent();
+    }
 
     @Override
     public JsonObject save() {
