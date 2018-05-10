@@ -114,6 +114,18 @@ public class Message {
     }
     
     /**
+     * Adds a value to this message (using the styling
+     * {@link Styling#NUMBER}).
+     * @param value the value
+     * @return this Message itself, to allow method-chaining.
+     */
+    public Message add(int value){
+        add(""+value, Styling.NUMBER);
+        
+        return this;
+    }
+    
+    /**
      * Adds the mention of an Item to this message (using the styling
      * {@link Styling#ITEM}).
      * @param item the item

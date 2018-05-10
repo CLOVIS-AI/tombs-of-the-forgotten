@@ -204,4 +204,9 @@ public class Styling {
             .setColor(Color.BLUE)
             .lock();
     
+    public static final Styling NUMBER = new Styling()
+            .setBold()
+            .setColor(Color.blue)
+            .lock();
+    
 }
