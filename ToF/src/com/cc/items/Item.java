@@ -160,6 +160,7 @@ public final class Item implements Save<JsonObject> {
                 .add("description", name)
                 .add("rarity", rarity.name())
                 .add("weight", weight)
-                .add("actions", acts);
+                .add("actions", acts)
+                .add("durability", durability.save());
     }
 }
