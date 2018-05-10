@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents a generic Item.
+ * Represents an Item.
  * @author Ivan Canet
  */
 public final class Item implements Save<JsonObject> {
@@ -44,6 +44,14 @@ public final class Item implements Save<JsonObject> {
     private final int weight;
     private final Bar durability;
     
+    /**
+     * Creates a new Item.
+     * @param name its name
+     * @param description its description
+     * @param rarity its rarity
+     * @param weight its weight (in grams)
+     * @param durability its durability
+     */
     public Item(String name, String description, Rarity rarity, int weight,
             Bar durability){
         this.name = name;
@@ -54,18 +62,30 @@ public final class Item implements Save<JsonObject> {
         actions = new ArrayList<>();
     }
     
+    /**
+     * Creates an Item.
+     * @param name its name
+     * @param description its description
+     * @param rarity its rarity
+     * @param weight its weight (in grams)
+     * @param maxDurability its maximum durability
+     */
     public Item(String name, String description, Rarity rarity, int weight,
             int maxDurability){
         this(name, description, rarity, weight,
              new Bar("Durability", 0, maxDurability, maxDurability));
     }
     
+    /**
+     * Loads an Item from JSON data.
+     * @param json the saved data
+     */
     public Item(JsonObject json){
-        this(json.getString("name", null),
-             json.getString("description", null),
+        this(               json.getString("name", null),
+                            json.getString("description", null),
              Rarity.valueOf(json.getString("rarity", null)),
-             json.getInt("weight", 0),
-             new Bar(json.get("durability").asObject()));
+                            json.getInt("weight", 0),
+                    new Bar(json.get("durability").asObject()));
         
         JsonArray acts = json.get("actions").asArray();
         for(JsonValue j : acts){
