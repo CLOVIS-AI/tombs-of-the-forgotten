@@ -24,7 +24,9 @@ package com.cc.items;
 
 import com.cc.players.Entity;
 import com.cc.utils.Bar;
+import static com.cc.utils.Bar.Behavior.ACCEPT;
 import com.cc.utils.Save;
+import com.cc.utils.messages.Message;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
@@ -94,11 +96,25 @@ public final class Item implements Save<JsonObject> {
     }
     
     /**
-     * Notifies the Item that an entity is using it.
+     * Uses this item.
      * @param entity the entity that uses the Item
      */
-    public void use(Entity entity){
+    void use(Entity entity){
+        if(isBroken())
+            return;
+        
         actions.forEach(a -> a.execute(entity));
+        durability.remove(1, ACCEPT);
+    }
+    
+    /**
+     * Gets the effects of this Item.
+     * @return the effects of this Item.
+     */
+    public List<Message> getEffects(){
+        ArrayList<Message> messages = new ArrayList<>();
+        actions.forEach(a -> a.addEffects(messages));
+        return messages;
     }
     
     /**
