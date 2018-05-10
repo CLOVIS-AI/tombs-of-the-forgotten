@@ -38,6 +38,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 /**
  * A class that represents an Entity.
@@ -530,5 +531,45 @@ public abstract class Entity implements Timable, Save<JsonObject> {
     @Override
     public String toString(){
         return name + " " + location;
+    }
+    
+    /**
+     * Represents a statistic of an Entity, such as its health.
+     */
+    public enum Stat {
+        /** The mana of an Entity. */
+        MANA(
+            (e, v) -> e.addMana(v),
+            (e, v) -> e.useMana(v)
+        ),
+        /** The health of an Entity. */
+        HEALTH(
+            (e, v) -> e.heal(v),
+            (e, v) -> e.hurt(v)
+        ),
+        /** The stamina of an Entity. */
+        STAMINA(
+            (e, v) -> e.addStamina(v),
+            (e, v) -> e.useStamina(v)
+        );
+        
+        private final BiConsumer<Entity, Integer> add, remove;
+        Stat(BiConsumer<Entity, Integer> add, BiConsumer<Entity, Integer> remove){
+            this.add = add; this.remove = remove;
+        }
+        
+        /**
+         * Increases the value of this stat for the specified entity.
+         * @param entity the entity
+         * @param value how much the stat will be increased
+         */
+        public void add(Entity entity, int value){add.accept(entity, value);}
+        
+        /**
+         * Decreases the value of this stat for the specified entity.
+         * @param entity the entity
+         * @param value how much the stat will be decreased
+         */
+        public void remove(Entity entity, int value){remove.accept(entity, value);};
     }
 }
