@@ -54,6 +54,12 @@ public final class Item implements Save<JsonObject> {
         actions = new ArrayList<>();
     }
     
+    public Item(String name, String description, Rarity rarity, int weight,
+            int maxDurability){
+        this(name, description, rarity, weight,
+             new Bar("Durability", 0, maxDurability, maxDurability));
+    }
+    
     public Item(JsonObject json){
         this(json.getString("name", null),
              json.getString("description", null),
@@ -63,7 +69,7 @@ public final class Item implements Save<JsonObject> {
         
         JsonArray acts = json.get("actions").asArray();
         for(JsonValue j : acts){
-            actions.add(new Action(j.asObject()));
+            actions.add(Action.load(j.asObject()));
         }
     }
     
