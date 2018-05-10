@@ -22,18 +22,17 @@
  */
 package com.cc.items;
 
-import static com.cc.items.Action.Operation.ADD;
-import static com.cc.items.Action.Stat.MANA;
-import static com.cc.items.Action.Target.SELF;
-import com.cc.players.Entity;
+import static com.cc.items.EntityAction.Operation.ADD;
+import static com.cc.items.EntityAction.Target.SELF;
+import static com.cc.players.Entity.Stat.MANA;
 import com.eclipsesource.json.JsonObject;
 import java.util.Objects;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -61,29 +60,29 @@ public class ActionTest {
     }
 
     /**
-     * Test of save method, of class Action.
+     * Test of save method, of class EntityAction.
      */
     @Test
     public void testSave() {
         System.out.println("Action#save&load");
-        Action a = new Action(SELF, ADD, MANA, 2);
+        EntityAction a = new EntityAction(SELF, ADD, MANA, 2);
         JsonObject json = a.save();
-        Action b = new Action(json);
+        EntityAction b = new EntityAction(json);
         assertTrue(Objects.equals(a, b));
         
-        Action c = new Action(SELF, ADD, MANA, 3);
+        EntityAction c = new EntityAction(SELF, ADD, MANA, 3);
         assertFalse(Objects.equals(a, c));
     }
 
     /**
-     * Test of equals method, of class Action.
+     * Test of equals method, of class EntityAction.
      */
     @Test
     public void testEquals() {
         System.out.println("Action#equals");
-        Action a = new Action(SELF, ADD, MANA, 0);
-        Action b = new Action(SELF, ADD, MANA, 0);
-        Action c = new Action(SELF, ADD, MANA, 1);
+        EntityAction a = new EntityAction(SELF, ADD, MANA, 0);
+        EntityAction b = new EntityAction(SELF, ADD, MANA, 0);
+        EntityAction c = new EntityAction(SELF, ADD, MANA, 1);
         
         assertTrue(a.equals(b));
         assertFalse(a.equals(c));

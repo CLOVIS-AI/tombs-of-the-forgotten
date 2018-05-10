@@ -7,7 +7,6 @@ package com.cc.players;
 
 import com.cc.items.Item;
 import com.cc.items.Rarity;
-import com.cc.items.Weapon;
 import static com.cc.world.Direction.NORTH;
 import com.cc.world.Location;
 import com.cc.world.Room;
@@ -18,10 +17,10 @@ import static java.util.Arrays.asList;
 import java.util.TreeMap;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -55,8 +54,8 @@ public class EntityTest {
     @Test
     public void testHasItem() {
         System.out.println("Entity#hasItem");
-        Item i = new Weapon("weapon", 110, "description", Rarity.RARE, 20, 20, 20);
-        Item n = new Weapon("weapon 2", 10, "description", Rarity.RARE, 20, 20, 20);
+        Item i = new Item("weapon", "description", Rarity.RARE, 20, 20);
+        Item n = new Item("weapon 2", "description", Rarity.RARE, 20, 20);
         Player p = new Player("p", 100, 50, 50, 200);
         p.addItem(i);
         
@@ -70,7 +69,7 @@ public class EntityTest {
     @Test
     public void testRemoveItem() {
         System.out.println("Entity#removeItem");
-        Item i = new Weapon("weapon", 110, "description", Rarity.RARE, 20, 20, 20);
+        Item i = new Item("weapon", "description", Rarity.RARE, 20, 20);
         Player p = new Player("p", 100, 50, 50, 200);
         p.addItem(i);
         p.removeItem(i);
@@ -84,7 +83,7 @@ public class EntityTest {
     @Test
     public void testDropItem() {
         System.out.println("Entity#dropItem");
-        Item i = new Weapon("weapon", 110, "description", Rarity.RARE, 20, 20, 20);
+        Item i = new Item("weapon", "description", Rarity.RARE, 20, 20);
         Player p = new Player("p", 100, 50, 50, 200);
         Location l = new Location(0, 0, 0);
         TreeMap<Location, Room> map = new TreeMap<>();
