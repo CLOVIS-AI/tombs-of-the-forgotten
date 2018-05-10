@@ -29,7 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 /**
  * Represents a container.
@@ -103,50 +102,6 @@ public class ItemContainer implements Save<JsonObject> {
      */
     public boolean contains(Item item) {
         return items.contains(item);
-    }
-    
-    /**
-     * Selects the weapons in this inventory, in no particular order.
-     * @return The weapons in this inventory.
-     */
-    public Stream<Weapon> selectWeapons() {
-        return items.stream()
-                .unordered()
-                .filter(i -> i instanceof Weapon)
-                .map(i -> (Weapon) i);
-    }
-    
-    /**
-     * Selects the armors in this inventory, in no particular order.
-     * @return The armors in this inventory.
-     */
-    public Stream<Armor> selectArmors() {
-        return items.stream()
-                .unordered()
-                .filter(i -> i instanceof Armor)
-                .map(i -> (Armor) i);
-    }
-    
-    /**
-     * Selects the magical items in this inventory, in no particular order.
-     * @return The magical items in this inventory.
-     */
-    public Stream<MagicalItem> selectMagicals() {
-        return items.stream()
-                .unordered()
-                .filter(i -> i instanceof MagicalItem)
-                .map(i -> (MagicalItem) i);
-    }
-    
-    /**
-     * Selects the unique usage items in this inventory, in no particular order.
-     * @return The unique usage items in this inventory.
-     */
-    public Stream<UniqueUsage> selectUnique() {
-        return items.stream()
-                .unordered()
-                .filter(i -> i instanceof UniqueUsage)
-                .map(i -> (UniqueUsage) i);
     }
     
     /**
