@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.Double?>
+<?import java.net.URL?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="678.0" prefWidth="1127.0" style="-fx-background-color: white;" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cc.view.MenuController">
+    <stylesheets>
+        <URL value="@menu.css" />
+    </stylesheets>
+   <children>
+      <AnchorPane id="AnchorPane" layoutX="64.0" layoutY="39.0" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: linear-gradient(to bottom, #b3cfe5 0%,#95b1c6 10%,#000000 60%);;" styleClass="mainFxmlClass">
+         <stylesheets>
+            <URL value="@menu.css" />
+         </stylesheets>
+         <children>
+            <Label fx:id="Title" layoutX="333.0" layoutY="282.0" text="Tombs of the Forgotten" textFill="#868686">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Label>
+            <Label fx:id="NewLabel" layoutX="910.0" layoutY="407.0" prefHeight="30.0" prefWidth="58.0" text="New" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="LoadLabel" layoutX="910.0" layoutY="457.0" prefHeight="30.0" prefWidth="58.0" text="Load" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="QuitLabel" layoutX="910.0" layoutY="511.0" prefHeight="30.0" prefWidth="58.0" text="Quit" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Line endX="100.0" layoutX="892.0" layoutY="395.0" startX="-100.0" stroke="WHITE" />
+            <AnchorPane fx:id="NewArrow" layoutX="722.0" layoutY="411.0" prefHeight="61.0" prefWidth="189.0">
+               <children>
+                  <Polygon fill="WHITE" layoutX="145.0" layoutY="21.0" rotate="90.0" scaleX="0.15" scaleY="0.5" stroke="#979797" strokeType="INSIDE" strokeWidth="5.0">
+                     <points>
+                        <Double fx:value="-50.0" />
+                        <Double fx:value="40.0" />
+                        <Double fx:value="50.0" />
+                        <Double fx:value="40.0" />
+                        <Double fx:value="0.0" />
+                        <Double fx:value="-60.0" />
+                     </points>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                  </Polygon>
+                  <Circle layoutX="119.0" layoutY="11.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon layoutX="139.0" layoutY="21.0" rotate="90.0" scaleX="0.07" scaleY="0.2" stroke="#96969600" strokeType="INSIDE" strokeWidth="10.0">
+                     <points>
+                        <Double fx:value="-50.0" />
+                        <Double fx:value="40.0" />
+                        <Double fx:value="50.0" />
+                        <Double fx:value="40.0" />
+                        <Double fx:value="0.0" />
+                        <Double fx:value="-60.0" />
+                     </points>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                  </Polygon>
+                  <Circle fill="WHITE" layoutX="130.0" layoutY="11.0" radius="3.0" stroke="WHITE" strokeType="INSIDE" />
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="LoadArrow" layoutX="722.0" layoutY="465.0" prefHeight="61.0" prefWidth="189.0">
+               <children>
+                  <Polygon fill="WHITE" layoutX="145.0" layoutY="21.0" rotate="90.0" scaleX="0.15" scaleY="0.5" stroke="#979797" strokeType="INSIDE" strokeWidth="5.0">
+                     <points>
+                        <Double fx:value="-50.0" />
+                        <Double fx:value="40.0" />
+                        <Double fx:value="50.0" />
+                        <Double fx:value="40.0" />
+                        <Double fx:value="0.0" />
+                        <Double fx:value="-60.0" />
+                     </points>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                  </Polygon>
+                  <Circle layoutX="119.0" layoutY="11.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon layoutX="139.0" layoutY="21.0" rotate="90.0" scaleX="0.07" scaleY="0.2" stroke="#96969600" strokeType="INSIDE" strokeWidth="10.0">
+                     <points>
+                        <Double fx:value="-50.0" />
+                        <Double fx:value="40.0" />
+                        <Double fx:value="50.0" />
+                        <Double fx:value="40.0" />
+                        <Double fx:value="0.0" />
+                        <Double fx:value="-60.0" />
+                     </points>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                  </Polygon>
+                  <Circle fill="WHITE" layoutX="130.0" layoutY="11.0" radius="3.0" stroke="WHITE" strokeType="INSIDE" />
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="QuitArrow" layoutX="722.0" layoutY="518.0" prefHeight="61.0" prefWidth="189.0">
+               <children>
+                  <Polygon fill="WHITE" layoutX="145.0" layoutY="21.0" rotate="90.0" scaleX="0.15" scaleY="0.5" stroke="#979797" strokeType="INSIDE" strokeWidth="5.0">
+                     <points>
+                        <Double fx:value="-50.0" />
+                        <Double fx:value="40.0" />
+                        <Double fx:value="50.0" />
+                        <Double fx:value="40.0" />
+                        <Double fx:value="0.0" />
+                        <Double fx:value="-60.0" />
+                     </points>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                  </Polygon>
+                  <Circle layoutX="119.0" layoutY="11.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Polygon layoutX="139.0" layoutY="21.0" rotate="90.0" scaleX="0.07" scaleY="0.2" stroke="#96969600" strokeType="INSIDE" strokeWidth="10.0">
+                     <points>
+                        <Double fx:value="-50.0" />
+                        <Double fx:value="40.0" />
+                        <Double fx:value="50.0" />
+                        <Double fx:value="40.0" />
+                        <Double fx:value="0.0" />
+                        <Double fx:value="-60.0" />
+                     </points>
+                     <cursor>
+                        <Cursor fx:constant="DEFAULT" />
+                     </cursor>
+                  </Polygon>
+                  <Circle fill="WHITE" layoutX="130.0" layoutY="11.0" radius="3.0" stroke="WHITE" strokeType="INSIDE" />
+               </children>
+            </AnchorPane>
+            <Polygon blendMode="MULTIPLY" layoutX="892.0" layoutY="261.0" opacity="0.41" scaleX="1.5" scaleY="2.0" stroke="#ffffff00" strokeType="INSIDE">
+               <points>
+                  <Double fx:value="-50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="0.0" />
+                  <Double fx:value="-60.0" />
+               </points>
+               <fill>
+                  <RadialGradient centerX="0.5561797752808989" centerY="0.9182692307692307" cycleMethod="REFLECT" focusAngle="-57.99" focusDistance="-0.2857142857142857" radius="0.8690476190476191">
+                     <stops>
+                        <Stop color="#060008" />
+                        <Stop color="#badaff59" offset="1.0" />
+                     </stops>
+                  </RadialGradient>
+               </fill>
+            </Polygon>
+            <Polygon blendMode="MULTIPLY" layoutX="801.0" layoutY="299.0" opacity="0.41" stroke="#ffffff00" strokeType="INSIDE">
+               <points>
+                  <Double fx:value="-50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="0.0" />
+                  <Double fx:value="-60.0" />
+               </points>
+               <fill>
+                  <RadialGradient centerX="0.5561797752808989" centerY="0.9182692307692307" cycleMethod="REFLECT" focusAngle="-57.99" focusDistance="-0.2857142857142857" radius="0.8690476190476191">
+                     <stops>
+                        <Stop color="#060008" />
+                        <Stop color="#badaff59" offset="1.0" />
+                     </stops>
+                  </RadialGradient>
+               </fill>
+            </Polygon>
+         </children>
+      </AnchorPane>
+      <Polygon layoutX="1064.0" layoutY="356.0" opacity="0.41" stroke="#ffffff00" strokeType="INSIDE">
+         <points>
+            <Double fx:value="-50.0" />
+            <Double fx:value="40.0" />
+            <Double fx:value="50.0" />
+            <Double fx:value="40.0" />
+            <Double fx:value="0.0" />
+            <Double fx:value="-60.0" />
+         </points>
+         <fill>
+            <RadialGradient centerX="0.5561797752808989" centerY="0.9182692307692307" cycleMethod="REFLECT" focusAngle="-57.99" focusDistance="-0.2857142857142857" radius="0.8690476190476191">
+               <stops>
+                  <Stop color="#060008" />
+                  <Stop color="#badaff59" offset="1.0" />
+               </stops>
+            </RadialGradient>
+         </fill>
+      </Polygon>
+   </children>
+</AnchorPane>
