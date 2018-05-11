@@ -22,28 +22,36 @@
  */
 package com.cc.tof;
 
+import com.cc.javafx.View;
 import com.cc.players.Player;
 import com.cc.world.Direction;
 import com.cc.world.Location;
 import com.cc.world.Room;
 import com.cc.world.World;
+import java.io.File;
+import java.net.URL;
 import java.util.Scanner;
 import java.util.TreeMap;
-
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 /**
  * The main game interface
  * @author Ivan Canet
  */
-public class ToF {
+public class ToF extends Application {
     
     private static World world;
-
+    private Parent menu;
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        launch(args);
         System.out.println("Tomb of the Forgotten Memory\n"
                 + "PROTOTYPE\n"
                 + "Available commands:\n"
@@ -139,6 +147,19 @@ public class ToF {
         }
         
         return new Action(s[0], parameters);
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        View view = new View(this, primaryStage);
+        System.out.println(new File("build/resources/main/Menu.fxml").exists());
+        URL url = new URL("build/resources/main/Menu.fxml");
+        System.err.println(url.toURI());
+        menu = FXMLLoader.load(url);
+        Scene scene = new Scene(menu, 1000, 600);
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Tomb Of The Forgotten");
+        primaryStage.show();
     }
     
 }
