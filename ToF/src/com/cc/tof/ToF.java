@@ -28,10 +28,18 @@ import com.cc.world.Direction;
 import com.cc.world.Location;
 import com.cc.world.Room;
 import com.cc.world.World;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.Scanner;
 import java.util.TreeMap;
+import java.util.stream.Stream;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -148,13 +156,61 @@ public class ToF extends Application {
         
         return new Action(s[0], parameters);
     }
+    
+     private List<String> getResourceFiles( String path ) throws IOException {
+    List<String> filenames = new ArrayList<>();
 
+    try(
+      InputStream in = getResourceAsStream( path );
+      BufferedReader br = new BufferedReader( new InputStreamReader( in ) ) ) {
+      String resource;
+
+      while( (resource = br.readLine()) != null ) {
+        filenames.add( resource );
+      }
+    }
+
+    return filenames;
+  }
+
+  private InputStream getResourceAsStream( String resource ) {
+    final InputStream in
+      = getContextClassLoader().getResourceAsStream( resource );
+
+    return in == null ? getClass().getResourceAsStream( resource ) : in;
+  }
+
+  private ClassLoader getContextClassLoader() {
+    return Thread.currentThread().getContextClassLoader();
+  }
+
+    private Stream<File> enfants(File f){
+        return Stream.of(f.listFiles())
+                .peek(System.out::println)
+                .filter(File::isDirectory)
+                .flatMap(a -> enfants(a));
+    }
+    
     @Override
     public void start(Stage primaryStage) throws Exception {
         View view = new View(this, primaryStage);
-        System.out.println(new File("build/resources/main/Menu.fxml").exists());
-        URL url = new URL("build/resources/main/Menu.fxml");
-        System.err.println(url.toURI());
+        
+        Enumeration<URL> roots = getClass().getClassLoader().getResources("Menu.fxml");
+while (roots.hasMoreElements()) {
+    final URL url = roots.nextElement();
+    System.out.println(url);
+}
+        
+        /*File f = new File(getClass().getClassLoader()
+                .getResources(".").toURI());
+        System.out.println("Fichier: " + f.getAbsolutePath());
+        System.out.println("Parent: " + f.getParentFile().getAbsolutePath());
+        System.out.println("Enfants: ");
+        enfants(f).forEach(System.out::println);*/
+        
+        URL url = getClass().getClassLoader().getResources("Menu.fxml").nextElement();
+        System.out.println(url);
+        
         menu = FXMLLoader.load(url);
         Scene scene = new Scene(menu, 1000, 600);
         primaryStage.setScene(scene);
