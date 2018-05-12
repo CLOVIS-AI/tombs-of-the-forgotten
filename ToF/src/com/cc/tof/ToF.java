@@ -22,8 +22,8 @@
  */
 package com.cc.tof;
 
-import com.cc.javafx.View;
 import com.cc.players.Player;
+import com.cc.view.View;
 import com.cc.world.Direction;
 import com.cc.world.Location;
 import com.cc.world.Room;

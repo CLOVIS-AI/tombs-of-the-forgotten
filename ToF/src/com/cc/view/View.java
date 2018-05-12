@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.cc.javafx;
+package com.cc.view;
 
 import com.cc.tof.ToF;
 import javafx.stage.Stage;
