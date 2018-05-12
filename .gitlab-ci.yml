@@ -1,4 +1,5 @@
 image: java:latest
+image: rburgst/java-openjfx:latest
 
 stages:
   - build
