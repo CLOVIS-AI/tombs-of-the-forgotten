@@ -6,6 +6,7 @@ stages:
 build:
   stage: build
   script:
+    - apt-get update
     - apt-get install openjfx
     - ./gradlew build
     - ./gradlew javadoc
