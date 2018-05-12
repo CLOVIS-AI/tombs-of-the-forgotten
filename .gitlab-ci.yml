@@ -1,4 +1,4 @@
-image: java:latest
+image: rburgst/java-openjfx
 
 stages:
   - build
@@ -6,7 +6,5 @@ stages:
 build:
   stage: build
   script:
-    - apt-get update
-    - apt-get install --no-install-recommends -y openjfx
     - ./gradlew build
     - ./gradlew javadoc
