@@ -1,4 +1,4 @@
-image: rburgst/java-openjfx
+image: clovisai/javafx
 
 stages:
   - build
