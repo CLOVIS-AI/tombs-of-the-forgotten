@@ -103,7 +103,7 @@ public class ToF extends Application {
     public void start(Stage primaryStage) throws Exception {
         View view = new View(this, primaryStage);
         
-        URL url = getClass().getClassLoader().getResources("Menu-test.fxml").nextElement();
+        URL url = getClass().getClassLoader().getResources("Menu.fxml").nextElement();
         System.out.println("Loading FXML from: " + url);
         menu = FXMLLoader.load(url);
 

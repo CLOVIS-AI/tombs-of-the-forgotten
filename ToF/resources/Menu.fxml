@@ -17,7 +17,7 @@
         <URL value="@menu.css" />
     </stylesheets>
    <children>
-      <AnchorPane id="AnchorPane" layoutX="64.0" layoutY="39.0" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: linear-gradient(to bottom, #b3cfe5 0%,#95b1c6 10%,#000000 60%);;" styleClass="mainFxmlClass">
+      <AnchorPane id="AnchorPane" layoutX="0.0" layoutY="0.0" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: linear-gradient(to bottom, #b3cfe5 0%,#95b1c6 10%,#000000 60%);;" styleClass="mainFxmlClass">
          <stylesheets>
             <URL value="@menu.css" />
          </stylesheets>

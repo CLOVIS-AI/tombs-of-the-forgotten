@@ -30,7 +30,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Font;
 
 /**
  * FXML Controller class
@@ -55,10 +54,12 @@ public class MenuController implements Initializable {
     private Label Title;
     /**
      * Initializes the controller class.
+     * @param url the url
+     * @param rb the resource bundle
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        Title.setFont(Font.loadFont("Skyrim.ttf", 30));
+        //Title.setFont(Font.loadFont("Skyrim.ttf", 30));
         NewArrow.setVisible(false);
         LoadArrow.setVisible(false);
         QuitArrow.setVisible(false);
