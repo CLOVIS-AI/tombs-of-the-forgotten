@@ -113,7 +113,7 @@ public final class Item implements Save<JsonObject> {
      */
     public List<Message> getEffects(){
         ArrayList<Message> messages = new ArrayList<>();
-        actions.forEach(a -> a.addEffects(messages));
+        actions.forEach(a -> messages.add(a.getEffects()));
         return messages;
     }
     

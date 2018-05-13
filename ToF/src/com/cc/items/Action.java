@@ -28,7 +28,6 @@ import com.cc.utils.Save;
 import com.cc.utils.messages.Message;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.WriterConfig;
-import java.util.List;
 
 /**
  * An action is a part of something done by the user.
@@ -38,7 +37,7 @@ public interface Action extends Save<JsonObject> {
     
     public void execute(Entity entity);
     
-    public void addEffects(List<Message> effects);
+    public Message getEffects();
     
     /**
      * Creates an Action object from the JSON data.

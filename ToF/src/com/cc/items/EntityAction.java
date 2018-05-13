@@ -28,7 +28,6 @@ import com.cc.players.Entity;
 import com.cc.players.Entity.Stat;
 import com.cc.utils.messages.Message;
 import com.eclipsesource.json.JsonObject;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -113,12 +112,11 @@ public class EntityAction implements Action {
     }
 
     @Override
-    public void addEffects(List<Message> effects) {
-        Message message = new Message()
+    public Message getEffects() {
+        return new Message()
                 .add(stat)
                 .add(": ")
                 .add(operation == ADD ? value : -value);
-        effects.add(message);
     }
     
     // ************************************************************* S T A T I C
