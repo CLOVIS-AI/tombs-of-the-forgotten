@@ -24,7 +24,10 @@ package com.cc.tof;
 
 import com.cc.view.View;
 import com.cc.world.World;
+import java.io.IOException;
 import java.net.URL;
+import java.util.Enumeration;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -99,13 +102,31 @@ public class ToF extends Application {
         return new Action(s[0], parameters);
     }
     
+    /**
+     * Gets a resource of the project. Resources should be located in the 
+     * 'ToF/resources' directory.
+     * @param name the name of the file (including extension).
+     * @return The specified resource.
+     */
+    public URL getResource(String name) {
+        Enumeration<URL> enm;
+        try {
+            enm = getClass().getClassLoader().getResources(name);
+            URL ret = enm.nextElement();
+            System.out.println("Using resource " + ret);
+            return ret;
+        } catch (IOException ex) {
+            throw new IllegalArgumentException("Cannot open resource '"+name+"'", ex);
+        } catch (NoSuchElementException ex) {
+            throw new IllegalArgumentException("Found no resource of the name '"+name+"'", ex);
+        }
+    }
+    
     @Override
     public void start(Stage primaryStage) throws Exception {
         View view = new View(this, primaryStage);
         
-        URL url = getClass().getClassLoader().getResources("Menu.fxml").nextElement();
-        System.out.println("Loading FXML from: " + url);
-        menu = FXMLLoader.load(url);
+        menu = FXMLLoader.load(getResource("Menu.fxml"));
 
         Scene scene = new Scene(menu, 1000, 600);
         primaryStage.setScene(scene);
