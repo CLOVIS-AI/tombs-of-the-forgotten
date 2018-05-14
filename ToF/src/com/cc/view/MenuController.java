@@ -54,6 +54,8 @@ public class MenuController implements Initializable {
     private Label QuitLabel;
     @FXML
     private Label Title;
+    @FXML
+    private Label MainTitle;
     /**
      * Initializes the controller class.
      * @param url the url
@@ -67,8 +69,10 @@ public class MenuController implements Initializable {
         QuitArrow.setVisible(false);
         NewLabel.setOnMouseEntered(e -> NewArrow.setVisible(true));
         NewLabel.setOnMouseExited(e -> NewArrow.setVisible(false));
+        NewLabel.setOnMousePressed(e -> ToF.newGame());
         LoadLabel.setOnMouseEntered(e -> LoadArrow.setVisible(true));
         LoadLabel.setOnMouseExited(e -> LoadArrow.setVisible(false));
+        LoadLabel.setOnMousePressed(e -> ToF.load());
         QuitLabel.setOnMouseEntered(e -> QuitArrow.setVisible(true));
         QuitLabel.setOnMouseExited(e -> QuitArrow.setVisible(false));
         QuitLabel.setOnMousePressed(e -> Platform.exit());
