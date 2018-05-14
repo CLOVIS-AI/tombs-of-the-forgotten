@@ -122,6 +122,10 @@ public class ToF extends Application {
         }
     }
     
+    public static void load() {
+        throw new UnsupportedOperationException("C ivan ki son okupe lol");
+    }
+    
     @Override
     public void start(Stage primaryStage) throws Exception {
         View view = new View(this, primaryStage);
