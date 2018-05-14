@@ -108,10 +108,10 @@ public class ToF extends Application {
      * @param name the name of the file (including extension).
      * @return The specified resource.
      */
-    public URL getResource(String name) {
+    public static URL getResource(String name) {
         Enumeration<URL> enm;
         try {
-            enm = getClass().getClassLoader().getResources(name);
+            enm = new ToF().getClass().getClassLoader().getResources(name);
             URL ret = enm.nextElement();
             System.out.println("Using resource " + ret);
             return ret;
