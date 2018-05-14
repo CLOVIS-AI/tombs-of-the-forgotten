@@ -122,6 +122,10 @@ public class ToF extends Application {
         }
     }
     
+    public static void newGame() {
+        throw new UnsupportedOperationException("sa ossi");
+    }
+    
     public static void load() {
         throw new UnsupportedOperationException("C ivan ki son okupe lol");
     }
