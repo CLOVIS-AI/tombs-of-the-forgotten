@@ -5,6 +5,8 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.RadialGradient?>
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Circle?>
@@ -22,6 +24,24 @@
             <URL value="@menu.css" />
          </stylesheets>
          <children>
+            <Polygon blendMode="OVERLAY" layoutX="950.0" layoutY="349.0" opacity="0.41" scaleX="1.5" scaleY="3.0" stroke="#ffffff00" strokeType="INSIDE">
+               <points>
+                  <Double fx:value="-50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="0.0" />
+                  <Double fx:value="-60.0" />
+               </points>
+               <fill>
+                  <RadialGradient centerX="0.5561797752808989" centerY="0.9182692307692307" cycleMethod="REFLECT" focusAngle="-57.99" focusDistance="-0.2857142857142857" radius="0.8690476190476191">
+                     <stops>
+                        <Stop color="#060008" />
+                        <Stop color="#badaff59" offset="1.0" />
+                     </stops>
+                  </RadialGradient>
+               </fill>
+            </Polygon>
             <Label fx:id="Title" layoutX="331.0" layoutY="282.0" text="Tomb of the Forgotten" textFill="#868686">
                <font>
                   <Font size="30.0" />
@@ -156,7 +176,7 @@
                   </RadialGradient>
                </fill>
             </Polygon>
-            <Polygon blendMode="MULTIPLY" layoutX="801.0" layoutY="299.0" opacity="0.41" stroke="#ffffff00" strokeType="INSIDE">
+            <Polygon blendMode="MULTIPLY" layoutX="798.0" layoutY="318.0" opacity="0.41" stroke="#ffffff00" strokeType="INSIDE">
                <points>
                   <Double fx:value="-50.0" />
                   <Double fx:value="40.0" />
@@ -246,34 +266,77 @@
                   </RadialGradient>
                </fill>
             </Polygon>
-            <Polygon blendMode="OVERLAY" layoutX="950.0" layoutY="349.0" opacity="0.41" scaleX="1.5" scaleY="3.0" stroke="#ffffff00" strokeType="INSIDE">
-               <points>
-                  <Double fx:value="-50.0" />
-                  <Double fx:value="40.0" />
-                  <Double fx:value="50.0" />
-                  <Double fx:value="40.0" />
-                  <Double fx:value="0.0" />
-                  <Double fx:value="-60.0" />
-               </points>
-               <fill>
-                  <RadialGradient centerX="0.5561797752808989" centerY="0.9182692307692307" cycleMethod="REFLECT" focusAngle="-57.99" focusDistance="-0.2857142857142857" radius="0.8690476190476191">
-                     <stops>
-                        <Stop color="#060008" />
-                        <Stop color="#badaff59" offset="1.0" />
-                     </stops>
-                  </RadialGradient>
-               </fill>
-            </Polygon>
             <Line endX="100.0" layoutX="892.0" layoutY="395.0" startX="-100.0" stroke="WHITE" />
-            <Line endX="100.0" layoutX="500.0" layoutY="268.0" startX="-100.0" stroke="WHITE" />
             <Label fx:id="MainTitle" layoutX="423.0" layoutY="242.0" text="The Younger Scrolls X" textFill="#838383">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
+            <Line endX="100.0" layoutX="567.0" layoutY="268.0" scaleX="0.6" startX="-100.0">
+               <stroke>
+                  <LinearGradient endX="1.0" endY="0.8317307692307692" startY="0.4807692307692307">
+                     <stops>
+                        <Stop color="#0a0a0a" />
+                        <Stop color="#728196b3" offset="1.0" />
+                     </stops>
+                  </LinearGradient>
+               </stroke>
+            </Line>
+            <Line endX="100.0" layoutX="433.0" layoutY="268.0" scaleX="0.6" startX="-100.0">
+               <stroke>
+                  <LinearGradient endX="1.0" endY="0.8317307692307692" startY="0.4807692307692307">
+                     <stops>
+                        <Stop color="#72819633" />
+                        <Stop color="BLACK" offset="1.0" />
+                     </stops>
+                  </LinearGradient>
+               </stroke>
+            </Line>
+            <Pane layoutX="399.0" layoutY="169.0" prefHeight="200.0" prefWidth="200.0" scaleX="0.05" scaleY="0.05">
+               <children>
+                  <Polygon layoutX="125.0" layoutY="74.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
+                    <points>
+                      <Double fx:value="-50.0" />
+                      <Double fx:value="40.0" />
+                      <Double fx:value="50.0" />
+                      <Double fx:value="40.0" />
+                      <Double fx:value="0.0" />
+                      <Double fx:value="-60.0" />
+                    </points>
+                     <fill>
+                        <LinearGradient endX="1.0" endY="0.716346153846154" startX="1.0">
+                           <stops>
+                              <Stop color="#b0bbc6" />
+                              <Stop color="#b0bbc6" offset="0.15185185185185185" />
+                              <Stop color="#324a61" offset="1.0" />
+                           </stops>
+                        </LinearGradient>
+                     </fill>
+                  </Polygon>
+                  <Polygon layoutX="125.0" layoutY="164.0" rotate="180.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
+                     <points>
+                        <Double fx:value="-50.0" />
+                        <Double fx:value="40.0" />
+                        <Double fx:value="50.0" />
+                        <Double fx:value="40.0" />
+                        <Double fx:value="0.0" />
+                        <Double fx:value="-60.0" />
+                     </points>
+                     <fill>
+                        <LinearGradient endX="1.0" endY="0.716346153846154" startX="1.0">
+                           <stops>
+                              <Stop color="#5a6f83" />
+                              <Stop color="#5a6f83" offset="0.15185185185185185" />
+                              <Stop color="#324a61" offset="1.0" />
+                           </stops>
+                        </LinearGradient>
+                     </fill>
+                  </Polygon>
+               </children>
+            </Pane>
          </children>
       </AnchorPane>
-      <Polygon layoutX="1000.0" layoutY="324.0" opacity="0.41" stroke="#ffffff00" strokeType="INSIDE">
+      <Polygon blendMode="COLOR_DODGE" layoutX="1000.0" layoutY="324.0" opacity="0.41" stroke="#ffffff00" strokeType="INSIDE">
          <points>
             <Double fx:value="-50.0" />
             <Double fx:value="40.0" />
