@@ -23,6 +23,7 @@
  */
 package com.cc.world.generator;
 
+import com.cc.utils.Pair;
 import com.cc.world.Direction;
 import com.cc.world.Location;
 import com.cc.world.Room;
@@ -30,6 +31,7 @@ import com.cc.world.World;
 import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.Random;
+import java.util.TreeMap;
 
 /**
  * The default generator of the game.
@@ -38,7 +40,8 @@ import java.util.Random;
 public class DefaultGenerator implements Generator {
 
     Random random;
-    Queue<Location> locations;
+    Queue<Pair<Location, Direction>> locations;
+    TreeMap<Location, Room> rooms;
     boolean isGenerated = false;
     
     @Override
@@ -48,10 +51,14 @@ public class DefaultGenerator implements Generator {
         
         random = randomizer;
         locations = new ArrayDeque<>();
-        locations.add(new Location(0, 0, 0));
         
         isGenerated = true;
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    void addToQueue(Location location){
+        if(rooms.containsKey(location))
+            return;
     }
     
     Location pickLocation() {
