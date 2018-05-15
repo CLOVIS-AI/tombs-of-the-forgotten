@@ -3,4 +3,5 @@
 
 build/
 .gradle/
-/.nb-gradle/
+/.nb-gradle/private
+private/

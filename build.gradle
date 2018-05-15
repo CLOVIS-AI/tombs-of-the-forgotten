@@ -9,6 +9,7 @@
 
 apply plugin: 'java'
 apply plugin: 'application'
+apply plugin: 'javafx-gradle-plugin'
 
 repositories {
     jcenter()
@@ -32,6 +33,10 @@ sourceSets {
         java {
             srcDirs = ['ToF/src']
         }
+        resources {
+            srcDirs = ['ToF/resources']
+            excludes = ['**/*.java']
+        }
     }
     test {
         java {
@@ -45,6 +50,21 @@ jar {
         attributes('Implementation-Title': project.name,
                    'Implementation-Version': project.version)
     }
+}
+
+buildscript {
+    dependencies {
+        classpath group: 'de.dynamicfiles.projects.gradle.plugins', name: 'javafx-gradle-plugin', version: '8.8.2'
+    }
+    repositories {
+        mavenCentral()
+    }
+}
+
+jfx {
+    mainClass = mainClassName
+    vendor = 'Canet-Chourouq'
+    verbose = true
 }
 
 gradle.projectsEvaluated {
