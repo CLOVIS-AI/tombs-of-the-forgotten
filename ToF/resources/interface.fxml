@@ -15,9 +15,9 @@
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1254.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cc.view.InterfaceController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1254.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cc.view.InterfaceController">
    <children>
-      <AnchorPane fx:id="LeftMenu" prefHeight="600.0" prefWidth="254.0">
+      <AnchorPane fx:id="LeftMenu" prefHeight="600.0" prefWidth="254.0" visible="false">
          <children>
             <Label layoutX="90.0" layoutY="14.0" text="PLAYERNAME" />
             <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
@@ -34,7 +34,7 @@
             <Label fx:id="All" layoutX="119.0" layoutY="390.0" text="ALL" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="BlockStats" prefHeight="600.0" prefWidth="254.0">
+      <AnchorPane fx:id="BlockStats" prefHeight="600.0" prefWidth="254.0" visible="false">
          <children>
             <Label layoutX="109.0" layoutY="14.0" text="STATS" />
             <ProgressBar layoutX="33.0" layoutY="192.0" prefWidth="200.0" progress="0.57" style="-fx-accent: #1495FF;" />
@@ -112,7 +112,7 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="BlockApparel" prefHeight="600.0" prefWidth="254.0">
+      <AnchorPane fx:id="BlockApparel" prefHeight="600.0" prefWidth="254.0" visible="false">
          <children>
             <Label layoutX="98.0" layoutY="14.0" text="APPAREL" />
             <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
@@ -141,7 +141,7 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="BlockEatable" prefHeight="600.0" prefWidth="254.0">
+      <AnchorPane fx:id="BlockEatable" prefHeight="600.0" prefWidth="254.0" visible="false">
          <children>
             <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
             <AnchorPane fx:id="Inventory11" layoutX="31.0" layoutY="53.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="204.0">
@@ -170,7 +170,7 @@
             <Label layoutX="104.0" layoutY="14.0" text="EATABLE" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="BlockScrolls" prefHeight="600.0" prefWidth="254.0">
+      <AnchorPane fx:id="BlockScrolls" prefHeight="600.0" prefWidth="254.0" visible="false">
          <children>
             <Label layoutX="98.0" layoutY="14.0" text="SCROLLS" />
             <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
@@ -199,35 +199,7 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="BlockOther" prefHeight="600.0" prefWidth="254.0">
-         <children>
-            <Label layoutX="104.0" layoutY="14.0" text="OTHER" />
-            <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
-            <AnchorPane fx:id="Inventory11111" layoutX="31.0" layoutY="53.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="204.0">
-               <children>
-                  <ScrollPane layoutX="1.0" layoutY="-2.0" prefHeight="522.0" prefWidth="204.0">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="517.0" prefWidth="202.0">
-                           <children>
-                              <VBox alignment="TOP_CENTER" layoutY="-1.0" prefHeight="515.0" prefWidth="200.0">
-                                 <children>
-                                    <MenuButton fx:id="YourFood1" mnemonicParsing="false" text="YourOther">
-                                       <items>
-                                          <MenuItem fx:id="ViewOther" mnemonicParsing="false" text="View" />
-                                          <MenuItem fx:id="DropOther" mnemonicParsing="false" text="Drop" />
-                                       </items>
-                                    </MenuButton>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </AnchorPane>
-                     </content>
-                  </ScrollPane>
-               </children>
-            </AnchorPane>
-         </children>
-      </AnchorPane>
-      <AnchorPane fx:id="BlockAll" layoutY="1.0" prefHeight="600.0" prefWidth="254.0">
+      <AnchorPane fx:id="BlockAll" layoutY="1.0" prefHeight="600.0" prefWidth="254.0" visible="false">
          <children>
             <Label layoutX="115.0" layoutY="14.0" text="ALL" />
             <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
@@ -255,7 +227,35 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="974.0" layoutY="347.0" prefHeight="255.0" prefWidth="280.0">
+      <AnchorPane fx:id="BlockOther" layoutY="1.0" prefHeight="600.0" prefWidth="254.0" visible="false">
+         <children>
+            <Label layoutX="115.0" layoutY="14.0" text="OTHER" />
+            <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
+            <AnchorPane fx:id="Inventory1111111" layoutX="31.0" layoutY="53.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="204.0">
+               <children>
+                  <ScrollPane layoutX="1.0" layoutY="-2.0" prefHeight="522.0" prefWidth="204.0">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="517.0" prefWidth="202.0">
+                           <children>
+                              <VBox alignment="TOP_CENTER" layoutY="-1.0" prefHeight="515.0" prefWidth="200.0">
+                                 <children>
+                                    <MenuButton fx:id="YourFood111" mnemonicParsing="false" text="YourOther">
+                                       <items>
+                                          <MenuItem fx:id="ViewOther11" mnemonicParsing="false" text="View" />
+                                          <MenuItem fx:id="DropOther11" mnemonicParsing="false" text="Drop" />
+                                       </items>
+                                    </MenuButton>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </ScrollPane>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="974.0" layoutY="347.0" prefHeight="255.0" prefWidth="280.0" visible="false">
          <children>
             <AnchorPane fx:id="PlayerPos" layoutX="7.0" layoutY="8.0" prefHeight="101.0" prefWidth="95.0">
                <children>
