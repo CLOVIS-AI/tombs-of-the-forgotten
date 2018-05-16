@@ -30,7 +30,6 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
@@ -75,31 +74,33 @@ public class InterfaceController implements Initializable {
     private Label All;
 
     private boolean isMenu = false;
-    private boolean showMenu = false;
     private Timeline move = new Timeline();
-    private AnchorPane p;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        Open.setOnMouseEntered(e -> {
+            isMenu = true;
+            slideRight(LeftMenu);
+            slideLeft(BlockStats);
+            slideLeft(BlockWeapon);
+            slideLeft(BlockApparel);
+            slideLeft(BlockEatable);
+            slideLeft(BlockScrolls);
+            slideLeft(BlockOther);
+            slideLeft(BlockAll);
+        });
         LeftMenu.setOnMouseExited(e -> {
             isMenu = false;
             slideLeft(LeftMenu);
         });
 
         showMenu(BlockStats, Stats);
-        hideMenu(BlockStats);
         showMenu(BlockWeapon, Weapons);
-        hideMenu(BlockWeapon);
         showMenu(BlockApparel, Apparel);
-        hideMenu(BlockApparel);
         showMenu(BlockEatable, Eatable);
-        hideMenu(BlockEatable);
         showMenu(BlockScrolls, Scrolls);
-        hideMenu(BlockScrolls);
         showMenu(BlockOther, Other);
-        hideMenu(BlockOther);
         showMenu(BlockAll, All);
-        hideMenu(BlockAll);
     }
 
     private void showMenu(AnchorPane block, Label label) {
@@ -107,25 +108,6 @@ public class InterfaceController implements Initializable {
             isMenu = true;
             slideLeft(LeftMenu);
             slideRight(block);
-        });
-    }
-
-    private void hideMenu(AnchorPane block) {
-        Open.setOnMouseEntered(e -> {
-            isMenu = true;
-            if (showMenu == true) {
-                slideLeft(block);
-
-                slideRight(LeftMenu);
-                showMenu = false;
-
-            } else {
-                slideLeft(block);
-                slideRight(LeftMenu);
-                showMenu = true;
-
-            }
-
         });
     }
 
