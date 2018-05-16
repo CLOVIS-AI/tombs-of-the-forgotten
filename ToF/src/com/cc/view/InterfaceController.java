@@ -23,7 +23,6 @@
  */
 package com.cc.view;
 
-import java.awt.Polygon;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
@@ -49,13 +48,44 @@ public class InterfaceController implements Initializable {
     @FXML
     private AnchorPane BlockStats;
     @FXML
+    private AnchorPane BlockWeapon;
+    @FXML
+    private AnchorPane BlockApparel;
+    @FXML
+    private AnchorPane BlockEatable;
+    @FXML
+    private AnchorPane BlockScrolls;
+    @FXML
+    private AnchorPane BlockOther;
+    @FXML
     private Label Stats;
+    @FXML
+    private Label Weapons;
+    @FXML
+    private Label Apparel;
+    @FXML
+    private Label Eatable;
+    @FXML
+    private Label Scrolls;
+    @FXML
+    private Label Other;
 
     private boolean isMenu = false;
     Timeline move = new Timeline();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        
+        setMenu(BlockStats, Stats);
+        setMenu(BlockWeapon, Weapons);
+        setMenu(BlockApparel, Apparel);
+        setMenu(BlockEatable, Eatable);
+        setMenu(BlockScrolls, Scrolls);
+        setMenu(BlockOther, Other);
+    }
+
+    private void setMenu(AnchorPane block, Label label){
         Open.setOnMouseEntered(e -> {
             isMenu = true;
             slideRight(LeftMenu);
@@ -64,19 +94,20 @@ public class InterfaceController implements Initializable {
             isMenu = false;
             slideLeft(LeftMenu);
         });
-        Stats.setOnMousePressed(e -> {
+        label.setOnMousePressed(e -> {
             isMenu = true;
             slideLeft(LeftMenu);
-            slideRight(BlockStats);
+            slideRight(block);
         });
-        BlockStats.setOnMouseExited(ev -> {
+        block.setOnMouseExited(e -> {
             if (move.getStatus() == Timeline.Status.STOPPED) {
                 isMenu = false;
-                slideLeft(BlockStats);
+                slideLeft(block);
             }
         });
-
+        
     }
+    
 
     private void slideRight(Node menu) {
         move = new Timeline(new KeyFrame(Duration.seconds(0.5), new KeyValue(menu.layoutXProperty(), 255)));
