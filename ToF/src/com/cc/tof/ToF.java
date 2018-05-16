@@ -134,8 +134,8 @@ public class ToF extends Application {
     public void start(Stage primaryStage) throws Exception {
         View view = new View(this, primaryStage);
         
-        menu = FXMLLoader.load(getResource("Menu.fxml"));
-
+        menu = FXMLLoader.load(getResource("interface.fxml"));
+        menu.relocate(-255, 0);
         Scene scene = new Scene(menu, 1000, 600);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Tombs of the Forgotten");

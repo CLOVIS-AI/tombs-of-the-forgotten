@@ -24,6 +24,7 @@
 package com.cc.view;
 
 import com.cc.tof.ToF;
+import java.awt.Polygon;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
