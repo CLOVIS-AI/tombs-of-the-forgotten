@@ -31,7 +31,7 @@
             <Label fx:id="Other" layoutX="107.0" layoutY="350.0" text="OTHER" />
             <Separator layoutX="27.0" layoutY="323.0" prefWidth="200.0" />
             <Label fx:id="Apparel" layoutX="98.0" layoutY="166.0" text="APPAREL" />
-            <Label layoutX="119.0" layoutY="390.0" text="ALL" />
+            <Label fx:id="All" layoutX="119.0" layoutY="390.0" text="ALL" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="BlockStats" prefHeight="600.0" prefWidth="254.0">
@@ -215,6 +215,34 @@
                                        <items>
                                           <MenuItem fx:id="ViewOther" mnemonicParsing="false" text="View" />
                                           <MenuItem fx:id="DropOther" mnemonicParsing="false" text="Drop" />
+                                       </items>
+                                    </MenuButton>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </ScrollPane>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="BlockAll" layoutY="1.0" prefHeight="600.0" prefWidth="254.0">
+         <children>
+            <Label layoutX="115.0" layoutY="14.0" text="ALL" />
+            <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
+            <AnchorPane fx:id="Inventory111111" layoutX="31.0" layoutY="53.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="204.0">
+               <children>
+                  <ScrollPane layoutX="1.0" layoutY="-2.0" prefHeight="522.0" prefWidth="204.0">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="517.0" prefWidth="202.0">
+                           <children>
+                              <VBox alignment="TOP_CENTER" layoutY="-1.0" prefHeight="515.0" prefWidth="200.0">
+                                 <children>
+                                    <MenuButton fx:id="YourFood11" mnemonicParsing="false" text="YourAll">
+                                       <items>
+                                          <MenuItem fx:id="ViewOther1" mnemonicParsing="false" text="View" />
+                                          <MenuItem fx:id="DropOther1" mnemonicParsing="false" text="Drop" />
                                        </items>
                                     </MenuButton>
                                  </children>

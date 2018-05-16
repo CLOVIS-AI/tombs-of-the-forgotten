@@ -58,6 +58,8 @@ public class InterfaceController implements Initializable {
     @FXML
     private AnchorPane BlockOther;
     @FXML
+    private AnchorPane BlockAll;
+    @FXML
     private Label Apparel;
     @FXML
     private Label Weapons;
@@ -69,90 +71,64 @@ public class InterfaceController implements Initializable {
     private Label Scrolls;
     @FXML
     private Label Other;
+    @FXML
+    private Label All;
 
     private boolean isMenu = false;
+    private boolean showMenu = false;
     private Timeline move = new Timeline();
     private AnchorPane p;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        Open.setOnMouseEntered(e -> {
-            isMenu = true;
-            slideRight(LeftMenu);
-        });
         LeftMenu.setOnMouseExited(e -> {
             isMenu = false;
             slideLeft(LeftMenu);
         });
-        Stats.setOnMousePressed(e -> {
-            isMenu = true;
-            slideLeft(LeftMenu);
-            slideRight(BlockStats);
-        });
-        BlockStats.setOnMouseExited(ev -> {
-            if (move.getStatus() == Timeline.Status.STOPPED) {
-                isMenu = false;
-                slideLeft(BlockStats);
-            }
-        });
-        Weapons.setOnMousePressed(e -> {
-            isMenu = true;
-            slideLeft(LeftMenu);
-            slideRight(BlockWeapon);
-        });
-        BlockWeapon.setOnMouseExited(ev -> {
-            if (move.getStatus() == Timeline.Status.STOPPED) {
-                isMenu = false;
-                slideLeft(BlockWeapon);
-            }
-        });
-        Apparel.setOnMousePressed(e -> {
-            isMenu = true;
-            slideLeft(LeftMenu);
-            slideRight(BlockApparel);
-        });
-        BlockApparel.setOnMouseExited(ev -> {
-            if (move.getStatus() == Timeline.Status.STOPPED) {
-                isMenu = true;
-                slideLeft(BlockApparel);
-            }
-        });
-        Eatable.setOnMousePressed(e -> {
-            isMenu = true;
-            slideLeft(LeftMenu);
-            slideRight(BlockEatable);
-        });
-        BlockEatable.setOnMouseExited(ev -> {
-            if (move.getStatus() == Timeline.Status.STOPPED) {
-                isMenu = false;
-                slideLeft(BlockEatable);
-            }
-        });
-        Scrolls.setOnMousePressed(e -> {
-            isMenu = true;
-            slideLeft(LeftMenu);
-            slideRight(BlockScrolls);
-        });
-        BlockScrolls.setOnMouseExited(ev -> {
-            if (move.getStatus() == Timeline.Status.STOPPED) {
-                isMenu = false;
-                slideLeft(BlockScrolls);
-            }
-        });
-        Other.setOnMousePressed(e -> {
-            isMenu = true;
-            slideLeft(LeftMenu);
-            slideRight(BlockOther);
-        });
-        BlockOther.setOnMouseExited(ev -> {
-            if (move.getStatus() == Timeline.Status.STOPPED) {
-                isMenu = false;
-                slideLeft(BlockOther);
-            }
-        });
 
+        showMenu(BlockStats, Stats);
+        hideMenu(BlockStats);
+        showMenu(BlockWeapon, Weapons);
+        hideMenu(BlockWeapon);
+        showMenu(BlockApparel, Apparel);
+        hideMenu(BlockApparel);
+        showMenu(BlockEatable, Eatable);
+        hideMenu(BlockEatable);
+        showMenu(BlockScrolls, Scrolls);
+        hideMenu(BlockScrolls);
+        showMenu(BlockOther, Other);
+        hideMenu(BlockOther);
+        showMenu(BlockAll, All);
+        hideMenu(BlockAll);
     }
-    
+
+    private void showMenu(AnchorPane block, Label label) {
+        label.setOnMousePressed(e -> {
+            isMenu = true;
+            slideLeft(LeftMenu);
+            slideRight(block);
+        });
+    }
+
+    private void hideMenu(AnchorPane block) {
+        Open.setOnMouseEntered(e -> {
+            isMenu = true;
+            if (showMenu == true) {
+                slideLeft(block);
+
+                slideRight(LeftMenu);
+                showMenu = false;
+
+            } else {
+                slideLeft(block);
+                slideRight(LeftMenu);
+                showMenu = true;
+
+            }
+
+        });
+    }
+
     private void slideRight(AnchorPane menu) {
         move = new Timeline(new KeyFrame(Duration.seconds(0.5), new KeyValue(menu.layoutXProperty(), 255)));
         move.play();
