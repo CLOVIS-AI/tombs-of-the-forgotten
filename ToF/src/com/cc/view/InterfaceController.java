@@ -58,11 +58,11 @@ public class InterfaceController implements Initializable {
     @FXML
     private AnchorPane BlockOther;
     @FXML
-    private Label Stats;
+    private Label Apparel;
     @FXML
     private Label Weapons;
     @FXML
-    private Label Apparel;
+    private Label Stats;
     @FXML
     private Label Eatable;
     @FXML
@@ -71,21 +71,11 @@ public class InterfaceController implements Initializable {
     private Label Other;
 
     private boolean isMenu = false;
-    Timeline move = new Timeline();
+    private Timeline move = new Timeline();
+    private AnchorPane p;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-        
-        setMenu(BlockStats, Stats);
-        setMenu(BlockWeapon, Weapons);
-        setMenu(BlockApparel, Apparel);
-        setMenu(BlockEatable, Eatable);
-        setMenu(BlockScrolls, Scrolls);
-        setMenu(BlockOther, Other);
-    }
-
-    private void setMenu(AnchorPane block, Label label){
         Open.setOnMouseEntered(e -> {
             isMenu = true;
             slideRight(LeftMenu);
@@ -94,22 +84,76 @@ public class InterfaceController implements Initializable {
             isMenu = false;
             slideLeft(LeftMenu);
         });
-        label.setOnMousePressed(e -> {
+        Stats.setOnMousePressed(e -> {
             isMenu = true;
             slideLeft(LeftMenu);
-            slideRight(block);
+            slideRight(BlockStats);
         });
-        block.setOnMouseExited(e -> {
+        BlockStats.setOnMouseExited(ev -> {
             if (move.getStatus() == Timeline.Status.STOPPED) {
                 isMenu = false;
-                slideLeft(block);
+                slideLeft(BlockStats);
             }
         });
-        
+        Weapons.setOnMousePressed(e -> {
+            isMenu = true;
+            slideLeft(LeftMenu);
+            slideRight(BlockWeapon);
+        });
+        BlockWeapon.setOnMouseExited(ev -> {
+            if (move.getStatus() == Timeline.Status.STOPPED) {
+                isMenu = false;
+                slideLeft(BlockWeapon);
+            }
+        });
+        Apparel.setOnMousePressed(e -> {
+            isMenu = true;
+            slideLeft(LeftMenu);
+            slideRight(BlockApparel);
+        });
+        BlockApparel.setOnMouseExited(ev -> {
+            if (move.getStatus() == Timeline.Status.STOPPED) {
+                isMenu = true;
+                slideLeft(BlockApparel);
+            }
+        });
+        Eatable.setOnMousePressed(e -> {
+            isMenu = true;
+            slideLeft(LeftMenu);
+            slideRight(BlockEatable);
+        });
+        BlockEatable.setOnMouseExited(ev -> {
+            if (move.getStatus() == Timeline.Status.STOPPED) {
+                isMenu = false;
+                slideLeft(BlockEatable);
+            }
+        });
+        Scrolls.setOnMousePressed(e -> {
+            isMenu = true;
+            slideLeft(LeftMenu);
+            slideRight(BlockScrolls);
+        });
+        BlockScrolls.setOnMouseExited(ev -> {
+            if (move.getStatus() == Timeline.Status.STOPPED) {
+                isMenu = false;
+                slideLeft(BlockScrolls);
+            }
+        });
+        Other.setOnMousePressed(e -> {
+            isMenu = true;
+            slideLeft(LeftMenu);
+            slideRight(BlockOther);
+        });
+        BlockOther.setOnMouseExited(ev -> {
+            if (move.getStatus() == Timeline.Status.STOPPED) {
+                isMenu = false;
+                slideLeft(BlockOther);
+            }
+        });
+
     }
     
-
-    private void slideRight(Node menu) {
+    private void slideRight(AnchorPane menu) {
         move = new Timeline(new KeyFrame(Duration.seconds(0.5), new KeyValue(menu.layoutXProperty(), 255)));
         move.play();
         if (isMenu) {

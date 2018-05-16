@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.Double?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
@@ -25,11 +26,11 @@
             <Label fx:id="Stats" layoutX="109.0" layoutY="53.0" text="STATS" />
             <Separator layoutX="33.0" layoutY="88.0" prefWidth="200.0" />
             <Label fx:id="Weapons" layoutX="97.0" layoutY="117.0" text="WEAPONS" />
-            <Label fx:id="Apparel" layoutX="98.0" layoutY="166.0" text="APPAREL" />
-            <Label fx:id="Potions" layoutX="101.0" layoutY="219.0" text="POTIONS" />
+            <Label fx:id="Eatable" layoutX="101.0" layoutY="219.0" text="EATABLE" />
             <Label fx:id="Scrolls" layoutX="100.0" layoutY="267.0" text="SCROLLS" />
-            <Label fx:id="RandomObjects" layoutX="107.0" layoutY="350.0" text="OTHER" />
+            <Label fx:id="Other" layoutX="107.0" layoutY="350.0" text="OTHER" />
             <Separator layoutX="27.0" layoutY="323.0" prefWidth="200.0" />
+            <Label fx:id="Apparel" layoutX="98.0" layoutY="166.0" text="APPAREL" />
             <Label layoutX="119.0" layoutY="390.0" text="ALL" />
          </children>
       </AnchorPane>
@@ -84,7 +85,7 @@
       </AnchorPane>
       <AnchorPane fx:id="BlockWeapon" prefHeight="600.0" prefWidth="254.0">
          <children>
-            <Label fx:id="BlockWeapons" layoutX="95.0" layoutY="14.0" text="WEAPONS" />
+            <Label layoutX="95.0" layoutY="14.0" text="WEAPONS" />
             <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
             <AnchorPane fx:id="Inventory" layoutX="31.0" layoutY="53.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="204.0">
                <children>
@@ -96,8 +97,9 @@
                                  <children>
                                     <MenuButton fx:id="YourWeapon" mnemonicParsing="false" text="YourWeapon">
                                       <items>
-                                        <MenuItem mnemonicParsing="false" text="Action 1" />
-                                        <MenuItem mnemonicParsing="false" text="Action 2" />
+                                        <MenuItem fx:id="EquipWeapon" mnemonicParsing="false" text="Equip" />
+                                          <MenuItem fx:id="DropWeapon" mnemonicParsing="false" text="Drop" />
+                                        <MenuItem fx:id="ViewWeapon" mnemonicParsing="false" text="View" />
                                       </items>
                                     </MenuButton>
                                  </children>
@@ -110,9 +112,9 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="Stats11" prefHeight="600.0" prefWidth="254.0">
+      <AnchorPane fx:id="BlockApparel" prefHeight="600.0" prefWidth="254.0">
          <children>
-            <Label fx:id="BlockWeapons1" layoutX="98.0" layoutY="14.0" text="APPAREL" />
+            <Label layoutX="98.0" layoutY="14.0" text="APPAREL" />
             <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
             <AnchorPane fx:id="Inventory1" layoutX="31.0" layoutY="53.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="204.0">
                <children>
@@ -124,8 +126,9 @@
                                  <children>
                                     <MenuButton fx:id="YourApparel" mnemonicParsing="false" text="YourApparel">
                                        <items>
-                                          <MenuItem mnemonicParsing="false" text="Action 1" />
-                                          <MenuItem mnemonicParsing="false" text="Action 2" />
+                                          <MenuItem fx:id="EquipApparel" mnemonicParsing="false" text="Equip" />
+                                          <MenuItem fx:id="DropApparel" mnemonicParsing="false" text="Drop" />
+                                          <MenuItem fx:id="ViewApparel" mnemonicParsing="false" text="View" />
                                        </items>
                                     </MenuButton>
                                  </children>
@@ -138,9 +141,8 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="Stats111" prefHeight="600.0" prefWidth="254.0">
+      <AnchorPane fx:id="BlockEatable" prefHeight="600.0" prefWidth="254.0">
          <children>
-            <Label fx:id="BlockWeapons11" layoutX="98.0" layoutY="14.0" text="POTIONS" />
             <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
             <AnchorPane fx:id="Inventory11" layoutX="31.0" layoutY="53.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="204.0">
                <children>
@@ -150,10 +152,11 @@
                            <children>
                               <VBox alignment="TOP_CENTER" layoutY="-1.0" prefHeight="515.0" prefWidth="200.0">
                                  <children>
-                                    <MenuButton fx:id="YourPotion" mnemonicParsing="false" text="YourPotion">
+                                    <MenuButton fx:id="YourPotion" mnemonicParsing="false" text="YourEatable">
                                        <items>
-                                          <MenuItem mnemonicParsing="false" text="Action 1" />
-                                          <MenuItem mnemonicParsing="false" text="Action 2" />
+                                          <MenuItem fx:id="UseEatable" mnemonicParsing="false" text="Use" />
+                                          <MenuItem fx:id="DropEatable" mnemonicParsing="false" text="Drop" />
+                                          <MenuItem fx:id="ViewEatable" mnemonicParsing="false" text="View" />
                                        </items>
                                     </MenuButton>
                                  </children>
@@ -164,11 +167,12 @@
                   </ScrollPane>
                </children>
             </AnchorPane>
+            <Label layoutX="104.0" layoutY="14.0" text="EATABLE" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="Stats1111" prefHeight="600.0" prefWidth="254.0">
+      <AnchorPane fx:id="BlockScrolls" prefHeight="600.0" prefWidth="254.0">
          <children>
-            <Label fx:id="BlockWeapons111" layoutX="98.0" layoutY="14.0" text="SCROLLS" />
+            <Label layoutX="98.0" layoutY="14.0" text="SCROLLS" />
             <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
             <AnchorPane fx:id="Inventory111" layoutX="31.0" layoutY="53.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="204.0">
                <children>
@@ -180,8 +184,9 @@
                                  <children>
                                     <MenuButton fx:id="YourScroll" mnemonicParsing="false" text="YourScroll">
                                        <items>
-                                          <MenuItem mnemonicParsing="false" text="Action 1" />
-                                          <MenuItem mnemonicParsing="false" text="Action 2" />
+                                          <MenuItem fx:id="UseScroll" mnemonicParsing="false" text="Use" />
+                                          <MenuItem fx:id="DropScroll" mnemonicParsing="false" text="Drop" />
+                                          <MenuItem fx:id="ViewScroll" mnemonicParsing="false" text="View" />
                                        </items>
                                     </MenuButton>
                                  </children>
@@ -194,37 +199,9 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="Stats11111" prefHeight="600.0" prefWidth="254.0">
+      <AnchorPane fx:id="BlockOther" prefHeight="600.0" prefWidth="254.0">
          <children>
-            <Label fx:id="BlockWeapons1111" layoutX="108.0" layoutY="14.0" text="FOOD" />
-            <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
-            <AnchorPane fx:id="Inventory1111" layoutX="31.0" layoutY="53.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="204.0">
-               <children>
-                  <ScrollPane layoutX="1.0" layoutY="-2.0" prefHeight="522.0" prefWidth="204.0">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="517.0" prefWidth="202.0">
-                           <children>
-                              <VBox alignment="TOP_CENTER" layoutY="-1.0" prefHeight="515.0" prefWidth="200.0">
-                                 <children>
-                                    <MenuButton fx:id="YourFood" mnemonicParsing="false" text="YourFood">
-                                       <items>
-                                          <MenuItem mnemonicParsing="false" text="Action 1" />
-                                          <MenuItem mnemonicParsing="false" text="Action 2" />
-                                       </items>
-                                    </MenuButton>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </AnchorPane>
-                     </content>
-                  </ScrollPane>
-               </children>
-            </AnchorPane>
-         </children>
-      </AnchorPane>
-      <AnchorPane fx:id="Stats111111" prefHeight="600.0" prefWidth="254.0">
-         <children>
-            <Label fx:id="BlockWeapons11111" layoutX="104.0" layoutY="14.0" text="OTHER" />
+            <Label layoutX="104.0" layoutY="14.0" text="OTHER" />
             <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
             <AnchorPane fx:id="Inventory11111" layoutX="31.0" layoutY="53.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="204.0">
                <children>
@@ -236,8 +213,8 @@
                                  <children>
                                     <MenuButton fx:id="YourFood1" mnemonicParsing="false" text="YourOther">
                                        <items>
-                                          <MenuItem mnemonicParsing="false" text="Action 1" />
-                                          <MenuItem mnemonicParsing="false" text="Action 2" />
+                                          <MenuItem fx:id="ViewOther" mnemonicParsing="false" text="View" />
+                                          <MenuItem fx:id="DropOther" mnemonicParsing="false" text="Drop" />
                                        </items>
                                     </MenuButton>
                                  </children>
@@ -250,18 +227,33 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="974.0" layoutY="355.0" prefHeight="247.0" prefWidth="280.0">
+      <AnchorPane layoutX="974.0" layoutY="347.0" prefHeight="255.0" prefWidth="280.0">
          <children>
-            <Label layoutX="122.0" layoutY="114.0" text="Map" />
+            <AnchorPane fx:id="PlayerPos" layoutX="7.0" layoutY="8.0" prefHeight="101.0" prefWidth="95.0">
+               <children>
+                  <Circle fill="#1c5d9a" layoutX="25.0" layoutY="31.0" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Line endX="50.0" layoutX="1.0" layoutY="73.0" rotate="90.0" />
+                  <Line endX="50.0" layoutX="43.0" layoutY="31.0" />
+               </children>
+            </AnchorPane>
          </children>
       </AnchorPane>
       <AnchorPane layoutX="518.0" layoutY="345.0" prefHeight="255.0" prefWidth="456.0">
          <children>
-            <Label layoutX="210.0" layoutY="112.0" text="Button" />
+            <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="REST" />
+            <Button layoutX="69.0" layoutY="14.0" mnemonicParsing="false" text="STOP REST" />
+            <Button layoutX="242.0" layoutY="14.0" mnemonicParsing="false" text="OPEN" />
+            <Button layoutX="170.0" layoutY="14.0" mnemonicParsing="false" text="CLOSE" />
+            <Button layoutX="351.0" layoutY="56.0" mnemonicParsing="false" text="DROP ITEM" />
+            <Button layoutX="242.0" layoutY="56.0" mnemonicParsing="false" text="GRAB ITEM" />
+            <Button layoutX="114.0" layoutY="56.0" mnemonicParsing="false" text="SEARCH ROOM" />
+            <Button layoutX="11.0" layoutY="56.0" mnemonicParsing="false" text="LOOT BODY" />
+            <Button layoutX="312.0" layoutY="14.0" mnemonicParsing="false" text="READ NOTE" />
          </children></AnchorPane>
       <AnchorPane layoutX="508.0" prefHeight="345.0" prefWidth="746.0">
          <children>
             <Label layoutX="355.0" layoutY="139.0" text="Game" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="348.0" stroke="#8a8a8a" strokeType="INSIDE" strokeWidth="3.0" width="747.0" />
          </children>
       </AnchorPane>
       <Line endY="600.0" layoutX="254.0" />
