@@ -103,6 +103,11 @@ public class InterfaceController implements Initializable {
         showMenu(BlockAll, All);
     }
 
+    /**
+     * Displays a menu listed among a main menu.
+     * @param block A menu
+     * @param label A button
+     */
     private void showMenu(AnchorPane block, Label label) {
         label.setOnMousePressed(e -> {
             isMenu = true;
@@ -111,6 +116,10 @@ public class InterfaceController implements Initializable {
         });
     }
 
+    /**
+     * Animation for displaying a menu on the game screen.
+     * @param menu A menu
+     */
     private void slideRight(AnchorPane menu) {
         move = new Timeline(new KeyFrame(Duration.seconds(0.5), new KeyValue(menu.layoutXProperty(), 255)));
         move.play();
@@ -120,6 +129,10 @@ public class InterfaceController implements Initializable {
         }
     }
 
+    /**
+     * Animation for hiding a menu out of the game screen.
+     * @param menu A menu
+     */
     private void slideLeft(AnchorPane menu) {
         move = new Timeline(new KeyFrame(Duration.seconds(0.5), new KeyValue(menu.layoutXProperty(), -255)));
         move.play();
