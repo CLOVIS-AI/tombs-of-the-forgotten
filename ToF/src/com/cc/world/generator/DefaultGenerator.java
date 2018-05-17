@@ -24,19 +24,23 @@
 package com.cc.world.generator;
 
 import com.cc.utils.Pair;
+import com.cc.world.Direction;
 import com.cc.world.Location;
 import com.cc.world.Room;
 import com.cc.world.World;
 import com.cc.world.links.Door;
 import com.cc.world.links.Link;
 import com.cc.world.links.Opening;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.TreeMap;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * The default generator of the game.
@@ -123,7 +127,25 @@ public class DefaultGenerator implements Generator {
     }
     
     Pair<Room, Location> pickRoom(){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Room r;
+        Location l;
+        final List<Room> candidates = new ArrayList<>(rooms.values());
+        
+        int safeguard = 0;
+        do {
+            final Room ro = candidates.get(random.nextInt(candidates.size()));
+            l = Stream.of(Direction.values())
+                    .filter((Direction d) -> !ro.getNeighbor(d).isPresent())
+                    .map(d -> ro.getLocation().add(d))
+                    .findAny()
+                    .orElse(null);
+            r = ro; // two variables so the Stream doesn't complain about not final
+            
+            if(safeguard++ < 100)
+                throw new IllegalStateException("Detected an infinite loop!");
+        } while(l != null);
+        
+        return new Pair<>(r, l);
     }
     
     // ************************************************************* S T A T I C
