@@ -47,6 +47,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.paint.Color;
@@ -71,6 +72,9 @@ public class InterfaceController implements Initializable {
     @FXML
     private MenuItem ViewWeapon, ViewApparel, ViewEatable, ViewScroll, ViewOther,
             ViewAll;
+    
+    @FXML
+    private Button ButtonRest;
 
     private boolean isMenu = false;
     private Timeline move = new Timeline();
@@ -108,6 +112,8 @@ public class InterfaceController implements Initializable {
         viewItem(ViewOther);
         viewItem(ViewAll);
 
+        restPopup(ButtonRest);     
+        
         /**
          * *********************MOVE DIRECTIONS BUTTONS***********************
          */
@@ -187,6 +193,24 @@ public class InterfaceController implements Initializable {
     public void viewItem(MenuItem i) {
         i.setOnAction(e -> {
             viewItem(e);
+        });
+    }
+    
+    public void restPopup(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(ToF.getResource("rest.fxml"));
+            Parent menu = (Parent) fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(menu));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void restPopup(Button b) {
+        b.setOnAction(e -> {
+            restPopup(e);
         });
     }
 
