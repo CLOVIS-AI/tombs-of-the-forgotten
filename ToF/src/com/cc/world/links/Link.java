@@ -93,6 +93,23 @@ public abstract class Link implements Save<JsonObject> {
     }
     
     /**
+     * Creates a link between two rooms, that is open by default.
+     * @param rooms the two rooms (in no particular order)
+     */
+    public Link(Room... rooms){
+        this(rooms[0], rooms[1]);
+    }
+    
+    /**
+     * Creates a link between two rooms, that is open by default.
+     * @param r1 the first room
+     * @param r2 the second room
+     */
+    public Link(Room r1, Room r2){
+        this(r1, r2, true);
+    }
+    
+    /**
      * Returns the two rooms as an array.
      * @return An array of the two rooms linked by this object.
      */
