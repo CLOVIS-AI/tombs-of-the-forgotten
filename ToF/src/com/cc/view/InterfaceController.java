@@ -138,6 +138,10 @@ public class InterfaceController implements Initializable {
         }
     }
 
+    /**
+     * Load a new fxml file.
+     * @param event the event
+     */
     public void viewItem(ActionEvent event) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(ToF.getResource("Item.fxml"));
@@ -150,6 +154,11 @@ public class InterfaceController implements Initializable {
         }
     }
     
+    /**
+     * Press a specific button resulting in opening a new fxml file.
+     * @param i The button
+     * @see #viewItem(javafx.event.ActionEvent) load a new fxml file
+     */
     public void viewItem (MenuItem i) {
         i.setOnAction(e -> {
             viewItem(e);
