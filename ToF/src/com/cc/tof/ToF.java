@@ -138,7 +138,7 @@ public class ToF extends Application {
         menu.relocate(-255, 0);
         Scene scene = new Scene(menu, 1000, 600);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Tombs of the Forgotten");
+        primaryStage.setTitle("Tomb of the Forgotten");
         primaryStage.show();
     }
     
