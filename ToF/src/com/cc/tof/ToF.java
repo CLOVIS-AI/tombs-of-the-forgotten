@@ -52,6 +52,10 @@ public class ToF extends Application {
         world.nextTick();
     }
     
+    public static World getWorld(){
+        return world;
+    }
+    
     /**
      * The player rests.
      * @param turns number of turns
