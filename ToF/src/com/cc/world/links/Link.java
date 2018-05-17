@@ -234,6 +234,12 @@ public abstract class Link implements Save<JsonObject> {
                         + "in the provided JSON: " + json);
         }
     }
+    
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " between " + room1 + " and "
+             + room2 + ", currently " + (isOpen ? "unlocked" : "locked") + ".";
+    }
 
     @Override
     public JsonObject save() {

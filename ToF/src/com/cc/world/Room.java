@@ -474,7 +474,7 @@ public class Room implements Save<JsonObject> {
                 .append(description)
                 .append(" ")
                 .append(location)
-                .append(" [neighbors:");
+                .append(" [");
         
         neighbors.forEach((d,l) -> sb
                 .append(" ")
