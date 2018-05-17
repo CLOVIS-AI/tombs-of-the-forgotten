@@ -35,6 +35,33 @@ import java.util.TreeMap;
 
 /**
  * The default generator of the game.
+ * 
+ * <p>This generator is limited by different rules in the project:
+ * <ul>
+ *  <li>A link cannot be created before the two rooms it links to.</li>
+ *  <li>There are links/doors that should be placed sequentially (a door and 
+ *      the room its key is in)</li>
+ * </ul>
+ * Therefore, it follows this algorithm:
+ * <ol>
+ *  <li>Generates two pairs of a Room and a Link to be placed:
+ *    <ul>
+ *      <li>At most, one of these pairs can be locked.</li>
+ *      <li>When the pairs are generated, swaps their link (so if there's a 
+ *          link/door couple, they don't appear side-by-side).</li>
+ *    </ul>
+ *  </li>
+ *  <li>Places both pairs:
+ *    <ol>
+ *      <li>Picks a random room in the already-generated ones and a random 
+ *          adjacent location that is empty,</li>
+ *      <li>Puts the selected room there,</li>
+ *      <li>Links them with the selected link,</li>
+ *      <li>Loops to do the same with the other pair.</li>
+ *    </ol>
+ *  </li>
+ * </ol>
+ * 
  * @author Ivan Canet
  */
 public class DefaultGenerator implements Generator {
