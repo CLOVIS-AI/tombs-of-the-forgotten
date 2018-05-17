@@ -27,8 +27,12 @@ import com.cc.utils.Pair;
 import com.cc.world.Location;
 import com.cc.world.Room;
 import com.cc.world.World;
+import com.cc.world.links.Door;
 import com.cc.world.links.Link;
+import com.cc.world.links.Opening;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 import java.util.function.Function;
@@ -108,6 +112,21 @@ public class DefaultGenerator implements Generator {
     
     Pair<Room, Location> pickRoom(){
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    // ************************************************************* S T A T I C
+    
+    private static final Map<Integer, Pair<Room, Function<Room[], Link>>> PAIRS;
+    private static final int TOTAL;
+    
+    static {
+        PAIRS = new HashMap<>();
+        PAIRS.put(15, new Pair<>(new Room("Random room"), Opening::new));
+        PAIRS.put( 5, new Pair<>(new Room("Random room"), Door::new));
+        
+        TOTAL = PAIRS.keySet().stream()
+                .mapToInt(v -> (int)v)
+                .sum();
     }
     
 }
