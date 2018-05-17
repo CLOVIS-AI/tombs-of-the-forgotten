@@ -43,6 +43,7 @@ public class ToF extends Application {
     
     private static World world;
     private Parent menu;
+    private static final long TIME_TURN = 1;
     
     static void gameTick(){
         if(world == null)
