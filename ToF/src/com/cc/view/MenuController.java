@@ -62,7 +62,8 @@ public class MenuController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //Title.setFont(Font.loadFont(ToF.getResource("Skyrim.ttf").toString(), 30));
+        //Title.setFont(Font.loadFont(ToF.getResource("MR.ttf").toString(), 30));
+        //MainTitle.setFont(Font.loadFont(ToF.getResource("Skyrim.ttf").toString(), 20));
         NewArrow.setVisible(false);
         LoadArrow.setVisible(false);
         QuitArrow.setVisible(false);

@@ -74,7 +74,7 @@ public class InterfaceController implements Initializable {
             ViewAll;
     
     @FXML
-    private Button ButtonRest;
+    private Button ButtonRest, ButtonSave;
 
     private boolean isMenu = false;
     private Timeline move = new Timeline();
@@ -113,6 +113,8 @@ public class InterfaceController implements Initializable {
         viewItem(ViewAll);
 
         restPopup(ButtonRest);     
+        
+         //ButtonSave.setOnMouseClicked(e -> ToF.getWorld().save());
         
         
         /**

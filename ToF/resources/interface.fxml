@@ -298,7 +298,7 @@
                  <Double fx:value="-13.5" />
                </points>
             </Polygon>
-            <Polygon fx:id="MoveEast" layoutX="84.0" layoutY="56.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
+            <Polygon fx:id="MoveEast" layoutX="84.0" layoutY="55.0" rotate="90.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
                <points>
                  <Double fx:value="-13.5" />
                  <Double fx:value="9.2" />
@@ -327,11 +327,12 @@
             <Button layoutX="170.0" layoutY="56.0" mnemonicParsing="false" text="GRAB ITEM" />
             <Button layoutX="30.0" layoutY="56.0" mnemonicParsing="false" text="SEARCH ROOM" />
             <Button layoutX="293.0" layoutY="14.0" mnemonicParsing="false" text="READ NOTE" />
+            <Button fx:id="ButtonSave" layoutX="191.0" layoutY="215.0" mnemonicParsing="false" text="Save" />
          </children></AnchorPane>
       <AnchorPane layoutX="508.0" prefHeight="345.0" prefWidth="746.0">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4b656f" height="348.0" stroke="#8a8a8a" strokeType="INSIDE" strokeWidth="3.0" width="747.0" />
-            <Label layoutX="194.0" layoutY="134.0" text="Welcome adventurer!">
+            <Label layoutX="207.0" layoutY="134.0" text="Welcome wanderer!">
                <font>
                   <Font size="33.0" />
                </font>
