@@ -24,7 +24,6 @@
 package com.cc.view;
 
 import com.cc.tof.ToF;
-import java.awt.Polygon;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -32,7 +31,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Font;
 
 /**
  * FXML Controller class
