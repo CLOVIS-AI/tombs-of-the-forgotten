@@ -23,8 +23,19 @@
  */
 package com.cc.view;
 
+import com.cc.players.Player;
 import com.cc.tof.ToF;
+import com.cc.world.Direction;
+import static com.cc.world.Direction.EAST;
+import static com.cc.world.Direction.NORTH;
+import static com.cc.world.Direction.SOUTH;
+import static com.cc.world.Direction.WEST;
+import com.cc.world.Location;
+import com.cc.world.Room;
+import com.cc.world.World;
+import com.cc.world.links.Opening;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -33,11 +44,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -48,8 +61,9 @@ import javafx.util.Duration;
 public class InterfaceController implements Initializable {
 
     @FXML
-    private AnchorPane LeftMenu, Open, BlockStats, BlockWeapon, BlockApparel,
-            BlockEatable, BlockScrolls, BlockOther, BlockAll;
+    private Node LeftMenu, Open,
+            BlockStats, BlockWeapon, BlockApparel, BlockEatable, BlockScrolls, BlockOther, BlockAll,
+            MoveNorth, MoveSouth, MoveEast, MoveWest;
 
     @FXML
     private Label Apparel, Weapons, Stats, Eatable, Scrolls, Other, All;
@@ -94,6 +108,15 @@ public class InterfaceController implements Initializable {
         viewItem(ViewOther);
         viewItem(ViewAll);
 
+        /**
+         * *********************MOVE DIRECTIONS BUTTONS***********************
+         */
+        Player p = new Player();
+        Room r1 = new Room("d").setLocation(new Location());
+        Room r2 = new Room("d").setLocation(new Location(0, 1, 0));
+        new World(World.createTreeMap(Arrays.asList(r1, r2)), p);
+        new Opening(r1, r2).autoLink();
+        update(p);
     }
 
     /**
@@ -102,7 +125,7 @@ public class InterfaceController implements Initializable {
      * @param block A menu
      * @param label A button
      */
-    private void showMenu(AnchorPane block, Label label) {
+    private void showMenu(Node block, Label label) {
         label.setOnMousePressed(e -> {
             isMenu = true;
             slideLeft(LeftMenu);
@@ -115,7 +138,7 @@ public class InterfaceController implements Initializable {
      *
      * @param menu A menu
      */
-    private void slideRight(AnchorPane menu) {
+    private void slideRight(Node menu) {
         move = new Timeline(new KeyFrame(Duration.seconds(0.5), new KeyValue(menu.layoutXProperty(), 255)));
         move.play();
         if (isMenu) {
@@ -129,7 +152,7 @@ public class InterfaceController implements Initializable {
      *
      * @param menu A menu
      */
-    private void slideLeft(AnchorPane menu) {
+    private void slideLeft(Node menu) {
         move = new Timeline(new KeyFrame(Duration.seconds(0.5), new KeyValue(menu.layoutXProperty(), -255)));
         move.play();
         if (!isMenu) {
@@ -140,6 +163,7 @@ public class InterfaceController implements Initializable {
 
     /**
      * Load a new fxml file.
+     *
      * @param event the event
      */
     public void viewItem(ActionEvent event) {
@@ -153,15 +177,42 @@ public class InterfaceController implements Initializable {
             e.printStackTrace();
         }
     }
-    
+
     /**
      * Press a specific button resulting in opening a new fxml file.
+     *
      * @param i The button
      * @see #viewItem(javafx.event.ActionEvent) load a new fxml file
      */
-    public void viewItem (MenuItem i) {
+    public void viewItem(MenuItem i) {
         i.setOnAction(e -> {
             viewItem(e);
         });
+    }
+
+    private static final Color CANNOT_MOVE = Color.GRAY;
+    private static final Color CAN_MOVE = Color.BLACK;
+    private static final Color SELECTED = Color.RED;
+
+    public void move(Player p, Direction d, Shape button) {
+        button.setDisable(!p.canMoveTo(d));
+        button.setOnMouseEntered(e -> button.setFill(SELECTED));
+        button.setOnMouseExited(e -> button.setFill(getColor(p.canMoveTo(d))));
+        button.setOnMouseReleased(e -> {
+            p.moveTo(d);
+            update(p);
+        });
+        button.setFill(getColor(p.canMoveTo(d)));
+    }
+
+    private Color getColor(boolean canMove) {
+        return canMove ? CAN_MOVE : CANNOT_MOVE;
+    }
+
+    public void update(Player p) {
+        move(p, NORTH, (Shape) MoveNorth);
+        move(p, SOUTH, (Shape) MoveSouth);
+        move(p, EAST, (Shape) MoveEast);
+        move(p, WEST, (Shape) MoveWest);
     }
 }
