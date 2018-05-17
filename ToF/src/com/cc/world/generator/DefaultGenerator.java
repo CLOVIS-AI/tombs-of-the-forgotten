@@ -33,6 +33,7 @@ import com.cc.world.links.Opening;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.TreeMap;
 import java.util.function.Function;
@@ -107,7 +108,18 @@ public class DefaultGenerator implements Generator {
     }
     
     Pair<Room, Function<Room[], Link>> createPair(){
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int choice = random.nextInt(TOTAL+1);
+        for (Entry<Integer, Pair<Room, Function<Room[], Link>>> pair : PAIRS.entrySet()) {
+            int poss = pair.getKey();
+            if(poss > (choice -= poss))
+                return pair.getValue();
+        }
+        
+        throw new IllegalStateException("Because of the way pairs work, there "
+                + "shouldn't be a way to NOT find one.\n"
+                + "The random value was " + choice + "\n"
+                + "The assocations are: \n"
+                + exportPairs());
     }
     
     Pair<Room, Location> pickRoom(){
@@ -127,6 +139,19 @@ public class DefaultGenerator implements Generator {
         TOTAL = PAIRS.keySet().stream()
                 .mapToInt(v -> (int)v)
                 .sum();
+    }
+    
+    private static String exportPairs(){
+        StringBuilder sb = new StringBuilder();
+        
+        PAIRS.forEach((key, value) -> sb
+                .append(key)
+                .append(": ")
+                .append(value)
+                .append("\n")
+        );
+        
+        return sb.toString();
     }
     
 }
