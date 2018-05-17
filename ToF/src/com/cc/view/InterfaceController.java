@@ -26,8 +26,6 @@ package com.cc.view;
 import com.cc.tof.ToF;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -50,14 +48,15 @@ import javafx.util.Duration;
 public class InterfaceController implements Initializable {
 
     @FXML
-    private AnchorPane LeftMenu, Open, BlockStats, BlockWeapon, BlockApparel, 
+    private AnchorPane LeftMenu, Open, BlockStats, BlockWeapon, BlockApparel,
             BlockEatable, BlockScrolls, BlockOther, BlockAll;
-    
+
     @FXML
     private Label Apparel, Weapons, Stats, Eatable, Scrolls, Other, All;
-    
+
     @FXML
-    private MenuItem ViewWeapon;
+    private MenuItem ViewWeapon, ViewApparel, ViewEatable, ViewScroll, ViewOther,
+            ViewAll;
 
     private boolean isMenu = false;
     private Timeline move = new Timeline();
@@ -87,16 +86,19 @@ public class InterfaceController implements Initializable {
         showMenu(BlockScrolls, Scrolls);
         showMenu(BlockOther, Other);
         showMenu(BlockAll, All);
-        
-        ViewWeapon.setOnAction(e -> {
-            viewItem(e);
-        });
-        
-        
+
+        viewItem(ViewWeapon);
+        viewItem(ViewApparel);
+        viewItem(ViewEatable);
+        viewItem(ViewScroll);
+        viewItem(ViewOther);
+        viewItem(ViewAll);
+
     }
 
     /**
      * Displays a menu listed among a main menu.
+     *
      * @param block A menu
      * @param label A button
      */
@@ -110,6 +112,7 @@ public class InterfaceController implements Initializable {
 
     /**
      * Animation for displaying a menu on the game screen.
+     *
      * @param menu A menu
      */
     private void slideRight(AnchorPane menu) {
@@ -123,6 +126,7 @@ public class InterfaceController implements Initializable {
 
     /**
      * Animation for hiding a menu out of the game screen.
+     *
      * @param menu A menu
      */
     private void slideLeft(AnchorPane menu) {
@@ -133,16 +137,22 @@ public class InterfaceController implements Initializable {
             Open.setOpacity(1);
         }
     }
-    
-  public void viewItem(ActionEvent event){               
-    try {
-    FXMLLoader fxmlLoader = new FXMLLoader(ToF.getResource("Item.fxml"));
+
+    public void viewItem(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(ToF.getResource("Item.fxml"));
             Parent menu = (Parent) fxmlLoader.load();
             Stage stage = new Stage();
-            stage.setScene(new Scene(menu));  
+            stage.setScene(new Scene(menu));
             stage.show();
-    } catch(Exception e) {
-       e.printStackTrace();
-      }
- }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void viewItem (MenuItem i) {
+        i.setOnAction(e -> {
+            viewItem(e);
+        });
+    }
 }
