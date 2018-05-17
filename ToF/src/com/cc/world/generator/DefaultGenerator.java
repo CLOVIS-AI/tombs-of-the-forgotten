@@ -24,14 +24,14 @@
 package com.cc.world.generator;
 
 import com.cc.utils.Pair;
-import com.cc.world.Direction;
 import com.cc.world.Location;
 import com.cc.world.Room;
 import com.cc.world.World;
-import java.util.ArrayDeque;
-import java.util.Queue;
+import com.cc.world.links.Link;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.TreeMap;
+import java.util.function.Function;
 
 /**
  * The default generator of the game.
@@ -67,7 +67,6 @@ import java.util.TreeMap;
 public class DefaultGenerator implements Generator {
 
     Random random;
-    Queue<Pair<Location, Direction>> locations;
     TreeMap<Location, Room> rooms;
     boolean isGenerated = false;
     
@@ -77,25 +76,37 @@ public class DefaultGenerator implements Generator {
             throw new IllegalStateException("This generator has already been used.");
         
         random = randomizer;
-        locations = new ArrayDeque<>();
+        
         
         isGenerated = true;
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    void addToQueue(Location location){
-        if(rooms.containsKey(location))
-            return;
+    void iteration(){
+        Pair<Room, Function<Room[], Link>> p1 = createPair();
+        Pair<Room, Function<Room[], Link>> p2 = createPair();
+        
+        {   // Swap the links
+            Function<Room[], Link> temp = p1.getSecond();
+            p1.setSecond(p2.getSecond());
+            p2.setSecond(temp);
+        }
+        
+        for(Pair<Room, Function<Room[], Link>> p : Arrays.asList(p1, p2)){
+            Pair<Room, Location> begin = pickRoom();
+            rooms.put(begin.getSecond(), p.getFirst());
+            p.getSecond()
+                    .apply(
+                        new Room[] { begin.getFirst(), p.getFirst() }
+                    ).autoLink();
+        }
     }
     
-    Location pickLocation() {
-        Direction[] dirs = Direction.values();
-        Direction dir = dirs[random.nextInt(dirs.length)];
-        
+    Pair<Room, Function<Room[], Link>> createPair(){
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    Room pickRooms(Random random, Queue<Location> locations) {
+    Pair<Room, Location> pickRoom(){
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
