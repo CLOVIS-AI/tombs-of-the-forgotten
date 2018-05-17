@@ -23,15 +23,24 @@
  */
 package com.cc.view;
 
+import com.cc.tof.ToF;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
@@ -41,37 +50,14 @@ import javafx.util.Duration;
 public class InterfaceController implements Initializable {
 
     @FXML
-    private AnchorPane LeftMenu;
+    private AnchorPane LeftMenu, Open, BlockStats, BlockWeapon, BlockApparel, 
+            BlockEatable, BlockScrolls, BlockOther, BlockAll;
+    
     @FXML
-    private AnchorPane Open;
+    private Label Apparel, Weapons, Stats, Eatable, Scrolls, Other, All;
+    
     @FXML
-    private AnchorPane BlockStats;
-    @FXML
-    private AnchorPane BlockWeapon;
-    @FXML
-    private AnchorPane BlockApparel;
-    @FXML
-    private AnchorPane BlockEatable;
-    @FXML
-    private AnchorPane BlockScrolls;
-    @FXML
-    private AnchorPane BlockOther;
-    @FXML
-    private AnchorPane BlockAll;
-    @FXML
-    private Label Apparel;
-    @FXML
-    private Label Weapons;
-    @FXML
-    private Label Stats;
-    @FXML
-    private Label Eatable;
-    @FXML
-    private Label Scrolls;
-    @FXML
-    private Label Other;
-    @FXML
-    private Label All;
+    private MenuItem ViewWeapon;
 
     private boolean isMenu = false;
     private Timeline move = new Timeline();
@@ -101,6 +87,12 @@ public class InterfaceController implements Initializable {
         showMenu(BlockScrolls, Scrolls);
         showMenu(BlockOther, Other);
         showMenu(BlockAll, All);
+        
+        ViewWeapon.setOnAction(e -> {
+            viewItem(e);
+        });
+        
+        
     }
 
     /**
@@ -141,4 +133,16 @@ public class InterfaceController implements Initializable {
             Open.setOpacity(1);
         }
     }
+    
+  public void viewItem(ActionEvent event){               
+    try {
+    FXMLLoader fxmlLoader = new FXMLLoader(ToF.getResource("Item.fxml"));
+            Parent menu = (Parent) fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(menu));  
+            stage.show();
+    } catch(Exception e) {
+       e.printStackTrace();
+      }
+ }
 }
