@@ -90,13 +90,13 @@ public class DefaultGenerator implements Generator {
         random = randomizer;
         rooms = new TreeMap<>();
         addRoom(new Room("This is where you spawn."), new Location());
-        int number = random.nextInt(50) + 1000;
+        int number = random.nextInt(50) + 10;
         for(int i = 0; i < number; i++){
             iteration();
         }
         
         isGenerated = true;
-        return new World(rooms, new Player());
+        return new World(rooms.values(), new Player());
     }
     
     void iteration(){

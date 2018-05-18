@@ -25,7 +25,6 @@ package com.cc.tof;
 import com.cc.view.View;
 import com.cc.world.World;
 import com.cc.world.generator.DefaultGenerator;
-import com.eclipsesource.json.WriterConfig;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
@@ -125,9 +124,21 @@ public class ToF extends Application {
     }
     
     public static void newGame() {
+        long time = System.currentTimeMillis();
+        
         DefaultGenerator gen = new DefaultGenerator();
         world = gen.generate();
-        world.save().toString(WriterConfig.PRETTY_PRINT);
+        
+        time -= System.currentTimeMillis();
+        
+        System.out.println("A new game was successfully created! Stats:");
+        System.out.println("> Time: " + (-time) + " ms");
+        System.out.println("> Number of rooms: " + world.getRooms().size());
+        System.out.println("> Average of neighbors: " + world.getRooms().stream()
+                .mapToLong(r -> r.getAllLinks().count())
+                .average()
+                .getAsDouble()
+        );
     }
     
     public static void load() {
