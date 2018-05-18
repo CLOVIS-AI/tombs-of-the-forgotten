@@ -52,6 +52,14 @@ public class Door extends Link {
         super(r1, r2, openByDefault);
     }
     
+    /**
+     * Creates a door between two rooms.
+     * @param rooms the two rooms
+     */
+    public Door(Room... rooms) {
+        this(rooms[0], rooms[1]);
+    }
+    
     public Door(World world, JsonObject json){
         super(world, json);
     }

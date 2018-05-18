@@ -115,5 +115,9 @@ public class Pair<T, U> {
         return true;
     }
     
+    @Override
+    public String toString() {
+        return "Pair of " + first + " and " + second;
+    }
     
 }

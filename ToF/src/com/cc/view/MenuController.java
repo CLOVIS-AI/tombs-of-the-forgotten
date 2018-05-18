@@ -24,6 +24,7 @@
 package com.cc.view;
 
 import com.cc.tof.ToF;
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -72,7 +73,7 @@ public class MenuController implements Initializable {
         NewLabel.setOnMousePressed(e -> ToF.newGame());
         LoadLabel.setOnMouseEntered(e -> LoadArrow.setVisible(true));
         LoadLabel.setOnMouseExited(e -> LoadArrow.setVisible(false));
-        LoadLabel.setOnMousePressed(e -> ToF.load());
+        LoadLabel.setOnMousePressed(e -> ToF.load(new File("save.json")));
         QuitLabel.setOnMouseEntered(e -> QuitArrow.setVisible(true));
         QuitLabel.setOnMouseExited(e -> QuitArrow.setVisible(false));
         QuitLabel.setOnMousePressed(e -> Platform.exit());
