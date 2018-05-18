@@ -51,6 +51,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
@@ -77,6 +78,9 @@ public class InterfaceController implements Initializable {
     @FXML
     private Button ButtonRest, ButtonSave, ButtonOpen, ButtonClose, ButtonReadNote,
             ButtonSearchRoom, ButtonGrabItem, ButtonDropItem;
+    
+    @FXML
+    private ProgressBar BarHP, BarMana, BarStamina, BarPods;
 
     private boolean isMenu = false;
     private Timeline move = new Timeline();
@@ -126,7 +130,11 @@ public class InterfaceController implements Initializable {
         new Opening(r1, r2).autoLink();
         update(p);
         
+        /**
+         * ******************************SAVE*********************************
+         */
         ButtonSave.setOnAction(e -> ToF.save((new File("save.json"))));
+                
     }
 
     /**
