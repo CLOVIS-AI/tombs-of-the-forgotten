@@ -22,13 +22,22 @@
  */
 package com.cc.tof;
 
+import com.cc.utils.messages.Message;
 import com.cc.view.View;
 import com.cc.world.World;
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.WriterConfig;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -41,7 +50,7 @@ import javafx.stage.Stage;
  */
 public class ToF extends Application {
     
-    private static World world;
+    public static World world;
     private Parent menu;
     private static final long TIME_TURN = 1;
     
@@ -59,25 +68,22 @@ public class ToF extends Application {
     
     /**
      * The player rests.
-     * @param turns number of turns
-     * @param time amount of time 
+     * @param turns number of turns 
      */
     @SuppressWarnings("SleepWhileInLoop")
-    public void rest(int turns, long time) {
+    public static void rest(int turns) {
         if(turns <= 0)
             throw new IllegalArgumentException("'turns' shouldn't be negative "
                     + "or null: " + turns);
-        if(time <= 0)
-            throw new IllegalArgumentException("'time' shouldn't be negative or"
-                    + " null: " + time);
         
-        try {
-            for (int i = 0; i < turns; i++) {
-                world.getPlayer().restATick();
-                world.nextTick();
-                Thread.sleep(time);
-            }
-        } catch (InterruptedException ex) {}
+        world.newMessage(new Message()
+            .add("You are sleeping for " + turns + " turns.")
+        );
+        
+        for (int i = 0; i < turns; i++) {
+            world.getPlayer().restATick();
+            world.nextTick();
+        }
     }
     
     /**
@@ -133,6 +139,27 @@ public class ToF extends Application {
     
     public static void load() {
         throw new UnsupportedOperationException("C ivan ki son okupe lol");
+    }
+    
+    public static void save(File file) {
+        // 1. Générer le JSON
+        JsonObject json = world.save();
+        // 2. Le convertir en String
+        String str = json.toString(WriterConfig.PRETTY_PRINT);
+        // 3. ENregistrer le String dans un fichier
+        System.out.println(str); //FileWriter
+        try {
+            FileWriter fw = new FileWriter(file);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            Writer writer = new FileWriter(file);
+            BufferedWriter bw = new BufferedWriter(writer);
+            bw.write(str);
+            bw.close();
+        } catch (IOException ex) {
+            Logger.getLogger(ToF.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     @Override
