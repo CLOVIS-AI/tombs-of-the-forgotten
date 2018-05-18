@@ -47,51 +47,57 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javax.swing.JFileChooser;
 
 /**
  * The main game interface
+ *
  * @author Ivan Canet
  */
 public class ToF extends Application {
-    
+
     public static World world;
     private Parent menu;
     private static final long TIME_TURN = 1;
-    
-    static void gameTick(){
-        if(world == null)
+
+    static void gameTick() {
+        if (world == null) {
             throw new IllegalStateException("This method should not be called "
                     + "when no world is loaded.");
-        
+        }
+
         world.nextTick();
     }
-    
-    public static World getWorld(){
+
+    public static World getWorld() {
         return world;
     }
-    
+
     /**
      * The player rests.
-     * @param turns number of turns 
+     *
+     * @param turns number of turns
      */
     @SuppressWarnings("SleepWhileInLoop")
     public static void rest(int turns) {
-        if(turns <= 0)
+        if (turns <= 0) {
             throw new IllegalArgumentException("'turns' shouldn't be negative "
                     + "or null: " + turns);
-        
+        }
+
         world.newMessage(new Message()
-            .add("You are sleeping for " + turns + " turns.")
+                .add("You are sleeping for " + turns + " turns.")
         );
-        
+
         for (int i = 0; i < turns; i++) {
             world.getPlayer().restATick();
             world.nextTick();
         }
     }
-    
+
     /**
      * Prompts the user for input.
+     *
      * @return The input
      */
     public static String getInput() {
@@ -100,26 +106,28 @@ public class ToF extends Application {
         String input = scanner.nextLine();
         return input;
     }
-    
+
     /**
      * Parses the input to get the different parts.
+     *
      * @param input the input
      * @return An action object
      */
     public static Action analyseInput(String input) {
         String[] s = input.split(" ");
         String[] parameters = new String[s.length - 1];
-        
-        for (int i = 0 ; i < s.length - 1 ; i++ ) {
-            parameters[i] = s[i+1];
+
+        for (int i = 0; i < s.length - 1; i++) {
+            parameters[i] = s[i + 1];
         }
-        
+
         return new Action(s[0], parameters);
     }
-    
+
     /**
-     * Gets a resource of the project. Resources should be located in the 
+     * Gets a resource of the project. Resources should be located in the
      * 'ToF/resources' directory.
+     *
      * @param name the name of the file (including extension).
      * @return The specified resource.
      */
@@ -131,20 +139,20 @@ public class ToF extends Application {
             System.out.println("Using resource " + ret);
             return ret;
         } catch (IOException ex) {
-            throw new IllegalArgumentException("Cannot open resource '"+name+"'", ex);
+            throw new IllegalArgumentException("Cannot open resource '" + name + "'", ex);
         } catch (NoSuchElementException ex) {
-            throw new IllegalArgumentException("Found no resource of the name '"+name+"'", ex);
+            throw new IllegalArgumentException("Found no resource of the name '" + name + "'", ex);
         }
     }
-    
+
     public static void newGame() {
         long time = System.currentTimeMillis();
-        
+
         DefaultGenerator gen = new DefaultGenerator();
         world = gen.generate();
-        
+
         time -= System.currentTimeMillis();
-        
+
         System.out.println("A new game was successfully created! Stats:");
         System.out.println("> Time: " + (-time) + " ms");
         System.out.println("> Number of rooms: " + world.getRooms().size());
@@ -154,21 +162,21 @@ public class ToF extends Application {
                 .getAsDouble()
         );
     }
-    
+
     /**
      * Loads the game from a save file.
      */
     public static void load(File file) {
         try {
             byte[] encoded = Files.readAllBytes(file.toPath());
-            JsonObject json = Json.parse (
+            JsonObject json = Json.parse(
                     new String(encoded, StandardCharsets.UTF_8)).asObject();
             world = new World(json);
         } catch (IOException ex) {
             Logger.getLogger(ToF.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public static void save(File file) {
         // 1. Générer le JSON
         JsonObject json = world.save();
@@ -177,6 +185,11 @@ public class ToF extends Application {
         // 3. ENregistrer le String dans un fichier
         System.out.println(str); //FileWriter
         try {
+            JFileChooser jfc = new JFileChooser();
+            jfc.showDialog(null, "Please Select the File");
+            jfc.setVisible(true);
+            File filename = jfc.getSelectedFile();
+            System.out.println("File name " + filename.getName());
             FileWriter fw = new FileWriter(file);
             if (!file.exists()) {
                 file.createNewFile();
@@ -189,11 +202,11 @@ public class ToF extends Application {
             Logger.getLogger(ToF.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         View view = new View(this, primaryStage);
-        
+
         menu = FXMLLoader.load(getResource("interface.fxml"));
         menu.relocate(-255, 0);
         Scene scene = new Scene(menu, 1000, 600);
@@ -201,5 +214,5 @@ public class ToF extends Application {
         primaryStage.setTitle("Tomb of the Forgotten");
         primaryStage.show();
     }
-    
+
 }
