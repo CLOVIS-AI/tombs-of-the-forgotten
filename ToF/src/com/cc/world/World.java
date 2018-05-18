@@ -30,6 +30,7 @@ import com.cc.world.links.Link;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -54,7 +55,7 @@ public class World implements Timable, Save<JsonObject> {
     
     private final List<Entity> entities;
     
-    private Queue<Message> messages;
+    private final Queue<Message> messages;
     
     // ************************************************* C O N S T R U C T O R S
     
@@ -69,6 +70,7 @@ public class World implements Timable, Save<JsonObject> {
         this.player = player;
         this.player.setWorld(this);
         this.entities = new ArrayList<>();
+        messages = new ArrayDeque<>();
     }
     
     public World(TreeMap<Location, Room> map, Player player, Collection<Entity> entities){
@@ -89,6 +91,7 @@ public class World implements Timable, Save<JsonObject> {
         entities = extractEntities(json.get("entities").asArray());
         
         concludeLoading();
+        messages = new ArrayDeque<>();
     }
     
     final void concludeLoading(){
@@ -311,6 +314,7 @@ public class World implements Timable, Save<JsonObject> {
      * @param message the message
      */
     public final void newMessage(Message message){
+        System.out.println(">> " + message.toStringSimple());
         messages.add(message);
     }
     
