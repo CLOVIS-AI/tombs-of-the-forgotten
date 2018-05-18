@@ -39,7 +39,7 @@ import javafx.stage.Stage;
 public class RestController implements Initializable{
     
     @FXML
-    private Button RestCancel;
+    private Button RestCancel, RestOK;
     
     @FXML
     private Spinner RestSpinner;
