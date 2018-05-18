@@ -41,6 +41,8 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.TreeMap;
 import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -87,36 +89,43 @@ public class DefaultGenerator implements Generator {
         
         random = randomizer;
         rooms = new TreeMap<>();
-        rooms.put(new Location(), new Room("This is where you spawn."));
-        iteration();
+        addRoom(new Room("This is where you spawn."), new Location());
+        int number = random.nextInt(50) + 1000;
+        for(int i = 0; i < number; i++){
+            iteration();
+        }
         
         isGenerated = true;
         return new World(rooms, new Player());
     }
     
     void iteration(){
-        Pair<Room, Function<Room[], Link>> p1 = createPair();
-        Pair<Room, Function<Room[], Link>> p2 = createPair();
+        Pair<Supplier<Room>, Function<Room[], Link>> p1 = createPair();
+        Pair<Supplier<Room>, Function<Room[], Link>> p2 = createPair();
         
         {   // Swap the links
             Function<Room[], Link> temp = p1.getSecond();
             p1.setSecond(p2.getSecond());
             p2.setSecond(temp);
         }
-        
-        for(Pair<Room, Function<Room[], Link>> p : Arrays.asList(p1, p2)){
-            Pair<Room, Location> begin = pickRoom();
-            rooms.put(begin.getSecond(), p.getFirst());
+        for(Pair<Supplier<Room>, Function<Room[], Link>> p : Arrays.asList(p1, p2)){
+            Pair<Room, Location> picked = pickRoom();
+            Room candidate = p.getFirst().get();
+            addRoom(candidate, picked.getSecond());
             p.getSecond()
-                    .apply(
-                        new Room[] { begin.getFirst(), p.getFirst() }
+                    .apply(new Room[] { picked.getFirst(), candidate }
                     ).autoLink();
         }
     }
     
-    Pair<Room, Function<Room[], Link>> createPair(){
+    void addRoom(Room r, Location l){
+        rooms.put(l, r);
+        r.setLocation(l);
+    }
+    
+    Pair<Supplier<Room>, Function<Room[], Link>> createPair(){
         int choice = random.nextInt(TOTAL+1);
-        for (Entry<Integer, Pair<Room, Function<Room[], Link>>> pair : PAIRS.entrySet()) {
+        for (Entry<Integer, Pair<Supplier<Room>, Function<Room[], Link>>> pair : PAIRS.entrySet()) {
             int poss = pair.getKey();
             if(poss > (choice -= poss))
                 return pair.getValue();
@@ -137,33 +146,37 @@ public class DefaultGenerator implements Generator {
         int safeguard = 0;
         do {
             final Room ro = candidates.get(random.nextInt(candidates.size()));
-            l = Stream.of(Direction.values())
+            List<Location> locs = Stream.of(Direction.values())
                     .filter((Direction d) -> !ro.getNeighbor(d).isPresent())
                     .map(d -> ro.getLocation().add(d))
-                    .findAny()
-                    .orElse(null);
+                    .collect(Collectors.toList());
+            l = locs.isEmpty() ? null : locs.get(random.nextInt(locs.size()));
             r = ro; // two variables so the Stream doesn't complain about not final
             
-            if(safeguard++ < 100)
+            if(safeguard++ > 10)
                 throw new IllegalStateException("Detected an infinite loop!");
-        } while(l != null);
+        } while(l == null);
         
         return new Pair<>(r, l);
     }
     
     // ************************************************************* S T A T I C
     
-    private static final Map<Integer, Pair<Room, Function<Room[], Link>>> PAIRS;
+    private static final Map<Integer, Pair<Supplier<Room>, Function<Room[], Link>>> PAIRS;
     private static final int TOTAL;
     
     static {
         PAIRS = new HashMap<>();
-        PAIRS.put(15, new Pair<>(new Room("Random room"), Opening::new));
-        PAIRS.put( 5, new Pair<>(new Room("Random room"), Door::new));
+        PAIRS.put(15, new Pair<>(DefaultGenerator::createRandomRoom, Opening::new));
+        PAIRS.put( 5, new Pair<>(DefaultGenerator::createRandomRoom, Door::new));
         
         TOTAL = PAIRS.keySet().stream()
                 .mapToInt(v -> (int)v)
                 .sum();
+    }
+    
+    private static Room createRandomRoom(){
+        return new Room("Random room");
     }
     
     private static String exportPairs(){
