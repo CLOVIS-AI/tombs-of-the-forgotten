@@ -71,6 +71,13 @@ public class World implements Timable, Save<JsonObject> {
         this.entities = new ArrayList<>();
     }
     
+    public World(Collection<Room> map, Player player){
+        rooms = createTreeMap(map);
+        this.player = player;
+        this.player.setWorld(this);
+        this.entities = new ArrayList<>();
+    }
+    
     public World(TreeMap<Location, Room> map, Player player, Collection<Entity> entities){
         this(map, player);
         this.entities.addAll(entities);
@@ -145,7 +152,7 @@ public class World implements Timable, Save<JsonObject> {
     
     /**
      * Get every room of the World.
-     * <p>Note that the rooms are provided in no particular order.
+     * <p>Note that the rooms are provided ordered by their location.
      * @return A Collection of rooms.
      */
     public Collection<Room> getRooms(){
@@ -278,7 +285,7 @@ public class World implements Timable, Save<JsonObject> {
                 sb.append("@");
             }else{
                 // Draw room
-                sb.append(e.getValue().getChar());
+            sb.append(e.getValue().getChar());
             }
             y++;
         }
