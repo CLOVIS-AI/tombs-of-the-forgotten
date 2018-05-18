@@ -127,7 +127,7 @@ public class InterfaceController implements Initializable {
     }
 
     /**
-     * Displays a menu listed among a main menu.
+     * Displays a listed among a main menu.
      *
      * @param block A menu
      * @param label A button
