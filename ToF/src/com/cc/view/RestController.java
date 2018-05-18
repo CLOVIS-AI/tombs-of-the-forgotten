@@ -23,12 +23,14 @@
  */
 package com.cc.view;
 
+import com.cc.tof.ToF;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.stage.Stage;
 
@@ -39,6 +41,9 @@ import javafx.stage.Stage;
 public class RestController implements Initializable{
     
     @FXML
+    private Label RestText;
+    
+    @FXML
     private Button RestCancel, RestOK;
     
     @FXML
@@ -46,10 +51,17 @@ public class RestController implements Initializable{
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        RestOK.setOnAction(e -> rest());
+    }
+    
+    void rest(){
+        closeRest(null);
+        int n = (int) RestSpinner.getValue();
+        ToF.rest(n);
     }
     
     @FXML
-public void handleCloseButtonAction(ActionEvent event) {
+    public void closeRest(ActionEvent event) {
     Stage stage = (Stage) RestCancel.getScene().getWindow();
     stage.close();
 }
