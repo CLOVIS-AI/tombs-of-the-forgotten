@@ -21,7 +21,17 @@ dependencies {
     compile 'com.eclipsesource.minimal-json:minimal-json:0.9.5'
 }
 
-version = '0.0.0'
+getVersion()
+
+private void getVersion(){
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'describe', '--tags', '--candidates=30'
+        standardOutput = stdout
+    }
+    version stdout.toString().replaceFirst("-\\d-", "-");
+}
+
 mainClassName = 'com.cc.tof.ToF'
 
 run {
