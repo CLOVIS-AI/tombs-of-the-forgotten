@@ -23,7 +23,7 @@
         <URL value="@menu.css" />
     </stylesheets>  
     <children>
-      <AnchorPane fx:id="LeftMenu" prefHeight="600.0" prefWidth="254.0">
+      <AnchorPane fx:id="LeftMenu" prefHeight="600.0" prefWidth="254.0" visible="false">
          <children>
             <Label layoutX="90.0" layoutY="14.0" text="PLAYERNAME" />
             <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
@@ -43,9 +43,9 @@
       <AnchorPane fx:id="BlockStats" prefHeight="600.0" prefWidth="254.0">
          <children>
             <Label layoutX="109.0" layoutY="14.0" text="STATS" />
-            <ProgressBar layoutX="33.0" layoutY="192.0" prefWidth="200.0" progress="0.57" style="-fx-accent: #1495FF;" />
-            <ProgressBar layoutX="33.0" layoutY="238.0" prefWidth="200.0" progress="0.59" style="-fx-accent: #32B368;" />
-            <ProgressBar layoutX="97.0" layoutY="89.0" prefHeight="75.0" prefWidth="70.0" progress="0.74" rotate="-90.0" style="-fx-accent: red;" />
+            <ProgressBar fx:id="BarMana" layoutX="33.0" layoutY="192.0" prefWidth="200.0" progress="0.57" style="-fx-accent: #1495FF;" />
+            <ProgressBar fx:id="BarStamina" layoutX="33.0" layoutY="238.0" prefWidth="200.0" progress="0.59" style="-fx-accent: #32B368;" />
+            <ProgressBar fx:id="BarHP" layoutX="97.0" layoutY="89.0" prefHeight="75.0" prefWidth="70.0" progress="0.74" rotate="-90.0" style="-fx-accent: red;" />
             <Label layoutX="124.0" layoutY="76.0" text="HP" />
             <Label layoutX="115.0" layoutY="175.0" text="Mana" />
             <Label layoutX="106.0" layoutY="220.0" text="Stamina" />
@@ -85,11 +85,11 @@
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="208.0" layoutY="11.0" stroke="BLACK" strokeType="INSIDE" width="183.0" />
                </children>
             </AnchorPane>
-            <ProgressBar layoutX="33.0" layoutY="285.0" prefWidth="200.0" progress="0.34" style="-fx-accent: gold;" />
+            <ProgressBar fx:id="BarPods" layoutX="33.0" layoutY="285.0" prefWidth="200.0" progress="0.34" style="-fx-accent: gold;" />
             <Label layoutX="118.0" layoutY="269.0" text="Pods" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="BlockWeapon" prefHeight="600.0" prefWidth="254.0">
+      <AnchorPane fx:id="BlockWeapon" prefHeight="600.0" prefWidth="254.0" visible="false">
          <children>
             <Label layoutX="95.0" layoutY="14.0" text="WEAPONS" />
             <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
@@ -118,7 +118,7 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="BlockApparel" prefHeight="600.0" prefWidth="254.0">
+      <AnchorPane fx:id="BlockApparel" prefHeight="600.0" prefWidth="254.0" visible="false">
          <children>
             <Label layoutX="98.0" layoutY="14.0" text="APPAREL" />
             <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
@@ -147,7 +147,7 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="BlockEatable" prefHeight="600.0" prefWidth="254.0">
+      <AnchorPane fx:id="BlockEatable" prefHeight="600.0" prefWidth="254.0" visible="false">
          <children>
             <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
             <AnchorPane fx:id="Inventory11" layoutX="31.0" layoutY="53.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="204.0">
@@ -176,7 +176,7 @@
             <Label layoutX="104.0" layoutY="14.0" text="EATABLE" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="BlockScrolls" prefHeight="600.0" prefWidth="254.0">
+      <AnchorPane fx:id="BlockScrolls" prefHeight="600.0" prefWidth="254.0" visible="false">
          <children>
             <Label layoutX="98.0" layoutY="14.0" text="SCROLLS" />
             <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
@@ -205,7 +205,7 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="BlockAll" layoutY="1.0" prefHeight="600.0" prefWidth="254.0">
+      <AnchorPane fx:id="BlockAll" layoutY="1.0" prefHeight="600.0" prefWidth="254.0" visible="false">
          <children>
             <Label layoutX="115.0" layoutY="14.0" text="ALL" />
             <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
@@ -233,7 +233,7 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="BlockOther" layoutY="1.0" prefHeight="600.0" prefWidth="254.0">
+      <AnchorPane fx:id="BlockOther" layoutY="1.0" prefHeight="600.0" prefWidth="254.0" visible="false">
          <children>
             <Label layoutX="115.0" layoutY="14.0" text="OTHER" />
             <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
@@ -261,7 +261,7 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="974.0" layoutY="347.0" prefHeight="255.0" prefWidth="280.0">
+      <AnchorPane layoutX="974.0" layoutY="347.0" prefHeight="255.0" prefWidth="280.0" visible="false">
          <children>
             <AnchorPane fx:id="PlayerPos" layoutX="7.0" layoutY="8.0" prefHeight="101.0" prefWidth="95.0">
                <children>
@@ -327,7 +327,7 @@
             <Button fx:id="ButtonGrabItem" layoutX="170.0" layoutY="56.0" mnemonicParsing="false" text="GRAB ITEM" />
             <Button fx:id="ButtonSearchRoom" layoutX="30.0" layoutY="56.0" mnemonicParsing="false" text="SEARCH ROOM" />
             <Button fx:id="ButtonReadNote" layoutX="293.0" layoutY="14.0" mnemonicParsing="false" text="READ NOTE" />
-            <Button fx:id="ButtonSave" layoutX="191.0" layoutY="215.0" mnemonicParsing="false" text="Save" />
+            <Button fx:id="ButtonSave" layoutX="191.0" layoutY="215.0" mnemonicParsing="false" text="SAVE" />
          </children></AnchorPane>
       <AnchorPane layoutX="508.0" prefHeight="345.0" prefWidth="746.0">
          <children>
