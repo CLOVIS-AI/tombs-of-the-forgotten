@@ -26,6 +26,7 @@ import com.cc.items.Item;
 import com.cc.players.Entity.Stat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A Message.
@@ -172,6 +173,12 @@ public class Message {
         for(MessagePart m : parts)
             sb.append(m).append(", ");
         return sb.delete(sb.length()-2, sb.length()).toString();
+    }
+    
+    public String toStringSimple() {
+        return this.parts.stream()
+                .map(MessagePart::getText)
+                .collect(Collectors.joining(" "));
     }
     
 }
