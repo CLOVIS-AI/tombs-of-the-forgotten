@@ -24,6 +24,8 @@ package com.cc.tof;
 
 import com.cc.view.View;
 import com.cc.world.World;
+import com.cc.world.generator.DefaultGenerator;
+import com.eclipsesource.json.WriterConfig;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
@@ -123,7 +125,9 @@ public class ToF extends Application {
     }
     
     public static void newGame() {
-        throw new UnsupportedOperationException("sa ossi");
+        DefaultGenerator gen = new DefaultGenerator();
+        world = gen.generate();
+        world.save().toString(WriterConfig.PRETTY_PRINT);
     }
     
     public static void load() {

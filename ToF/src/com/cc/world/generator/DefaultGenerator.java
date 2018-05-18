@@ -23,6 +23,7 @@
  */
 package com.cc.world.generator;
 
+import com.cc.players.Player;
 import com.cc.utils.Pair;
 import com.cc.world.Direction;
 import com.cc.world.Location;
@@ -85,10 +86,12 @@ public class DefaultGenerator implements Generator {
             throw new IllegalStateException("This generator has already been used.");
         
         random = randomizer;
-        
+        rooms = new TreeMap<>();
+        rooms.put(new Location(), new Room("This is where you spawn."));
+        iteration();
         
         isGenerated = true;
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new World(rooms, new Player());
     }
     
     void iteration(){
