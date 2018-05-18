@@ -34,7 +34,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -81,33 +80,6 @@ public class ToF extends Application {
                 Thread.sleep(time);
             }
         } catch (InterruptedException ex) {}
-    }
-    
-    /**
-     * Prompts the user for input.
-     * @return The input
-     */
-    public static String getInput() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter your command : ");
-        String input = scanner.nextLine();
-        return input;
-    }
-    
-    /**
-     * Parses the input to get the different parts.
-     * @param input the input
-     * @return An action object
-     */
-    public static Action analyseInput(String input) {
-        String[] s = input.split(" ");
-        String[] parameters = new String[s.length - 1];
-        
-        for (int i = 0 ; i < s.length - 1 ; i++ ) {
-            parameters[i] = s[i+1];
-        }
-        
-        return new Action(s[0], parameters);
     }
     
     /**
