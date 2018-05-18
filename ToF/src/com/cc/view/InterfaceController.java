@@ -74,7 +74,8 @@ public class InterfaceController implements Initializable {
             ViewAll;
 
     @FXML
-    private Button ButtonRest, ButtonSave;
+    private Button ButtonRest, ButtonSave, ButtonOpen, ButtonClose, ButtonReadNote,
+            ButtonSearchRoom, ButtonGrabItem, ButtonDropItem;
 
     private boolean isMenu = false;
     private Timeline move = new Timeline();
