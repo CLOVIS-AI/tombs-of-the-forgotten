@@ -34,6 +34,7 @@ import com.cc.world.Location;
 import com.cc.world.Room;
 import com.cc.world.World;
 import com.cc.world.links.Opening;
+import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.ResourceBundle;
@@ -115,20 +116,21 @@ public class InterfaceController implements Initializable {
 
         restPopup(ButtonRest);
 
-        //ButtonSave.setOnMouseClicked(e -> ToF.getWorld().save());
         /**
          * *********************MOVE DIRECTIONS BUTTONS***********************
          */
         Player p = new Player();
         Room r1 = new Room("d").setLocation(new Location());
         Room r2 = new Room("d").setLocation(new Location(0, 1, 0));
-        new World(World.createTreeMap(Arrays.asList(r1, r2)), p);
+        ToF.world = new World(World.createTreeMap(Arrays.asList(r1, r2)), p);
         new Opening(r1, r2).autoLink();
         update(p);
+        
+        ButtonSave.setOnAction(e -> ToF.save((new File("save.json"))));
     }
 
     /**
-     * Displays a listed among a main menu.
+     * Displays a listed menu among the main menu.
      *
      * @param block A menu
      * @param label A button
@@ -230,8 +232,8 @@ public class InterfaceController implements Initializable {
     private static final Color SELECTED = Color.RED;
 
     /**
-     * Set a specific color on a button depending whether or not the player can 
-     * go to a certain direction
+     * Set a specific color on a button depending whether the player can 
+     * go to a certain direction or not.
      * @param p the player
      * @param d the direction
      * @param button the direction button
