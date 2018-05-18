@@ -72,7 +72,7 @@ public class InterfaceController implements Initializable {
     @FXML
     private MenuItem ViewWeapon, ViewApparel, ViewEatable, ViewScroll, ViewOther,
             ViewAll;
-    
+
     @FXML
     private Button ButtonRest, ButtonSave;
 
@@ -112,11 +112,9 @@ public class InterfaceController implements Initializable {
         viewItem(ViewOther);
         viewItem(ViewAll);
 
-        restPopup(ButtonRest);     
-        
-         //ButtonSave.setOnMouseClicked(e -> ToF.getWorld().save());
-        
-        
+        restPopup(ButtonRest);
+
+        //ButtonSave.setOnMouseClicked(e -> ToF.getWorld().save());
         /**
          * *********************MOVE DIRECTIONS BUTTONS***********************
          */
@@ -198,7 +196,11 @@ public class InterfaceController implements Initializable {
             viewItem(e);
         });
     }
-    
+
+    /**
+     * Load a new JavaFx window.
+     * @param event the event
+     */
     public void restPopup(ActionEvent event) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(ToF.getResource("rest.fxml"));
@@ -210,7 +212,12 @@ public class InterfaceController implements Initializable {
             e.printStackTrace();
         }
     }
-    
+
+    /**
+     * Press a specific button resulting in opening a new JavaFX window.
+     * @param b the button
+     * @see #restPopup(javafx.event.ActionEvent) Load a new JavaFX window
+     */
     public void restPopup(Button b) {
         b.setOnAction(e -> {
             restPopup(e);
@@ -221,6 +228,13 @@ public class InterfaceController implements Initializable {
     private static final Color CAN_MOVE = Color.BLACK;
     private static final Color SELECTED = Color.RED;
 
+    /**
+     * Set a specific color on a button depending whether or not the player can 
+     * go to a certain direction
+     * @param p the player
+     * @param d the direction
+     * @param button the direction button
+     */
     public void move(Player p, Direction d, Shape button) {
         button.setDisable(!p.canMoveTo(d));
         button.setOnMouseEntered(e -> button.setFill(SELECTED));
@@ -232,10 +246,19 @@ public class InterfaceController implements Initializable {
         button.setFill(getColor(p.canMoveTo(d)));
     }
 
+    /**
+     * The color of a direction button
+     * @param canMove True if the player can move to a certain direction
+     * @return True if the player can move, false else
+     */
     private Color getColor(boolean canMove) {
         return canMove ? CAN_MOVE : CANNOT_MOVE;
     }
 
+    /**
+     * Reinitialize every direction button's color each time the player moves.
+     * @param p the player
+     */
     public void update(Player p) {
         move(p, NORTH, (Shape) MoveNorth);
         move(p, SOUTH, (Shape) MoveSouth);
