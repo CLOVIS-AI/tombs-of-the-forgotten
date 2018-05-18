@@ -24,11 +24,19 @@ package com.cc.tof;
 
 import com.cc.view.View;
 import com.cc.world.World;
+import com.cc.world.generator.DefaultGenerator;
+import com.eclipsesource.json.Json;
+import com.eclipsesource.json.JsonObject;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -128,11 +136,35 @@ public class ToF extends Application {
     }
     
     public static void newGame() {
-        throw new UnsupportedOperationException("sa ossi");
+        long time = System.currentTimeMillis();
+        
+        DefaultGenerator gen = new DefaultGenerator();
+        world = gen.generate();
+        
+        time -= System.currentTimeMillis();
+        
+        System.out.println("A new game was successfully created! Stats:");
+        System.out.println("> Time: " + (-time) + " ms");
+        System.out.println("> Number of rooms: " + world.getRooms().size());
+        System.out.println("> Average of neighbors: " + world.getRooms().stream()
+                .mapToLong(r -> r.getAllLinks().count())
+                .average()
+                .getAsDouble()
+        );
     }
     
-    public static void load() {
-        throw new UnsupportedOperationException("C ivan ki son okupe lol");
+    /**
+     * Loads the game from a save file.
+     */
+    public static void load(File file) {
+        try {
+            byte[] encoded = Files.readAllBytes(file.toPath());
+            JsonObject json = Json.parse (
+                    new String(encoded, StandardCharsets.UTF_8)).asObject();
+            world = new World(json);
+        } catch (IOException ex) {
+            Logger.getLogger(ToF.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     @Override

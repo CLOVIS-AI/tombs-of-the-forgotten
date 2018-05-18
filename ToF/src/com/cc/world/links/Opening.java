@@ -33,13 +33,31 @@ import com.eclipsesource.json.JsonObject;
  */
 public final class Opening extends Link {
 
+    /**
+     * Creates an opening.
+     * @param r1 the first room
+     * @param r2 the second room
+     */
     public Opening(Room r1, Room r2) {
         super(r1, r2, true);
     }
     
+    /**
+     * Creates an opening.
+     * @param world the first room
+     * @param json the second room
+     */
     public Opening(World world, JsonObject json) {
         super(world, json);
         isOpen = true;
+    }
+    
+    /**
+     * Creates an opening.
+     * @param rooms the two rooms
+     */
+    public Opening(Room... rooms){
+        this(rooms[0], rooms[1]);
     }
 
     @Override
