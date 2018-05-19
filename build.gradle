@@ -9,6 +9,7 @@
 
 apply plugin: 'java'
 apply plugin: 'application'
+apply plugin: 'javafx-gradle-plugin'
 
 repositories {
     jcenter()
@@ -20,7 +21,17 @@ dependencies {
     compile 'com.eclipsesource.minimal-json:minimal-json:0.9.5'
 }
 
-version = '0.0.0'
+getVersion()
+
+private void getVersion(){
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'describe', '--tags', '--candidates=30'
+        standardOutput = stdout
+    }
+    version stdout.toString()[0..-2].replaceFirst("-\\d-", "-")
+}
+
 mainClassName = 'com.cc.tof.ToF'
 
 run {
@@ -32,6 +43,10 @@ sourceSets {
         java {
             srcDirs = ['ToF/src']
         }
+        resources {
+            srcDirs = ['ToF/resources']
+            excludes = ['**/*.java']
+        }
     }
     test {
         java {
@@ -42,9 +57,25 @@ sourceSets {
 
 jar {
     manifest {
-        attributes('Implementation-Title': project.name,
-                   'Implementation-Version': project.version)
+        attributes 'Implementation-Title': project.name,
+                   'Implementation-Version': project.version,
+                   'Main-Class': 'com.cc.tof.ToF'
     }
+}
+
+buildscript {
+    dependencies {
+        classpath group: 'de.dynamicfiles.projects.gradle.plugins', name: 'javafx-gradle-plugin', version: '8.8.2'
+    }
+    repositories {
+        mavenCentral()
+    }
+}
+
+jfx {
+    mainClass = mainClassName
+    vendor = 'Canet-Chourouq'
+    verbose = true
 }
 
 gradle.projectsEvaluated {

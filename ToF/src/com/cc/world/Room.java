@@ -85,7 +85,7 @@ public class Room implements Save<JsonObject> {
      * @return This room itself, to allow method-chaining.
      */
     public Room setWorld(World w){
-        if(world != null && !isGenerated)
+        if(world != null || isGenerated)
             throw new IllegalStateException("This method should only be called once.");
         
         world = w;
@@ -99,8 +99,10 @@ public class Room implements Save<JsonObject> {
      * @return This room itself, to allow method-chaining.
      */
     public Room setLocation(Location l){
-        if(location != null && !isGenerated){
-            System.err.println("Warning: Room#setLocation should only be called once.");
+        if(location != null || isGenerated){
+            System.err.println("Warning: Room#setLocation should only be called"
+                    + " once. The current value " + location + " is not changed"
+                    + " to " + l + ".");
             return this;
         }
         
@@ -471,10 +473,11 @@ public class Room implements Save<JsonObject> {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder()
+                .append("\"")
                 .append(description)
-                .append(" ")
+                .append("\" ")
                 .append(location)
-                .append(" [neighbors:");
+                .append(" [");
         
         neighbors.forEach((d,l) -> sb
                 .append(" ")

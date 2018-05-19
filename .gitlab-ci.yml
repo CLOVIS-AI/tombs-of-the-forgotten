@@ -1,4 +1,4 @@
-image: java:latest
+image: clovisai/javafx
 
 stages:
   - build
