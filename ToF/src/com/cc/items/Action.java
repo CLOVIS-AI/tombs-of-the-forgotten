@@ -35,8 +35,23 @@ import com.eclipsesource.json.WriterConfig;
  */
 public interface Action extends Save<JsonObject> {
     
+    /**
+     * Executes this action on this entity.
+     * @param entity the entity
+     */
     public void execute(Entity entity);
     
+    /**
+     * Can this action be executed on this entity?
+     * @param entity the entity
+     * @return {@code true} if it can be executed
+     */
+    public boolean canUse(Entity entity);
+    
+    /**
+     * Gets the effect of this action.
+     * @return The effect of this action, as a Message.
+     */
     public Message getEffects();
     
     /**
