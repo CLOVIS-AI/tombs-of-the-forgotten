@@ -108,6 +108,18 @@ public final class Item implements Save<JsonObject> {
     }
     
     /**
+     * Can an entity use this item?
+     * @param entity the entity
+     * @return {@code true} if it can.
+     */
+    public boolean canUse(Entity entity){
+        if(isBroken())
+            return false;
+        
+        return actions.stream().allMatch(a -> a.canUse(entity));
+    }
+    
+    /**
      * Gets the effects of this Item.
      * @return the effects of this Item.
      */
