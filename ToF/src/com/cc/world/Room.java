@@ -74,8 +74,8 @@ public class Room implements Save<JsonObject> {
      */
     public Room(JsonObject json){
         this(json.getString("desc", null));
-        this.items = new ItemContainer(json.get("items").asObject());
-        this.location = new Location(json.get("location").asObject());
+        this.items =    new ItemContainer(  json.get("items").asObject()    );
+        this.location = new Location(       json.get("location").asObject() );
     }
     
     /**
