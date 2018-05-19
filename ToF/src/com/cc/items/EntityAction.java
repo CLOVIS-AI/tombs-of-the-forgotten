@@ -23,12 +23,12 @@
 package com.cc.items;
 
 import static com.cc.items.EntityAction.Operation.ADD;
-import static com.cc.items.EntityAction.Target.SELF;
 import com.cc.players.Entity;
 import com.cc.players.Entity.Stat;
 import com.cc.utils.messages.Message;
 import com.eclipsesource.json.JsonObject;
 import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * The action that is executed when an Item is used (for instance).
@@ -90,25 +90,7 @@ public class EntityAction implements Action {
      */
     @Override
     public void execute(Entity e){
-        Entity entity = target == SELF ?
-                      e : e.getOpponent()
-                              .orElseThrow(() -> new IllegalArgumentException("Cannot "
-                                      + "use this item in this case, the entity"
-                                      + " ("+e+") does not have any opponent!"));
-        
-        operation.execute(entity, stat, value);
-    }
-    
-    /**
-     * Adds/removes the specified value from the target's stat.
-     * @param target the target
-     */
-    void add(Entity target, int value){
-        switch(stat){
-            case MANA: target.addMana(value); break;
-            case HEALTH: target.heal(value); break;
-            case STAMINA: target.addStamina(value); break;
-        }
+        operation.execute(target.select(e), stat, value);
     }
 
     @Override
@@ -126,10 +108,18 @@ public class EntityAction implements Action {
      */
     public enum Target {
         /** The action will do something on the entity that uses the Item. */
-        SELF,
+        SELF(e -> e),
         /** The action will do something on the opponent of the entity that uses
          the item. */
-        OPPONENT
+        OPPONENT(e -> e.getOpponent().orElseThrow(CannotUseItem::noOpponent));
+        
+        private final Function<Entity, Entity> f;
+        Target(Function<Entity, Entity> ff){
+            f = ff;
+        }
+        Entity select(Entity e){
+            return f.apply(e);
+        }
     }
     
     /**
@@ -199,5 +189,15 @@ public class EntityAction implements Action {
         return true;
     }
     
-    
+    /**
+     * Thrown when the user tries to use an item that is not available.
+     */
+    public static class CannotUseItem extends RuntimeException {
+        public CannotUseItem(String str){
+            super(str);
+        }
+        public static CannotUseItem noOpponent(){
+            return new CannotUseItem("No opponent was found.");
+        }
+    }
 }
