@@ -23,13 +23,12 @@
 package com.cc.items;
 
 import static com.cc.items.EntityAction.Operation.ADD;
-import static com.cc.items.EntityAction.Target.SELF;
 import com.cc.players.Entity;
 import com.cc.players.Entity.Stat;
 import com.cc.utils.messages.Message;
 import com.eclipsesource.json.JsonObject;
-import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * The action that is executed when an Item is used (for instance).
@@ -91,34 +90,20 @@ public class EntityAction implements Action {
      */
     @Override
     public void execute(Entity e){
-        Entity entity = target == SELF ?
-                      e : e.getOpponent()
-                              .orElseThrow(() -> new IllegalArgumentException("Cannot "
-                                      + "use this item in this case, the entity"
-                                      + " ("+e+") does not have any opponent!"));
-        
-        operation.execute(entity, stat, value);
-    }
-    
-    /**
-     * Adds/removes the specified value from the target's stat.
-     * @param target the target
-     */
-    void add(Entity target, int value){
-        switch(stat){
-            case MANA: target.addMana(value); break;
-            case HEALTH: target.heal(value); break;
-            case STAMINA: target.addStamina(value); break;
-        }
+        operation.execute(target.select(e), stat, value);
     }
 
     @Override
-    public void addEffects(List<Message> effects) {
-        Message message = new Message()
+    public Message getEffects() {
+        return new Message()
                 .add(stat)
                 .add(": ")
                 .add(operation == ADD ? value : -value);
-        effects.add(message);
+    }
+
+    @Override
+    public boolean canUse(Entity entity) {
+        return operation.canExecute(target.select(entity), stat, value);
     }
     
     // ************************************************************* S T A T I C
@@ -128,10 +113,18 @@ public class EntityAction implements Action {
      */
     public enum Target {
         /** The action will do something on the entity that uses the Item. */
-        SELF,
+        SELF(e -> e),
         /** The action will do something on the opponent of the entity that uses
          the item. */
-        OPPONENT
+        OPPONENT(e -> e.getOpponent().orElseThrow(CannotUseItem::noOpponent));
+        
+        private final Function<Entity, Entity> f;
+        Target(Function<Entity, Entity> ff){
+            f = ff;
+        }
+        Entity select(Entity e){
+            return f.apply(e);
+        }
     }
     
     /**
@@ -139,19 +132,14 @@ public class EntityAction implements Action {
      */
     public enum Operation {
         /** Add a value to the player's stats. */
-        ADD {
-            @Override
-            public void execute(Entity e, Stat s, int v) {
-                s.add(e, v);
-            }
-        },
+        ADD(v -> v),
         /** Remove a value to the player's stats. */
-        REMOVE {
-            @Override
-            public void execute(Entity e, Stat s, int v) {
-                s.remove(e, v);
-            }
-        };
+        REMOVE(v -> -v);
+        
+        private final Function<Integer, Integer> modifier;
+        Operation(Function<Integer, Integer> mod){
+            modifier = mod;
+        }
         
         /**
          * Executes this operation.
@@ -159,7 +147,20 @@ public class EntityAction implements Action {
          * @param stat the entity's stat that is modified
          * @param value how effective this operation is
          */
-        public abstract void execute(Entity entity, Stat stat, int value);
+        public void execute(Entity entity, Stat stat, int value){
+            stat.set(entity, modifier.apply(value));
+        }
+        
+        /**
+         * Is it possible to execute this operation?
+         * @param entity the entity the operation is executed one
+         * @param stat the entity's stat that is modified
+         * @param value how effective the operation is
+         * @return {@code true} if the operation can be performed.
+         */
+        public boolean canExecute(Entity entity, Stat stat, int value){
+            return stat.canSet(entity, modifier.apply(value));
+        }
     }
     
     // *************************************************************** O T H E R
@@ -201,5 +202,15 @@ public class EntityAction implements Action {
         return true;
     }
     
-    
+    /**
+     * Thrown when the user tries to use an item that is not available.
+     */
+    public static class CannotUseItem extends RuntimeException {
+        public CannotUseItem(String str){
+            super(str);
+        }
+        public static CannotUseItem noOpponent(){
+            return new CannotUseItem("No opponent was found.");
+        }
+    }
 }

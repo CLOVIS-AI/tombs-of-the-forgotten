@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Spliterator;
+import java.util.stream.Stream;
 
 /**
  * Represents a container.
@@ -161,4 +163,30 @@ public class ItemContainer implements Save<JsonObject> {
                 .add("items", items);
     }
     
+    /**
+     * Returns a spliterator of the items contained in this object.
+     * @return A spliterator of the items in this object.
+     * @see List#spliterator() 
+     */
+    public Spliterator<Item> spliterator(){
+        return items.spliterator();
+    }
+    
+    /**
+     * Creates a stream of the items.
+     * @return A stream of the items.
+     * @see List#stream() 
+     */
+    public Stream<Item> stream(){
+        return items.stream();
+    }
+    
+    /**
+     * Creates a parallel stream of the items.
+     * @return A parallel stream of the items.
+     * @see List#parallelStream() 
+     */
+    public Stream<Item> parallelStream(){
+        return items.parallelStream();
+    }
 }
