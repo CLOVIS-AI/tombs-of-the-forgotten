@@ -88,7 +88,7 @@ public class Path {
     public static Path createPath(World world, Room departure, Room arrival, Entity entity) throws UnreachableRoomException{
         // Initilization of costs (any=Infinity, first=0)
         Map<Room, Integer> costs = new HashMap<>();
-        world.getRooms().forEach(r -> costs.put(r, 99));
+        world.getRooms().forEach(r -> costs.put(r, Integer.MAX_VALUE));
         costs.put(departure, 0);
         
         // Initilization of predecessors (any=itself)
