@@ -100,6 +100,11 @@ public class EntityAction implements Action {
                 .add(": ")
                 .add(operation == ADD ? value : -value);
     }
+
+    @Override
+    public boolean canUse(Entity entity) {
+        return operation.canExecute(target.select(entity), stat, value);
+    }
     
     // ************************************************************* S T A T I C
     
@@ -127,19 +132,14 @@ public class EntityAction implements Action {
      */
     public enum Operation {
         /** Add a value to the player's stats. */
-        ADD {
-            @Override
-            public void execute(Entity e, Stat s, int v) {
-                s.add(e, v);
-            }
-        },
+        ADD(v -> v),
         /** Remove a value to the player's stats. */
-        REMOVE {
-            @Override
-            public void execute(Entity e, Stat s, int v) {
-                s.remove(e, v);
-            }
-        };
+        REMOVE(v -> -v);
+        
+        private final Function<Integer, Integer> modifier;
+        Operation(Function<Integer, Integer> mod){
+            modifier = mod;
+        }
         
         /**
          * Executes this operation.
@@ -147,7 +147,20 @@ public class EntityAction implements Action {
          * @param stat the entity's stat that is modified
          * @param value how effective this operation is
          */
-        public abstract void execute(Entity entity, Stat stat, int value);
+        public void execute(Entity entity, Stat stat, int value){
+            stat.set(entity, modifier.apply(value));
+        }
+        
+        /**
+         * Is it possible to execute this operation?
+         * @param entity the entity the operation is executed one
+         * @param stat the entity's stat that is modified
+         * @param value how effective the operation is
+         * @return {@code true} if the operation can be performed.
+         */
+        public boolean canExecute(Entity entity, Stat stat, int value){
+            return stat.canSet(entity, modifier.apply(value));
+        }
     }
     
     // *************************************************************** O T H E R
