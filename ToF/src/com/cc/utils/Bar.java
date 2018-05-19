@@ -113,7 +113,8 @@ public class Bar implements Save<JsonObject> {
      * @return {@code true} if you can increment it.
      */
     public boolean canAdd(int value){
-        return real + value <= maximum;
+        return value >= 0 ? real + value <= maximum
+                          : canRemove(value);
     }
     
     /**
@@ -121,12 +122,10 @@ public class Bar implements Save<JsonObject> {
      * <p>Note that this is not the same as a bonus. See {@link #addBonus(int,int)}.
      * @param value how much you'd like to increment to value of this bar
      * @param mode what should do this method if the maximum value is reached.
-     * @throws IllegalArgumentException for negative values
      */
     public void add(int value, Behavior mode){
         if(value < 0)
-            throw new IllegalArgumentException("Negative increments are not "
-                    + "allowed. See Bar.remove(int,int).");
+            remove(value, mode);
         
         if(canAdd(value))
            real += value;
