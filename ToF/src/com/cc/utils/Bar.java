@@ -108,6 +108,15 @@ public class Bar implements Save<JsonObject> {
     }
     
     /**
+     * Is it possible to increment the value of this bar?
+     * @param value how much you'd like to increment the value of this bar
+     * @return {@code true} if you can increment it.
+     */
+    public boolean canAdd(int value){
+        return real + value <= maximum;
+    }
+    
+    /**
      * Increments the value of this bar by a set number.
      * <p>Note that this is not the same as a bonus. See {@link #addBonus(int,int)}.
      * @param value how much you'd like to increment to value of this bar
@@ -119,7 +128,7 @@ public class Bar implements Save<JsonObject> {
             throw new IllegalArgumentException("Negative increments are not "
                     + "allowed. See Bar.remove(int,int).");
         
-        if(real + value <= maximum)
+        if(canAdd(value))
            real += value;
         else{
             if(mode == ACCEPT)
@@ -130,6 +139,15 @@ public class Bar implements Save<JsonObject> {
                         + "greater than the allowed maximum (%d)", value, real, 
                         value+real, maximum));
         }
+    }
+    
+    /**
+     * Is it possible to decrement the value of this bar?
+     * @param value how much you'd like to decrement the value of this bar
+     * @return {@code true} if you can decrement it.
+     */
+    public boolean canRemove(int value){
+        return real - value >= minimum;
     }
     
     /**
@@ -144,7 +162,7 @@ public class Bar implements Save<JsonObject> {
             throw new IllegalArgumentException("Negative decrements are not "
                     + "allowed. See Bar.add(int,int).");
         
-        if(real - value >= minimum)
+        if(canRemove(value))
            real -= value;
         else{
             if(mode == ACCEPT)
