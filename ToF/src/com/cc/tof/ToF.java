@@ -178,12 +178,9 @@ public class ToF extends Application {
     }
 
     public static void save(File file) {
-        // 1. Générer le JSON
         JsonObject json = world.save();
-        // 2. Le convertir en String
         String str = json.toString(WriterConfig.PRETTY_PRINT);
-        // 3. ENregistrer le String dans un fichier
-        System.out.println(str); //FileWriter
+        System.out.println(str);
         try {
             JFileChooser jfc = new JFileChooser();
             jfc.showDialog(null, "Please Select the File");
