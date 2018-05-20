@@ -24,6 +24,9 @@
 package com.cc.world;
 
 import com.cc.tof.ToF;
+import com.cc.utils.Save;
+import com.eclipsesource.json.Json;
+import com.eclipsesource.json.JsonValue;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -34,10 +37,10 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
- * A note is an information
+ * A note is an information that can be found in a Room.
  * @author Ivan Canet
  */
-public class Note {
+public class Note implements Save<JsonValue> {
     
     private final int ID;
     private final String text;
@@ -47,12 +50,24 @@ public class Note {
         this.text = text;
     }
     
+    /**
+     * Creates a note from an ID.
+     * @param ID the ID
+     */
     public Note(int ID) {
         this.ID = ID;
         text = notes.get(ID);
         
         if(text == null)
             throw new IllegalArgumentException("No note was found with the ID: " + ID);
+    }
+    
+    /**
+     * Loads a note from a JSON value.
+     * @param json the saved data
+     */
+    public Note(JsonValue json){
+        this(json.asInt());
     }
 
     @Override
@@ -81,6 +96,11 @@ public class Note {
             return false;
         }
         return true;
+    }
+    
+    @Override
+    public JsonValue save() {
+        return Json.value(ID);
     }
     
     // ************************************************************* S T A T I C
