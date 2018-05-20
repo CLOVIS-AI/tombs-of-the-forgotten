@@ -25,6 +25,7 @@ package com.cc.world;
 import com.cc.items.ItemContainer;
 import com.cc.players.Entity;
 import com.cc.utils.Save;
+import com.cc.world.Note.Notes;
 import com.cc.world.Path.UnreachableRoomException;
 import com.cc.world.links.Link;
 import com.eclipsesource.json.JsonObject;
@@ -52,6 +53,7 @@ public class Room implements Save<JsonObject> {
     private boolean isGenerated = false;
     
     private ItemContainer items;
+    private Notes notes;
     
     public Room(String description){
         this(description, null, null);
@@ -64,6 +66,7 @@ public class Room implements Save<JsonObject> {
         this.world = world;
         isGenerated = true;
         items = new ItemContainer(description);
+        notes = new Notes();
     }
     
     /**
@@ -76,6 +79,7 @@ public class Room implements Save<JsonObject> {
         this(json.getString("desc", null));
         this.items =    new ItemContainer(  json.get("items").asObject()    );
         this.location = new Location(       json.get("location").asObject() );
+        this.notes =    new Notes(          json.get("notes").asArray()     );
     }
     
     /**
@@ -493,7 +497,8 @@ public class Room implements Save<JsonObject> {
         return new JsonObject()
                 .add("desc", description)
                 .add("items", items.save())
-                .add("location", location.save());
+                .add("location", location.save())
+                .add("notes", notes.save());
     }
     
 }
