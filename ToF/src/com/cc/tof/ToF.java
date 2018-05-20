@@ -93,7 +93,7 @@ public class ToF extends Application {
         try {
             enm = new ToF().getClass().getClassLoader().getResources(name);
             URL ret = enm.nextElement();
-            System.out.println("Using resource " + ret);
+            System.out.println("[Data]\tUsing resource " + ret);
             return ret;
         } catch (IOException ex) {
             throw new IllegalArgumentException("Cannot open resource '"+name+"'", ex);
@@ -122,6 +122,7 @@ public class ToF extends Application {
     
     /**
      * Loads the game from a save file.
+     * @param file Loads the game from a file.
      */
     public static void load(File file) {
         try {
@@ -138,11 +139,15 @@ public class ToF extends Application {
     public void start(Stage primaryStage) throws Exception {
         View view = new View(this, primaryStage);
         
+        System.out.println("[ToF]\tLoading general menu...");
         menu = FXMLLoader.load(getResource("Menu.fxml"));
-
+        System.out.println("[ToF]\tMenu loaded.");
+        
+        System.out.println("[ToF]\tCreating main scene...");
         Scene scene = new Scene(menu, 1000, 600);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Tombs of the Forgotten");
+        System.out.println("[ToF]\tLaunching the game.");
         primaryStage.show();
     }
     

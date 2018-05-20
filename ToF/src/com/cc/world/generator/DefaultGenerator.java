@@ -27,6 +27,7 @@ import com.cc.players.Player;
 import com.cc.utils.Pair;
 import com.cc.world.Direction;
 import com.cc.world.Location;
+import com.cc.world.Note;
 import com.cc.world.Room;
 import com.cc.world.World;
 import com.cc.world.links.Door;
@@ -176,7 +177,14 @@ public class DefaultGenerator implements Generator {
     }
     
     private static Room createRandomRoom(){
-        return new Room("Random room");
+        Room randomizedRoom = new Room("Random room");
+        
+        for(int i = 0; i < new Random().nextInt(3); i++){
+            List<Integer> notes = new ArrayList<>(Note.getIDs());
+            randomizedRoom.addNote(new Note(notes.get(new Random().nextInt(notes.size()))));
+        }
+        
+        return randomizedRoom;
     }
     
     private static String exportPairs(){
