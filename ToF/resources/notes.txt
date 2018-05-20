@@ -15,8 +15,5 @@
 #  - Remove an ID (otherwise players who created their world on an old version
 #    might not be able to load their save in the new version)
 
-1 Welcome to this World
-216 This is such a new Place
-37 Fuck me in the ass 'cause I love Jesus
-47  TEST
-32      Spaces
+1   Welcome to this world.
+2   This story has been forgotten long ago.
