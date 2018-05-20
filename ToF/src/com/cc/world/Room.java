@@ -444,6 +444,19 @@ public class Room implements Save<JsonObject> {
     }
     
     /**
+     * Adds a note to this room.
+     * @param note the note
+     * @throws IllegalStateException if this room's generation is finished
+     */
+    public void addNote(Note note) {
+        if(isGenerated)
+            throw new IllegalStateException("Cannot add a note ("+note+") to an"
+                    + " already generated room:" + this);
+        
+        notes.add(note);
+    }
+    
+    /**
      * Does this room contains notes?
      * @return {@code true} if at least one note is present.
      */
