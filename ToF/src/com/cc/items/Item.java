@@ -79,6 +79,22 @@ public final class Item implements Save<JsonObject> {
     }
     
     /**
+     * Creates an Item.
+     * @param name its name
+     * @param description its description
+     * @param rarity its rarity
+     * @param weight its weight (in grams)
+     * @param maxDurability its maximum durability
+     * @param actions its actions
+     */
+    public Item(String name, String description, Rarity rarity, int weight,
+            int maxDurability, List<Action> actions){
+        this(name, description, rarity, weight,
+             new Bar("Durability", 0, maxDurability, maxDurability));
+        this.actions.addAll(actions);
+    }
+    
+    /**
      * Loads an Item from JSON data.
      * @param json the saved data
      */
