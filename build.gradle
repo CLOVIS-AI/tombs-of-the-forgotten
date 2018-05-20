@@ -29,7 +29,7 @@ private void getVersion(){
         commandLine 'git', 'describe', '--tags', '--candidates=30'
         standardOutput = stdout
     }
-    version stdout.toString()[0..-2].replaceFirst("-\\d-", "-")
+    version stdout.toString()[0..-2].replaceFirst("-\\d+-", "-")
 }
 
 mainClassName = 'com.cc.tof.ToF'
