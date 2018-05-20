@@ -26,11 +26,13 @@ package com.cc.world;
 import com.cc.tof.ToF;
 import com.cc.utils.Save;
 import com.eclipsesource.json.Json;
+import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonValue;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -132,6 +134,39 @@ public class Note implements Save<JsonValue> {
         }
         
         return ret;
+    }
+    
+    // *************************************************************** I N N E R
+    
+    /**
+     * An ArrayList overload for Notes, that adds a constructor with the IDs and
+     * implements Save.
+     */
+    public static class Notes extends ArrayList<Note> implements Save<JsonArray> {
+
+        /**
+         * Creates a new list of Notes.
+         */
+        public Notes(){
+            super();
+        }
+        
+        /**
+         * Creates a new list of Notes from JSON.
+         * @param json the saved data
+         */
+        public Notes(JsonArray json){
+            super(json.size());
+            json.forEach(v -> add(new Note(v)));
+        }
+        
+        @Override
+        public JsonArray save() {
+            JsonArray json = new JsonArray();
+            super.forEach(n -> json.add(n.save()));
+            return json;
+        }
+        
     }
     
 }
