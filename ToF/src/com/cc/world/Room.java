@@ -29,7 +29,9 @@ import com.cc.world.Note.Notes;
 import com.cc.world.Path.UnreachableRoomException;
 import com.cc.world.links.Link;
 import com.eclipsesource.json.JsonObject;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -439,6 +441,22 @@ public class Room implements Save<JsonObject> {
     
     public ItemContainer getItems() {
         return items;
+    }
+    
+    /**
+     * Does this room contains notes?
+     * @return {@code true} if at least one note is present.
+     */
+    public boolean hasNotes() {
+        return !notes.isEmpty();
+    }
+    
+    /**
+     * Returns an unmodifiable view of the notes.
+     * @return An unmodifiable view of the notes.
+     */
+    public List<Note> getNotes() {
+        return Collections.unmodifiableList(notes);
     }
 
     @Override
