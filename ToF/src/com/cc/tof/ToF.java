@@ -27,15 +27,21 @@ import com.cc.world.World;
 import com.cc.world.generator.DefaultGenerator;
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -97,6 +103,40 @@ public class ToF extends Application {
             return ret;
         } catch (IOException ex) {
             throw new IllegalArgumentException("Cannot open resource '"+name+"'", ex);
+        } catch (NoSuchElementException ex) {
+            throw new IllegalArgumentException("Found no resource of the name '"+name+"'", ex);
+        }
+    }
+    
+    /**
+     * Creates a Stream of the lines in the resource.
+     * <p>This method is not optimized for big files (the full file is read into
+     * the memory before being returned).
+     * @param name the name of the resource
+     * @return A Stream of each line in the resource.
+     */
+    public static Stream<String> getResourceByLine(String name) {
+        try {
+            System.out.print("[Data]\tOpening resource '"+name+"'...");
+            BufferedReader reader;
+            {
+                ClassLoader loader = new ToF().getClass().getClassLoader();
+                InputStream input = loader.getResourceAsStream(name);
+                InputStreamReader in = new InputStreamReader(input, StandardCharsets.UTF_8);
+                reader = new BufferedReader(in);
+            }
+            System.out.print(" reading...");
+
+            List<String> lines = new ArrayList<>();
+            try {
+                String currentLine;
+                while((currentLine = reader.readLine()) != null)
+                    lines.add(currentLine);
+            } catch (IOException ex) {
+                throw new RuntimeException("Cannot read resource '"+name+"'", ex);
+            }
+            System.out.println(" done.");
+            return lines.stream();
         } catch (NoSuchElementException ex) {
             throw new IllegalArgumentException("Found no resource of the name '"+name+"'", ex);
         }
