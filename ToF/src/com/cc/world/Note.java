@@ -28,16 +28,11 @@ import com.cc.utils.Save;
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonValue;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Stream;
 
 /**
  * A note is an information that can be found in a Room.
@@ -119,20 +114,12 @@ public class Note implements Save<JsonValue> {
     static Map<Integer, String> loadNotes(){
         Map<Integer, String> ret = new HashMap<>();
         
-        // Inspired from https://stackoverflow.com/a/5868528/5666171
-        try (Stream<String> stream = Files.lines(
-                Paths.get(ToF.getResource("notes.txt").getPath()),
-                StandardCharsets.UTF_8)) {
-            
-            stream.filter(l -> l != null && l.length() != 0)
-                    .filter(l -> l.charAt(0) != '#')            // Remove comments
-                    .map(l -> l.split("\\s+", 2))               // Split ID/text
-                    .filter(l -> l[0].matches("\\A\\d+\\z"))    // Check if ID correct
-                    .forEach(l -> ret.put(Integer.valueOf(l[0]), l[1]));
-            
-        } catch (IOException ex) {
-            throw new RuntimeException("Cannot load the resource notes.txt.", ex);
-        }
+        ToF.getResourceByLine("notes.txt")
+                .filter(l -> l != null && l.length() != 0)
+                .filter(l -> l.charAt(0) != '#')            // Remove comments
+                .map(l -> l.split("\\s+", 2))               // Split ID/text
+                .filter(l -> l[0].matches("\\A\\d+\\z"))    // Check if ID correct
+                .forEach(l -> ret.put(Integer.valueOf(l[0]), l[1]));
         
         return ret;
     }
