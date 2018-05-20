@@ -1,0 +1,12 @@
+# Notes
+# Every line beginning by a # is ignored
+# Every empty line is ignored
+# Each line should be written in the following format:
+# 1 The user...
+# (that is; INTEGER SPACE TEXT)
+
+1 Welcome to this World
+216 This is such a new Place
+37 Fuck me in the ass 'cause I love Jesus
+47  TEST
+32      Spaces
