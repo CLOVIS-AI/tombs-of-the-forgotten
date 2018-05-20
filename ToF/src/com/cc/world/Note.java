@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -134,6 +135,14 @@ public class Note implements Save<JsonValue> {
         }
         
         return ret;
+    }
+    
+    /**
+     * A Set of all the available Note IDs.
+     * @return The IDs.
+     */
+    public static final Set<Integer> getIDs(){
+        return notes.keySet();
     }
     
     // *************************************************************** I N N E R
