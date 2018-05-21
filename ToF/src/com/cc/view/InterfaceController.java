@@ -230,9 +230,23 @@ public class InterfaceController implements Initializable {
      * @see #restPopup(javafx.event.ActionEvent) Load a new JavaFX window
      */
     public void restPopup(Button b) {
-        b.setOnAction(e -> {
-            restPopup(e);
-        });
+        b.setOnAction(e -> restPopup(e));
+    }
+    
+    public void lootPopup(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(ToF.getResource("Loot.fxml"));
+            Parent menu = (Parent) fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(menu));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void lootPopup(Button b) {
+        b.setOnAction(e -> lootPopup(e));
     }
 
     private static final Color CANNOT_MOVE = Color.GRAY;
