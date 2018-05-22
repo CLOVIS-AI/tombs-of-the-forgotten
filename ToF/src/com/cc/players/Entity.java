@@ -420,6 +420,22 @@ public abstract class Entity implements Timable, Save<JsonObject> {
         a.add(inventory.getWeightBar());
         return a;
     }
+    
+    public Bar getHealthBar() {
+        return health;
+    }
+    
+    public Bar getManaBar() {
+        return mana;
+    }
+    
+    public Bar getStaminaBar() {
+        return stamina;
+    }
+    
+    public Bar getWeightBar() {
+        return inventory.getWeightBar();
+    }
 
     /**
      * Verifies if a specific item is contained in the player's inventory.

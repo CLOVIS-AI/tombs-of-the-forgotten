@@ -25,6 +25,7 @@ package com.cc.view;
 
 import com.cc.players.Player;
 import com.cc.tof.ToF;
+import com.cc.utils.Bar;
 import com.cc.world.Direction;
 import static com.cc.world.Direction.EAST;
 import static com.cc.world.Direction.NORTH;
@@ -134,6 +135,8 @@ public class InterfaceController implements Initializable {
          * ******************************SAVE*********************************
          */
         ButtonSave.setOnAction(e -> ToF.save((new File("save.json"))));
+        
+        updateBars();
                 
     }
 
@@ -249,9 +252,9 @@ public class InterfaceController implements Initializable {
         b.setOnAction(e -> lootPopup(e));
     }
 
-    private static final Color CANNOT_MOVE = Color.GRAY;
+    private static final Color CANNOT_MOVE = Color.SLATEGRAY;
     private static final Color CAN_MOVE = Color.BLACK;
-    private static final Color SELECTED = Color.RED;
+    private static final Color SELECTED = Color.SNOW;
 
     /**
      * Set a specific color on a button depending whether the player can 
@@ -289,5 +292,17 @@ public class InterfaceController implements Initializable {
         move(p, SOUTH, (Shape) MoveSouth);
         move(p, EAST, (Shape) MoveEast);
         move(p, WEST, (Shape) MoveWest);
+    }
+    
+    public void fillBar(Bar b, ProgressBar bar) {
+        
+        bar.setProgress(b.getCurrent()*1.0/b.getMaximum());
+    }
+    
+    public void updateBars() {
+        fillBar(ToF.getWorld().getPlayer().getHealthBar(), BarHP);
+        fillBar(ToF.getWorld().getPlayer().getManaBar(), BarMana);
+        fillBar(ToF.getWorld().getPlayer().getStaminaBar(), BarStamina);
+        fillBar(ToF.getWorld().getPlayer().getWeightBar(), BarPods);
     }
 }
