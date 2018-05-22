@@ -22,6 +22,7 @@
  */
 package com.cc.items;
 
+import static com.cc.items.EntityAction.Mode.MODIFICATION;
 import static com.cc.items.EntityAction.Operation.ADD;
 import com.cc.players.Entity;
 import com.cc.players.Entity.Stat;
@@ -40,6 +41,7 @@ public class EntityAction implements Action {
     private final Target target;
     private final int value;
     private final Operation operation;
+    private final Mode mode;
     
     /**
      * Creates a new Action
@@ -48,11 +50,13 @@ public class EntityAction implements Action {
      * @param stat the stat that will be modified
      * @param value how much it will be modified
      */
-    public EntityAction(Target target, Operation operation, Stat stat, int value){
+    public EntityAction(Target target, Operation operation, Stat stat, int value,
+            Mode mode){
         this.target = target;
         this.stat = stat;
         this.value = value;
         this.operation = operation;
+        this.mode = mode;
     }
     
     /**
@@ -60,8 +64,8 @@ public class EntityAction implements Action {
      * @param target the target of the action
      * @param operation the operation that will be executed on that target 
      */
-    public EntityAction(Target target, Operation operation){
-        this(target, operation, null, 0);
+    public EntityAction(Target target, Operation operation, Mode mode){
+        this(target, operation, null, 0, mode);
     }
     
     /**
@@ -72,16 +76,18 @@ public class EntityAction implements Action {
         this(Target.valueOf(   json.getString("target", null)),
              Operation.valueOf(json.getString("operation", null)),
              Stat.valueOf(     json.getString("stat", null)),
-                               json.getInt("value", 0));
+                               json.getInt("value", 0),
+             Mode.valueOf(     json.getString("mode", null)));
     }
     
     @Override
     public JsonObject save() {
         return new JsonObject()
-                .add("target", target.toString())
-                .add("stat", stat.toString())
+                .add("target", target.name())
+                .add("stat", stat.name())
                 .add("value", value)
-                .add("operation", operation.toString());
+                .add("operation", operation.name())
+                .add("mode", mode.name());
     }
     
     /**
@@ -97,6 +103,7 @@ public class EntityAction implements Action {
     public Message getEffects() {
         return new Message()
                 .add(stat)
+                .add(mode != MODIFICATION ? " ("+mode+")" : "")
                 .add(": ")
                 .add(operation == ADD ? value : -value);
     }
@@ -161,6 +168,10 @@ public class EntityAction implements Action {
         public boolean canExecute(Entity entity, Stat stat, int value){
             return stat.canIncrement(entity, modifier.apply(value));
         }
+    }
+    
+    public enum Mode {
+        MODIFICATION, BONUS, PERMANENT;
     }
     
     // *************************************************************** O T H E R
