@@ -35,9 +35,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -126,17 +124,7 @@ public class ToF extends Application {
                 reader = new BufferedReader(in);
             }
             System.out.print(" reading...");
-
-            List<String> lines = new ArrayList<>();
-            try {
-                String currentLine;
-                while((currentLine = reader.readLine()) != null)
-                    lines.add(currentLine);
-            } catch (IOException ex) {
-                throw new RuntimeException("Cannot read resource '"+name+"'", ex);
-            }
-            System.out.println(" done.");
-            return lines.stream();
+            return reader.lines();
         } catch (NoSuchElementException ex) {
             throw new IllegalArgumentException("Found no resource of the name '"+name+"'", ex);
         }
