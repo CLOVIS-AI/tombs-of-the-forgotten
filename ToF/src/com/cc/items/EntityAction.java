@@ -39,7 +39,7 @@ public class EntityAction implements Action {
 
     private final Stat stat;
     private final Target target;
-    private final int value;
+    private final int value, turns;
     private final Operation operation;
     private final Mode mode;
     
@@ -57,6 +57,7 @@ public class EntityAction implements Action {
         this.value = value;
         this.operation = operation;
         this.mode = mode;
+        this.turns = 1;
     }
     
     /**
@@ -96,7 +97,7 @@ public class EntityAction implements Action {
      */
     @Override
     public void execute(Entity e){
-        operation.execute(target.select(e), stat, value);
+        mode.execute(target.select(e), stat, value, turns);
     }
 
     @Override
@@ -110,7 +111,7 @@ public class EntityAction implements Action {
 
     @Override
     public boolean canUse(Entity entity) {
-        return operation.canExecute(target.select(entity), stat, value);
+        return mode.canExecute(target.select(entity), stat, value);
     }
     
     // ************************************************************* S T A T I C
@@ -149,29 +150,43 @@ public class EntityAction implements Action {
         }
         
         /**
-         * Executes this operation.
+         * Calculates the effect of an operation.
          * @param entity the entity the operation is executed on
-         * @param stat the entity's stat that is modified
          * @param value how effective this operation is
          */
-        public void execute(Entity entity, Stat stat, int value){
-            stat.increment(entity, modifier.apply(value));
-        }
-        
-        /**
-         * Is it possible to execute this operation?
-         * @param entity the entity the operation is executed one
-         * @param stat the entity's stat that is modified
-         * @param value how effective the operation is
-         * @return {@code true} if the operation can be performed.
-         */
-        public boolean canExecute(Entity entity, Stat stat, int value){
-            return stat.canIncrement(entity, modifier.apply(value));
+        public int getValue(Entity entity, int value){
+            return modifier.apply(value);
         }
     }
     
     public enum Mode {
-        MODIFICATION, BONUS, PERMANENT;
+        MODIFICATION {
+            @Override
+            public void execute(Entity e, Stat s, int value, int turns) {
+                s.increment(e, value);
+            }
+            @Override
+            public boolean canExecute(Entity e, Stat s, int value) {
+                return s.canIncrement(e, value);
+            }
+        }, BONUS {
+            @Override
+            public void execute(Entity e, Stat s, int value, int turns) {
+                s.newBonus(e, turns, value);
+            }
+        }, PERMANENT {
+            @Override
+            public void execute(Entity e, Stat s, int value, int turns) {
+                throw new IllegalStateException("You cannot execute a permanent item!");
+            }
+            @Override
+            public boolean canExecute(Entity e, Stat s, int value) {
+                return false;
+            }
+        };
+        
+        public abstract void execute(Entity e, Stat s, int value, int turns);
+        public boolean canExecute(Entity e, Stat s, int value){ return true; }
     }
     
     // *************************************************************** O T H E R
