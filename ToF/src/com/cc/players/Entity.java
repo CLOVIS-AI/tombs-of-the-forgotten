@@ -554,12 +554,35 @@ public abstract class Entity implements Timable, Save<JsonObject> {
             this.bar = bar;
         }
         
-        public void set(Entity e, int value){
+        /**
+         * Increments or decrements a stat.
+         * @param e the entity that is affected
+         * @param value by how much the value is incremented (negative values 
+         * for decrements)
+         */
+        public void increment(Entity e, int value){
             bar.apply(e).add(value, ACCEPT);
         }
         
-        public boolean canSet(Entity e, int value){
+        /**
+         * Checks if the stat can be incremented or decremented.
+         * @param e the entity that is affected
+         * @param value by how much the value is incremented (negative values
+         * for decrements)
+         * @return {@code true} if the stat can be incremented/decremented.
+         */
+        public boolean canIncrement(Entity e, int value){
             return bar.apply(e).canAdd(value);
+        }
+        
+        /**
+         * Adds a bonus to the entity
+         * @param e the entity that is affected
+         * @param turns how many turns the bonus will last
+         * @param value by how much the bonus is affected
+         */
+        public void newBonus(Entity e, int turns, int value){
+            bar.apply(e).addBonus(turns, value);
         }
     }
 }

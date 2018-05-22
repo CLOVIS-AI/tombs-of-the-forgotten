@@ -148,7 +148,7 @@ public class EntityAction implements Action {
          * @param value how effective this operation is
          */
         public void execute(Entity entity, Stat stat, int value){
-            stat.set(entity, modifier.apply(value));
+            stat.increment(entity, modifier.apply(value));
         }
         
         /**
@@ -159,7 +159,7 @@ public class EntityAction implements Action {
          * @return {@code true} if the operation can be performed.
          */
         public boolean canExecute(Entity entity, Stat stat, int value){
-            return stat.canSet(entity, modifier.apply(value));
+            return stat.canIncrement(entity, modifier.apply(value));
         }
     }
     
