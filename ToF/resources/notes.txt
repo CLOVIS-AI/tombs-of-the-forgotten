@@ -1,0 +1,19 @@
+# Notes
+# Every line beginning by a # is ignored
+# Every empty line is ignored
+# Each line should be written in the following format:
+# 1 The user...
+# (that is; INTEGER SPACE TEXT)
+
+# The rules with IDs are the following:
+#  - Any positive integer is allowed (only composed of digits [0..9])
+#  - To allow backward-compatibility, IDs should not be removed.
+# This means that, when updating this file, you CAN:
+#  - Add a new ID/content pair
+#  - Change the content of a particular ID
+# But you CANT:
+#  - Remove an ID (otherwise players who created their world on an old version
+#    might not be able to load their save in the new version)
+
+1   Welcome to this world.
+2   This story has been forgotten long ago.

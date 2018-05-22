@@ -29,19 +29,22 @@ import com.cc.world.generator.DefaultGenerator;
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.WriterConfig;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Writer;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -96,35 +99,6 @@ public class ToF extends Application {
     }
 
     /**
-     * Prompts the user for input.
-     *
-     * @return The input
-     */
-    public static String getInput() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter your command : ");
-        String input = scanner.nextLine();
-        return input;
-    }
-
-    /**
-     * Parses the input to get the different parts.
-     *
-     * @param input the input
-     * @return An action object
-     */
-    public static Action analyseInput(String input) {
-        String[] s = input.split(" ");
-        String[] parameters = new String[s.length - 1];
-
-        for (int i = 0; i < s.length - 1; i++) {
-            parameters[i] = s[i + 1];
-        }
-
-        return new Action(s[0], parameters);
-    }
-
-    /**
      * Gets a resource of the project. Resources should be located in the
      * 'ToF/resources' directory.
      *
@@ -136,7 +110,7 @@ public class ToF extends Application {
         try {
             enm = new ToF().getClass().getClassLoader().getResources(name);
             URL ret = enm.nextElement();
-            System.out.println("Using resource " + ret);
+            System.out.println("[Data]\tUsing resource " + ret);
             return ret;
         } catch (IOException ex) {
             throw new IllegalArgumentException("Cannot open resource '" + name + "'", ex);
@@ -144,7 +118,31 @@ public class ToF extends Application {
             throw new IllegalArgumentException("Found no resource of the name '" + name + "'", ex);
         }
     }
-
+    
+    /**
+     * Creates a Stream of the lines in the resource.
+     * <p>This method is not optimized for big files (the full file is read into
+     * the memory before being returned).
+     * @param name the name of the resource
+     * @return A Stream of each line in the resource.
+     */
+    public static Stream<String> getResourceByLine(String name) {
+        try {
+            System.out.print("[Data]\tOpening resource '"+name+"'...");
+            BufferedReader reader;
+            {
+                ClassLoader loader = new ToF().getClass().getClassLoader();
+                InputStream input = loader.getResourceAsStream(name);
+                InputStreamReader in = new InputStreamReader(input, StandardCharsets.UTF_8);
+                reader = new BufferedReader(in);
+            }
+            System.out.print(" reading...");
+            return reader.lines();
+        } catch (NoSuchElementException ex) {
+            throw new IllegalArgumentException("Found no resource of the name '"+name+"'", ex);
+        }
+    }
+    
     public static void newGame() {
         long time = System.currentTimeMillis();
 
@@ -165,6 +163,7 @@ public class ToF extends Application {
 
     /**
      * Loads the game from a save file.
+     * @param file Loads the game from a file.
      */
     public static void load(File file) {
         try {
@@ -203,12 +202,16 @@ public class ToF extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         View view = new View(this, primaryStage);
-
-        menu = FXMLLoader.load(getResource("interface.fxml"));
-        menu.relocate(-255, 0);
+        
+        System.out.println("[ToF]\tLoading general menu...");
+        menu = FXMLLoader.load(getResource("Menu.fxml"));
+        System.out.println("[ToF]\tMenu loaded.");
+        
+        System.out.println("[ToF]\tCreating main scene...");
         Scene scene = new Scene(menu, 1000, 600);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Tomb of the Forgotten");
+        primaryStage.setTitle("Tombs of the Forgotten");
+        System.out.println("[ToF]\tLaunching the game.");
         primaryStage.show();
     }
 

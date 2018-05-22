@@ -79,6 +79,22 @@ public final class Item implements Save<JsonObject> {
     }
     
     /**
+     * Creates an Item.
+     * @param name its name
+     * @param description its description
+     * @param rarity its rarity
+     * @param weight its weight (in grams)
+     * @param maxDurability its maximum durability
+     * @param actions its actions
+     */
+    public Item(String name, String description, Rarity rarity, int weight,
+            int maxDurability, List<Action> actions){
+        this(name, description, rarity, weight,
+             new Bar("Durability", 0, maxDurability, maxDurability));
+        this.actions.addAll(actions);
+    }
+    
+    /**
      * Loads an Item from JSON data.
      * @param json the saved data
      */
@@ -108,12 +124,24 @@ public final class Item implements Save<JsonObject> {
     }
     
     /**
+     * Can an entity use this item?
+     * @param entity the entity
+     * @return {@code true} if it can.
+     */
+    public boolean canUse(Entity entity){
+        if(isBroken())
+            return false;
+        
+        return actions.stream().allMatch(a -> a.canUse(entity));
+    }
+    
+    /**
      * Gets the effects of this Item.
      * @return the effects of this Item.
      */
     public List<Message> getEffects(){
         ArrayList<Message> messages = new ArrayList<>();
-        actions.forEach(a -> a.addEffects(messages));
+        actions.forEach(a -> messages.add(a.getEffects()));
         return messages;
     }
     

@@ -38,7 +38,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.BiConsumer;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * A class that represents an Entity.
@@ -478,6 +479,10 @@ public abstract class Entity implements Timable, Save<JsonObject> {
     public Inventory getInventory() {
         return inventory;
     }
+    
+    public Stream<Item> selectUsableItems() {
+        return inventory.stream();
+    }
 
     /**
      * The world this entity is in.
@@ -554,38 +559,23 @@ public abstract class Entity implements Timable, Save<JsonObject> {
      */
     public enum Stat {
         /** The mana of an Entity. */
-        MANA(
-            (e, v) -> e.addMana(v),
-            (e, v) -> e.useMana(v)
-        ),
+        MANA(e -> e.mana),
         /** The health of an Entity. */
-        HEALTH(
-            (e, v) -> e.heal(v),
-            (e, v) -> e.hurt(v)
-        ),
+        HEALTH(e -> e.health),
         /** The stamina of an Entity. */
-        STAMINA(
-            (e, v) -> e.addStamina(v),
-            (e, v) -> e.useStamina(v)
-        );
+        STAMINA(e -> e.stamina);
         
-        private final BiConsumer<Entity, Integer> add, remove;
-        Stat(BiConsumer<Entity, Integer> add, BiConsumer<Entity, Integer> remove){
-            this.add = add; this.remove = remove;
+        private final Function<Entity, Bar> bar;
+        Stat(Function<Entity, Bar> bar){
+            this.bar = bar;
         }
         
-        /**
-         * Increases the value of this stat for the specified entity.
-         * @param entity the entity
-         * @param value how much the stat will be increased
-         */
-        public void add(Entity entity, int value){add.accept(entity, value);}
+        public void set(Entity e, int value){
+            bar.apply(e).add(value, ACCEPT);
+        }
         
-        /**
-         * Decreases the value of this stat for the specified entity.
-         * @param entity the entity
-         * @param value how much the stat will be decreased
-         */
-        public void remove(Entity entity, int value){remove.accept(entity, value);};
+        public boolean canSet(Entity e, int value){
+            return bar.apply(e).canAdd(value);
+        }
     }
 }

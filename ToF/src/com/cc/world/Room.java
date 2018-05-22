@@ -25,10 +25,13 @@ package com.cc.world;
 import com.cc.items.ItemContainer;
 import com.cc.players.Entity;
 import com.cc.utils.Save;
+import com.cc.world.Note.Notes;
 import com.cc.world.Path.UnreachableRoomException;
 import com.cc.world.links.Link;
 import com.eclipsesource.json.JsonObject;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -52,6 +55,7 @@ public class Room implements Save<JsonObject> {
     private boolean isGenerated = false;
     
     private ItemContainer items;
+    private Notes notes;
     
     public Room(String description){
         this(description, null, null);
@@ -64,6 +68,7 @@ public class Room implements Save<JsonObject> {
         this.world = world;
         isGenerated = true;
         items = new ItemContainer(description);
+        notes = new Notes();
     }
     
     /**
@@ -74,8 +79,9 @@ public class Room implements Save<JsonObject> {
      */
     public Room(JsonObject json){
         this(json.getString("desc", null));
-        this.items = new ItemContainer(json.get("items").asObject());
-        this.location = new Location(json.get("location").asObject());
+        this.items =    new ItemContainer(  json.get("items").asObject()    );
+        this.location = new Location(       json.get("location").asObject() );
+        this.notes =    new Notes(          json.get("notes").asArray()     );
     }
     
     /**
@@ -436,6 +442,35 @@ public class Room implements Save<JsonObject> {
     public ItemContainer getItems() {
         return items;
     }
+    
+    /**
+     * Adds a note to this room.
+     * @param note the note
+     * @throws IllegalStateException if this room's generation is finished
+     */
+    public void addNote(Note note) {
+        if(isGenerated)
+            throw new IllegalStateException("Cannot add a note ("+note+") to an"
+                    + " already generated room:" + this);
+        
+        notes.add(note);
+    }
+    
+    /**
+     * Does this room contains notes?
+     * @return {@code true} if at least one note is present.
+     */
+    public boolean hasNotes() {
+        return !notes.isEmpty();
+    }
+    
+    /**
+     * Returns an unmodifiable view of the notes.
+     * @return An unmodifiable view of the notes.
+     */
+    public List<Note> getNotes() {
+        return Collections.unmodifiableList(notes);
+    }
 
     @Override
     public int hashCode() {
@@ -493,7 +528,8 @@ public class Room implements Save<JsonObject> {
         return new JsonObject()
                 .add("desc", description)
                 .add("items", items.save())
-                .add("location", location.save());
+                .add("location", location.save())
+                .add("notes", notes.save());
     }
     
 }

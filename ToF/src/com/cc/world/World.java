@@ -24,6 +24,7 @@ package com.cc.world;
 
 import com.cc.players.Entity;
 import com.cc.players.Player;
+import com.cc.players.SimpleAI;
 import com.cc.utils.Save;
 import com.cc.utils.messages.Message;
 import com.cc.world.links.Link;
@@ -122,8 +123,8 @@ public class World implements Timable, Save<JsonObject> {
 
     final List<Entity> extractEntities(JsonArray json) {
         List<Entity> list = new ArrayList<>(json.size());
-        for (JsonValue j : json.values()) {
-            // @TODO in #78: Add the entity
+        for(JsonValue j : json.values()){
+            list.add(new SimpleAI(j.asObject()));
         }
         return list;
     }
@@ -141,8 +142,11 @@ public class World implements Timable, Save<JsonObject> {
     @Override
     public void nextTick() {
         player.nextTick();
-        entities.forEach(Entity::nextTick);
-        entities.removeIf(Entity::isDead);
+        
+        entities.removeIf(e -> {
+            e.nextTick();
+            return e.isDead();
+        });
     }
 
     // *********************************************************** G E T T E R S
