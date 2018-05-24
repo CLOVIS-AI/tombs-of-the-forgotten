@@ -22,6 +22,7 @@
  */
 package com.cc.items;
 
+import static com.cc.items.EntityAction.Mode.MODIFICATION;
 import static com.cc.items.EntityAction.Operation.ADD;
 import static com.cc.items.EntityAction.Target.SELF;
 import static com.cc.players.Entity.Stat.MANA;
@@ -65,12 +66,12 @@ public class ActionTest {
     @Test
     public void testSave() {
         System.out.println("Action#save&load");
-        EntityAction a = new EntityAction(SELF, ADD, MANA, 2);
+        EntityAction a = new EntityAction(SELF, ADD, MANA, 2, MODIFICATION);
         JsonObject json = a.save();
         EntityAction b = new EntityAction(json);
         assertTrue(Objects.equals(a, b));
         
-        EntityAction c = new EntityAction(SELF, ADD, MANA, 3);
+        EntityAction c = new EntityAction(SELF, ADD, MANA, 3, MODIFICATION);
         assertFalse(Objects.equals(a, c));
     }
 
@@ -80,9 +81,9 @@ public class ActionTest {
     @Test
     public void testEquals() {
         System.out.println("Action#equals");
-        EntityAction a = new EntityAction(SELF, ADD, MANA, 0);
-        EntityAction b = new EntityAction(SELF, ADD, MANA, 0);
-        EntityAction c = new EntityAction(SELF, ADD, MANA, 1);
+        EntityAction a = new EntityAction(SELF, ADD, MANA, 0, MODIFICATION);
+        EntityAction b = new EntityAction(SELF, ADD, MANA, 0, MODIFICATION);
+        EntityAction c = new EntityAction(SELF, ADD, MANA, 1, MODIFICATION);
         
         assertTrue(a.equals(b));
         assertFalse(a.equals(c));
