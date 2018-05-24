@@ -22,6 +22,8 @@
  */
 package com.cc.items;
 
+import com.cc.players.Entity.Stat;
+import com.cc.utils.Bar;
 import com.cc.utils.Save;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
@@ -161,6 +163,17 @@ public class ItemContainer implements Save<JsonObject> {
         return new JsonObject()
                 .add("description", description.orElse(""))
                 .add("items", items);
+    }
+    
+    /**
+     * Adds to the bar the total amount of every bonus of type "permanent".
+     * @param stat the stat that is linked to the bar
+     * @param bar the bar
+     */
+    public void applyWears(Stat stat, Bar bar){
+        for(Item item : items){
+            bar.addBonus(1, item.getWear(stat));
+        }
     }
     
     /**

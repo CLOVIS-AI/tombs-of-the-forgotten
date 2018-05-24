@@ -23,6 +23,7 @@
 package com.cc.items;
 
 import com.cc.players.Entity;
+import com.cc.players.Entity.Stat;
 import com.cc.utils.Bar;
 import static com.cc.utils.Bar.Behavior.ACCEPT;
 import com.cc.utils.Save;
@@ -192,6 +193,17 @@ public final class Item implements Save<JsonObject> {
      */
     public int getDurability(){
         return durability.getCurrent();
+    }
+    
+    /**
+     * Gets the way a stat is modified by worn effects of this object.
+     * @param stat the stat
+     * @return The effect on the specified stat
+     */
+    public int getWear(Stat stat){
+        return actions.stream()
+                .mapToInt(a -> a.getWear(stat))
+                .sum();
     }
 
     @Override
