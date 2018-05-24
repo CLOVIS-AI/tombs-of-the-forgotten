@@ -28,6 +28,7 @@ import com.cc.utils.Save;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -78,7 +79,7 @@ public class ItemContainer implements Save<JsonObject> {
      * @return A container.
      */
     public List<Item> getItems() {
-        return new ArrayList<>(items);
+        return Collections.unmodifiableList(items);
     }
 
     /**
