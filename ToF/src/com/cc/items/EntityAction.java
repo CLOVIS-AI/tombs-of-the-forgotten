@@ -200,6 +200,7 @@ public class EntityAction implements Action {
         hash = 37 * hash + Objects.hashCode(this.target);
         hash = 37 * hash + this.value;
         hash = 37 * hash + Objects.hashCode(this.operation);
+        hash = 37 * hash + Objects.hashCode(this.mode);
         return hash;
     }
 
@@ -225,6 +226,9 @@ public class EntityAction implements Action {
             return false;
         }
         if (this.operation != other.operation) {
+            return false;
+        }
+        if (this.mode != other.mode) {
             return false;
         }
         return true;
