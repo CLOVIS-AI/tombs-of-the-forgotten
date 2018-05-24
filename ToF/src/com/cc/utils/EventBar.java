@@ -31,6 +31,7 @@ import java.util.function.Consumer;
 public class EventBar extends Bar {
     
     private Consumer<EventBar> onFull, onEmpty;
+    private Consumer<EventBar> onBonusUpdate;
     
     /**
      * Creates a Bar.
@@ -78,6 +79,14 @@ public class EventBar extends Bar {
         this.onEmpty = onEmpty;
     }
     
+    /**
+     * Sets the action to be taken on the event of the bar updated.
+     * @param onUpdate the action (the parameter is this bar)
+     */
+    public void setOnBonusUpdate(Consumer<EventBar> onUpdate) {
+        this.onBonusUpdate = onUpdate;
+    }
+    
     @Override
     public void add(int value, Behavior mode){
         super.add(value, mode);
@@ -92,5 +101,11 @@ public class EventBar extends Bar {
         
         if(onEmpty != null && getCurrent() == getMinimum())
             onEmpty.accept(this);
+    }
+    
+    @Override
+    public void updateBonus() {
+        super.updateBonus();
+        onBonusUpdate.accept(this);
     }
 }

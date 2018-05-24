@@ -209,7 +209,7 @@ public class Bar implements Save<JsonObject> {
         updateBonus();
     }
     
-    final void updateBonus(){
+    protected void updateBonus(){
         bonusTotal = 0;
         
         for(Pair<Integer, Integer> p : bonuses)
