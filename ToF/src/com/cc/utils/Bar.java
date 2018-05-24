@@ -119,7 +119,7 @@ public class Bar implements Save<JsonObject> {
     
     /**
      * Increments the value of this bar by a set number.
-     * <p>Note that this is not the same as a bonus. See {@link #addBonus(int,int)}.
+     * <p>Note that this is not the same as a bonus. See {@link #addBonus(int,int,boolean)}.
      * @param value how much you'd like to increment to value of this bar
      * @param mode what should do this method if the maximum value is reached.
      */
@@ -151,7 +151,7 @@ public class Bar implements Save<JsonObject> {
     
     /**
      * Decrements the value of this bar by a set number.
-     * <p>Note that this is not the same as a bonus. See {@link #addBonus(int,int)}.
+     * <p>Note that this is not the same as a bonus. See {@link #addBonus(int,int,boolean)}.
      * @param value how much you'd like to decrement to value of this bar
      * @param mode what should do this method if the minimum value is reached.
      * @throws IllegalArgumentException for negative values
