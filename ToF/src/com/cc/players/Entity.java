@@ -24,8 +24,13 @@ package com.cc.players;
 
 import com.cc.items.Inventory;
 import com.cc.items.Item;
+import static com.cc.players.Entity.Stat.HEALTH;
+import static com.cc.players.Entity.Stat.MANA;
+import static com.cc.players.Entity.Stat.PODS;
+import static com.cc.players.Entity.Stat.STAMINA;
 import com.cc.utils.Bar;
 import static com.cc.utils.Bar.Behavior.ACCEPT;
+import com.cc.utils.EventBar;
 import com.cc.utils.Save;
 import com.cc.world.Direction;
 import com.cc.world.Location;
@@ -51,17 +56,17 @@ public abstract class Entity implements Timable, Save<JsonObject> {
     /**
      * Health bar. Game over when 0.
      */
-    private final Bar health;
+    private final EventBar health;
 
     /**
      * Strength bar. Used for physical attacks.
      */
-    private final Bar stamina;
+    private final EventBar stamina;
 
     /**
      * Mana bar. Used for magical attacks.
      */
-    private final Bar mana;
+    private final EventBar mana;
     
     private Location location;
     private World world;
@@ -118,12 +123,18 @@ public abstract class Entity implements Timable, Save<JsonObject> {
     public Entity(String name, Bar health, Bar stamina, Bar mana, Location location, 
             Entity opponent, Inventory inventory) {
         this.name = name;
-        this.health = new Bar(health);
-        this.stamina = new Bar(stamina);
-        this.mana = new Bar(mana);
+        this.health = new EventBar(health)
+                .setOnBonusUpdate(t -> inventory.applyWears(HEALTH, t));
+        this.stamina = new EventBar(stamina)
+                .setOnBonusUpdate(t -> inventory.applyWears(STAMINA, t));
+        this.mana = new EventBar(mana)
+                .setOnBonusUpdate(t -> inventory.applyWears(MANA, t));
         this.location = location;
         this.opponent = Optional.ofNullable(opponent);
         this.inventory = inventory;
+        this.inventory.getWeightBar()
+                .setOnBonusUpdate(t -> inventory.applyWears(PODS, t));
+                
     }
     
     /**
@@ -547,7 +558,9 @@ public abstract class Entity implements Timable, Save<JsonObject> {
         /** The health of an Entity. */
         HEALTH(e -> e.health),
         /** The stamina of an Entity. */
-        STAMINA(e -> e.stamina);
+        STAMINA(e -> e.stamina),
+        /** The pods of an Entity. */
+        PODS(e -> e.inventory.getWeightBar());
         
         private final Function<Entity, Bar> bar;
         Stat(Function<Entity, Bar> bar){
