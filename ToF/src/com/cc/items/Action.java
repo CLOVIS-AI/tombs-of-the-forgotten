@@ -24,6 +24,7 @@
 package com.cc.items;
 
 import com.cc.players.Entity;
+import com.cc.players.Entity.Stat;
 import com.cc.utils.Save;
 import com.cc.utils.messages.Message;
 import com.eclipsesource.json.JsonObject;
@@ -53,6 +54,14 @@ public interface Action extends Save<JsonObject> {
      * @return The effect of this action, as a Message.
      */
     public Message getEffects();
+    
+    /**
+     * Gets the total effect of the wearable items for this object and a
+     * specific stat.
+     * @param stat the stat 
+     * @return The effect of this object on the stat.
+     */
+    public int getWear(Stat stat);
     
     /**
      * Creates an Action object from the JSON data.

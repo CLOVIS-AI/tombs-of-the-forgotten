@@ -114,6 +114,11 @@ public class EntityAction implements Action {
     public boolean canUse(Entity entity) {
         return mode.canExecute(target.select(entity), stat, value);
     }
+
+    @Override
+    public int getWear(Stat requested) {
+        return mode.getWear(stat, requested, value);
+    }
     
     // ************************************************************* S T A T I C
     
@@ -185,10 +190,17 @@ public class EntityAction implements Action {
             public boolean canExecute(Entity e, Stat s, int value) {
                 return false;
             }
+            @Override
+            public int getWear(Stat current, Stat requested, int value) {
+                return current == requested ? value : 0;
+            }
         };
         
         public abstract void execute(Entity e, Stat s, int value, int turns);
         public boolean canExecute(Entity e, Stat s, int value){ return true; }
+        public int getWear(Stat current, Stat requested, int value){ 
+            throw new IllegalStateException("Cannot wear this action: "+this);
+        }
     }
     
     // *************************************************************** O T H E R
@@ -232,6 +244,11 @@ public class EntityAction implements Action {
             return false;
         }
         return true;
+    }
+    
+    @Override
+    public String toString() {
+        return mode + ":" + target + ":" + stat + ":" + operation + ":" + value;
     }
     
     /**
