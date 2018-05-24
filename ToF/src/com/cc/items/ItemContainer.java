@@ -81,6 +81,18 @@ public class ItemContainer implements Save<JsonObject> {
     public List<Item> getItems() {
         return Collections.unmodifiableList(items);
     }
+    
+    /**
+     * Gets all the items that can only be used once.
+     * <p>Note that items that can be used multiple times (eg. 5 times) but were
+     * already almost used (eg. used 4 times, so 1 use is left) <b>are</b>
+     * included.
+     * @return The items that can only be used once.
+     */
+    public Stream<Item> getUniqueUsage() {
+        return items.stream()
+                .filter(i -> i.getDurability() == 1);
+    }
 
     /**
      * The description of a container.
