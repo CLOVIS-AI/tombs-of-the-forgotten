@@ -111,9 +111,9 @@ public class EventBar extends Bar {
     
     @Override
     public void updateBonus() {
-        super.updateBonus();
-        
         if(onBonusUpdate != null)
             onBonusUpdate.accept(this);
+        
+        super.updateBonus();
     }
 }

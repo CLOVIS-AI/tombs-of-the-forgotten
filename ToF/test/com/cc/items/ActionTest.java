@@ -23,10 +23,17 @@
 package com.cc.items;
 
 import static com.cc.items.EntityAction.Mode.MODIFICATION;
+import static com.cc.items.EntityAction.Mode.PERMANENT;
 import static com.cc.items.EntityAction.Operation.ADD;
 import static com.cc.items.EntityAction.Target.SELF;
+import static com.cc.items.Rarity.RARE;
 import static com.cc.players.Entity.Stat.MANA;
+import com.cc.players.Player;
+import com.cc.world.World;
 import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.WriterConfig;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -91,6 +98,23 @@ public class ActionTest {
         assertFalse(b.equals(c));
         assertFalse(c.equals(a));
         assertFalse(c.equals(b));
+    }
+    
+    @Test
+    public void testPermanent() {
+        System.out.println("Action:permanent");
+        Player p = new Player("p", 20, 20, 20, 20);
+        World w = new World(new ArrayList<>(), p);
+        Item i = new Item("i", "i", RARE, 1, 1, Arrays.asList(
+                new EntityAction(SELF, ADD, MANA, 5, PERMANENT)
+        ));
+        assertEquals(0, p.getMana());
+        p.addItem(i);
+        assertEquals(5, p.getMana());
+        p.removeItem(i);
+        p.nextTick();
+        System.out.println(p.getInventory().getWeightBar().save().toString(WriterConfig.PRETTY_PRINT));
+        assertEquals(0, p.getMana());
     }
     
 }

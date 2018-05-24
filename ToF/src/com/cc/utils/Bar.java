@@ -202,14 +202,16 @@ public class Bar implements Save<JsonObject> {
      * Adds a bonus to this bar.
      * @param time How many ticks the bonus will last
      * @param value How much does this bonus increase the value
+     * @param update Should this object be updated after the bonus is added?
      */
-    public void addBonus(int time, int value) {
+    public void addBonus(int time, int value, boolean update) {
         bonuses.add(new Pair<>(time, value));
         
-        updateBonus();
+        if(update)
+            updateBonus();
     }
     
-    protected void updateBonus(){
+    public void updateBonus(){
         bonusTotal = 0;
         
         for(Pair<Integer, Integer> p : bonuses)

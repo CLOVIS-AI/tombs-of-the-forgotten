@@ -9,10 +9,10 @@ import static com.cc.utils.Bar.Behavior.ACCEPT;
 import static com.cc.utils.Bar.Behavior.DENY;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -151,7 +151,7 @@ public class BarTest {
         System.out.println("Bar#copy");
         Bar a = new Bar("Bonjour", 1, 5, 2);
         a.add(2, ACCEPT);
-        a.addBonus(12, 4);
+        a.addBonus(12, 4, true);
         a.decreaseMinimum(1);
         a.nextTick();
         Bar b = new Bar(a);

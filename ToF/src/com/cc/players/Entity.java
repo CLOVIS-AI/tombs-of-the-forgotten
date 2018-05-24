@@ -404,6 +404,7 @@ public abstract class Entity implements Timable, Save<JsonObject> {
      */
     public void addItem(Item item) {
         inventory.add(item);
+        getBars().forEach(Bar::updateBonus);
     }
 
     /**
@@ -452,6 +453,7 @@ public abstract class Entity implements Timable, Save<JsonObject> {
     public void removeItem(Item item) {
         if (hasItem(item)) {
             inventory.remove(item);
+            getBars().forEach(Bar::updateBonus);
         } else {
             throw new IllegalArgumentException("You can't throw away an item you"
                     + "don't possess: " + item);
@@ -595,7 +597,7 @@ public abstract class Entity implements Timable, Save<JsonObject> {
          * @param value by how much the bonus is affected
          */
         public void newBonus(Entity e, int turns, int value){
-            bar.apply(e).addBonus(turns, value);
+            bar.apply(e).addBonus(turns, value, true);
         }
     }
 }
