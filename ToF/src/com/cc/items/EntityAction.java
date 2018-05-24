@@ -49,6 +49,7 @@ public class EntityAction implements Action {
      * @param operation the operation that will be executed on that target
      * @param stat the stat that will be modified
      * @param value how much it will be modified
+     * @param mode the mode of use of this item
      */
     public EntityAction(Target target, Operation operation, Stat stat, int value,
             Mode mode){
@@ -153,6 +154,7 @@ public class EntityAction implements Action {
          * Calculates the effect of an operation.
          * @param entity the entity the operation is executed on
          * @param value how effective this operation is
+         * @return The amount of effect this operation has.
          */
         public int getValue(Entity entity, int value){
             return modifier.apply(value);
