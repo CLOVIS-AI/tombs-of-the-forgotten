@@ -33,6 +33,7 @@ import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Represents an Item.
@@ -144,6 +145,14 @@ public final class Item implements Save<JsonObject> {
         ArrayList<Message> messages = new ArrayList<>();
         actions.forEach(a -> messages.add(a.getEffects()));
         return messages;
+    }
+    
+    /**
+     * Returns the actions. Note: do not confuse with #getEffects.
+     * @return The actions.
+     */
+    public Stream<Action> getActions(){
+        return actions.stream();
     }
     
     /**
