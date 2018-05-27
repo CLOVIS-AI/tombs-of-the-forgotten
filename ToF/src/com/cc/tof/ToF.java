@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Writer;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -62,6 +63,8 @@ public class ToF extends Application {
     public static World world;
     private static final long TIME_TURN = 1;
     private static Stage stage;
+    
+    private static File SAVE_DIR;
 
     static void gameTick() {
         if (world == null) {
@@ -165,7 +168,7 @@ public class ToF extends Application {
      * Loads the game from a save file.
      */
     public static void load() {
-        File file = ToF.selectFile("Load");
+        File file = ToF.selectFile("Load", SAVE_DIR);
         try {
             byte[] encoded = Files.readAllBytes(file.toPath());
             JsonObject json = Json.parse(
@@ -177,7 +180,7 @@ public class ToF extends Application {
     }
 
     public static void save() {
-        File file = ToF.selectFile("Save");
+        File file = ToF.selectFile("Save", SAVE_DIR);
         JsonObject json = world.save();
         String str = json.toString(WriterConfig.PRETTY_PRINT);
         try {
@@ -198,6 +201,8 @@ public class ToF extends Application {
     public void start(Stage primaryStage) throws Exception {
         View view = new View(this, primaryStage);
         ToF.stage = primaryStage;
+        ToF.SAVE_DIR = getRootDir("saves");
+        System.out.println("[File]\tSaves are stored in: " + SAVE_DIR.getAbsolutePath());
         
         System.out.println("[ToF]\tLoading general menu...");
         Parent menu = FXMLLoader.load(getResource("Menu.fxml"));
@@ -215,11 +220,28 @@ public class ToF extends Application {
         return stage;
     }
     
-    public static File selectFile(String message){
-        JFileChooser jfc = new JFileChooser(".");
+    public static File selectFile(String message, File pos){
+        if(!pos.exists()){
+            System.out.println("[File]\tCreating folder " + pos.getAbsolutePath());
+        }
+        
+        JFileChooser jfc = new JFileChooser(pos);
         jfc.showDialog(null, message);
         jfc.setVisible(true);
         return jfc.getSelectedFile();
+    }
+    
+    public static File getRoot(){
+        URL u = new ToF().getClass().getProtectionDomain().getCodeSource().getLocation();
+        try {
+            return new File(u.toURI()).getParentFile().getParentFile();
+        } catch (URISyntaxException ex) {
+            throw new IllegalStateException("Could not get the root dir", ex);
+        }
+    }
+    
+    public static File getRootDir(String name){
+        return new File(getRoot(), name);
     }
 
 }
