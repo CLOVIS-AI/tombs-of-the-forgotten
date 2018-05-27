@@ -31,7 +31,6 @@ import static com.cc.world.Direction.EAST;
 import static com.cc.world.Direction.NORTH;
 import static com.cc.world.Direction.SOUTH;
 import static com.cc.world.Direction.WEST;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -122,7 +121,7 @@ public class InterfaceController implements Initializable {
         /**
          * ******************************SAVE*********************************
          */
-        ButtonSave.setOnAction(e -> ToF.save((new File("save.json"))));
+        ButtonSave.setOnAction(e -> ToF.save());
         
         updateBars();
                 

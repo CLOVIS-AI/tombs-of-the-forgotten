@@ -136,7 +136,7 @@ public class ToF extends Application {
                 InputStreamReader in = new InputStreamReader(input, StandardCharsets.UTF_8);
                 reader = new BufferedReader(in);
             }
-            System.out.print(" reading...");
+            System.out.println(" reading...");
             return reader.lines();
         } catch (NoSuchElementException ex) {
             throw new IllegalArgumentException("Found no resource of the name '"+name+"'", ex);
@@ -163,9 +163,9 @@ public class ToF extends Application {
 
     /**
      * Loads the game from a save file.
-     * @param file Loads the game from a file.
      */
-    public static void load(File file) {
+    public static void load() {
+        File file = ToF.selectFile("Load");
         try {
             byte[] encoded = Files.readAllBytes(file.toPath());
             JsonObject json = Json.parse(
@@ -176,16 +176,11 @@ public class ToF extends Application {
         }
     }
 
-    public static void save(File file) {
+    public static void save() {
+        File file = ToF.selectFile("Save");
         JsonObject json = world.save();
         String str = json.toString(WriterConfig.PRETTY_PRINT);
-        System.out.println(str);
         try {
-            JFileChooser jfc = new JFileChooser();
-            jfc.showDialog(null, "Please Select the File");
-            jfc.setVisible(true);
-            File filename = jfc.getSelectedFile();
-            System.out.println("File name " + filename.getName());
             FileWriter fw = new FileWriter(file);
             if (!file.exists()) {
                 file.createNewFile();
@@ -218,6 +213,13 @@ public class ToF extends Application {
     
     public static Stage getStage(){
         return stage;
+    }
+    
+    public static File selectFile(String message){
+        JFileChooser jfc = new JFileChooser(".");
+        jfc.showDialog(null, message);
+        jfc.setVisible(true);
+        return jfc.getSelectedFile();
     }
 
 }

@@ -24,7 +24,6 @@
 package com.cc.view;
 
 import com.cc.tof.ToF;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -78,7 +77,7 @@ public class MenuController implements Initializable {
         NewLabel.setOnMousePressed(e -> {ToF.newGame(); launchGame();});
         LoadLabel.setOnMouseEntered(e -> LoadArrow.setVisible(true));
         LoadLabel.setOnMouseExited(e -> LoadArrow.setVisible(false));
-        LoadLabel.setOnMousePressed(e -> ToF.load(new File("save.json")));
+        LoadLabel.setOnMousePressed(e -> {ToF.load(); launchGame();});
         QuitLabel.setOnMouseEntered(e -> QuitArrow.setVisible(true));
         QuitLabel.setOnMouseExited(e -> QuitArrow.setVisible(false));
         QuitLabel.setOnMousePressed(e -> Platform.exit());
@@ -91,10 +90,10 @@ public class MenuController implements Initializable {
             Parent ui = FXMLLoader.load(ToF.getResource("interface.fxml"));
             ui.relocate(-255, 0);
             
-            System.out.println("[ToF]\nCreating the scene...");
+            System.out.println("[ToF]\tCreating the scene...");
             Scene sc = new Scene(ui, 1000, 600);
             
-            System.out.println("[ToF]\nSwapping the scene...");
+            System.out.println("[ToF]\tSwapping the scene...");
             ToF.getStage().setScene(sc);
         } catch (IOException ex) {
             throw new IllegalStateException("Could not load main UI", ex);
