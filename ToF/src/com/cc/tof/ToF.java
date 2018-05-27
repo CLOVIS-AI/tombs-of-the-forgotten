@@ -61,6 +61,7 @@ public class ToF extends Application {
 
     public static World world;
     private static final long TIME_TURN = 1;
+    private static Stage stage;
 
     static void gameTick() {
         if (world == null) {
@@ -201,6 +202,7 @@ public class ToF extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         View view = new View(this, primaryStage);
+        ToF.stage = primaryStage;
         
         System.out.println("[ToF]\tLoading general menu...");
         Parent menu = FXMLLoader.load(getResource("Menu.fxml"));
@@ -212,6 +214,10 @@ public class ToF extends Application {
         primaryStage.setTitle("Tombs of the Forgotten");
         System.out.println("[ToF]\tLaunching the game.");
         primaryStage.show();
+    }
+    
+    public static Stage getStage(){
+        return stage;
     }
 
 }
