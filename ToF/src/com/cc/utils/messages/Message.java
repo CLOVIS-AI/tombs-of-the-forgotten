@@ -74,9 +74,12 @@ public class Message {
             add((String) o);
         else if(o instanceof Stat)
             add((Stat) o);
-        else
-            throw new IllegalArgumentException("Cannot recognize " + o + " "
-                    + "as any allowed objects.");
+        else if(o instanceof Integer)
+            add((int) o);
+        else {
+            System.err.println("[Msg]\tCannot recognize type of " + o);
+            add(o.toString());
+        }
         
         return this;
     }
