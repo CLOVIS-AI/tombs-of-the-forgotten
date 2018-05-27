@@ -146,6 +146,9 @@ public class ToF extends Application {
         }
     }
     
+    /**
+     * Creates a new game and prints a few stats about it.
+     */
     public static void newGame() {
         long time = System.currentTimeMillis();
 
@@ -179,6 +182,9 @@ public class ToF extends Application {
         }
     }
 
+    /**
+     * Prompts the user for a file then saves the game into that file.
+     */
     public static void save() {
         File file = ToF.selectFile("Save", SAVE_DIR);
         JsonObject json = world.save();
@@ -216,10 +222,20 @@ public class ToF extends Application {
         primaryStage.show();
     }
     
+    /**
+     * The stage of the game.
+     * @return The stage of the game.
+     */
     public static Stage getStage(){
         return stage;
     }
     
+    /**
+     * Prompts a window asking to select a file to the user.
+     * @param message what is written in the button (open...)
+     * @param pos the position of the directory
+     * @return A file object of what the user chose
+     */
     public static File selectFile(String message, File pos){
         if(!pos.exists()){
             System.out.println("[File]\tCreating folder " + pos.getAbsolutePath());
@@ -231,7 +247,14 @@ public class ToF extends Application {
         return jfc.getSelectedFile();
     }
     
+    /**
+     * Gets the root directory of the project.
+     * @return The root directory of the project.
+     * @see #getRootDir(java.lang.String) A sub-directory of the root directory
+     */
     public static File getRoot(){
+        // Inspired from "Get the root of an application"
+        // http://www.rgagnon.com/javadetails/java-0581.html
         URL u = new ToF().getClass().getProtectionDomain().getCodeSource().getLocation();
         try {
             return new File(u.toURI()).getParentFile().getParentFile();
@@ -240,6 +263,12 @@ public class ToF extends Application {
         }
     }
     
+    /**
+     * Gets a directory in the root directory of the project.
+     * @param name the name of the directory
+     * @return A file object representing the directory.
+     * @see #getRoot() The root directory
+     */
     public static File getRootDir(String name){
         return new File(getRoot(), name);
     }
