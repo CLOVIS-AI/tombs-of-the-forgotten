@@ -25,6 +25,7 @@ package com.cc.world;
 import com.cc.items.ItemContainer;
 import com.cc.players.Entity;
 import com.cc.utils.Save;
+import com.cc.utils.messages.Message;
 import com.cc.world.Note.Notes;
 import com.cc.world.Path.UnreachableRoomException;
 import com.cc.world.links.Link;
@@ -470,6 +471,20 @@ public class Room implements Save<JsonObject> {
      */
     public List<Note> getNotes() {
         return Collections.unmodifiableList(notes);
+    }
+    
+    /**
+     * Adds the content of the notes in the World message log.
+     */
+    public void readNotes() {
+        if(hasNotes())
+            world.newMessage(new Message().add("There are " + notes.size() + " notes"
+                + "in this room. You read them..."));
+        else
+            world.newMessage(new Message().add("There are no notes in this room."));
+        
+        for(Note n : notes)
+            world.newMessage(new Message().add(n.print()));
     }
 
     @Override

@@ -124,7 +124,9 @@ public class InterfaceController implements Initializable {
         ButtonSave.setOnAction(e -> ToF.save());
         
         updateBars();
-                
+        
+        // Buttons
+        ButtonReadNote.setOnAction(e -> ToF.getWorld().getPlayer().getCurrentRoom().readNotes());
     }
 
     /**
