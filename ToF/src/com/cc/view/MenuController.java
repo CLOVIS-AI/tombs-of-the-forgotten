@@ -77,7 +77,7 @@ public class MenuController implements Initializable {
         NewLabel.setOnMousePressed(e -> {ToF.newGame(); launchGame();});
         LoadLabel.setOnMouseEntered(e -> LoadArrow.setVisible(true));
         LoadLabel.setOnMouseExited(e -> LoadArrow.setVisible(false));
-        LoadLabel.setOnMousePressed(e -> {ToF.load(); launchGame();});
+        LoadLabel.setOnMousePressed(e -> {if(ToF.load()) launchGame();});
         QuitLabel.setOnMouseEntered(e -> QuitArrow.setVisible(true));
         QuitLabel.setOnMouseExited(e -> QuitArrow.setVisible(false));
         QuitLabel.setOnMousePressed(e -> Platform.exit());

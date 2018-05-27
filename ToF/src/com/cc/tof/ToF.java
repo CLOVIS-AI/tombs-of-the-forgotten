@@ -41,10 +41,9 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -169,16 +168,29 @@ public class ToF extends Application {
 
     /**
      * Loads the game from a save file.
+     * @return {@code true} if the loading was successful.
      */
-    public static void load() {
+    public static boolean load() {
         File file = ToF.selectFile("Load", SAVE_DIR);
+        System.out.println("[Load]\tThe user selected: " + file.getAbsolutePath());
         try {
+            System.out.println("[Load]\tReading the file...");
             byte[] encoded = Files.readAllBytes(file.toPath());
+            
+            System.out.println("[Load]\tParsing the JSON...");
             JsonObject json = Json.parse(
                     new String(encoded, StandardCharsets.UTF_8)).asObject();
+            
+            System.out.println("[Load]\tInstantiating the world...");
             world = new World(json);
+            System.out.println("[Load]\tDone.");
+            return true;
         } catch (IOException ex) {
-            Logger.getLogger(ToF.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex instanceof NoSuchFileException)
+                System.err.println("You canno't load a file that does not exist.");
+            else
+                throw new RuntimeException("Cannot load file", ex);
+            return false;
         }
     }
 
@@ -187,19 +199,27 @@ public class ToF extends Application {
      */
     public static void save() {
         File file = ToF.selectFile("Save", SAVE_DIR);
+        System.out.println("[Save]\tThe user selected: " + file.getAbsolutePath());
+        
+        System.out.println("[Save]\tGenerating the save of the game...");
         JsonObject json = world.save();
         String str = json.toString(WriterConfig.PRETTY_PRINT);
+        System.out.println("[Save]\tSave is ready, opening the file...");
         try {
             FileWriter fw = new FileWriter(file);
             if (!file.exists()) {
                 file.createNewFile();
+                System.out.println("[Save]\tCreated the file.");
             }
             Writer writer = new FileWriter(file);
             BufferedWriter bw = new BufferedWriter(writer);
+            
+            System.out.println("[Save]\tWriting in the file...");
             bw.write(str);
             bw.close();
+            System.out.println("[Save]\tDone.");
         } catch (IOException ex) {
-            Logger.getLogger(ToF.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException("Cannot open file", ex);
         }
     }
 
@@ -239,8 +259,10 @@ public class ToF extends Application {
     public static File selectFile(String message, File pos){
         if(!pos.exists()){
             System.out.println("[File]\tCreating folder " + pos.getAbsolutePath());
+            pos.mkdir();
         }
         
+        System.out.println("[File]\tOpening prompt in " + pos.getAbsolutePath());
         JFileChooser jfc = new JFileChooser(pos);
         jfc.showDialog(null, message);
         jfc.setVisible(true);
