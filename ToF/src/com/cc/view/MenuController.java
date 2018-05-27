@@ -25,13 +25,18 @@ package com.cc.view;
 
 import com.cc.tof.ToF;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Font;
 
 /**
  * FXML Controller class
@@ -63,14 +68,14 @@ public class MenuController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //Title.setFont(Font.loadFont(ToF.getResource("DeathtoMetal.ttf").toString(), 30));
-        //MainTitle.setFont(Font.loadFont(ToF.getResource("Iglesia.ttf").toString(), 24));
+        Title.setFont(Font.loadFont(ToF.getResource("DeathtoMetal.ttf").toString(), 30));
+        MainTitle.setFont(Font.loadFont(ToF.getResource("Iglesia.ttf").toString(), 24));
         NewArrow.setVisible(false);
         LoadArrow.setVisible(false);
         QuitArrow.setVisible(false);
         NewLabel.setOnMouseEntered(e -> NewArrow.setVisible(true));
         NewLabel.setOnMouseExited(e -> NewArrow.setVisible(false));
-        NewLabel.setOnMousePressed(e -> ToF.newGame());
+        NewLabel.setOnMousePressed(e -> {ToF.newGame(); launchGame();});
         LoadLabel.setOnMouseEntered(e -> LoadArrow.setVisible(true));
         LoadLabel.setOnMouseExited(e -> LoadArrow.setVisible(false));
         LoadLabel.setOnMousePressed(e -> ToF.load(new File("save.json")));
@@ -78,6 +83,22 @@ public class MenuController implements Initializable {
         QuitLabel.setOnMouseExited(e -> QuitArrow.setVisible(false));
         QuitLabel.setOnMousePressed(e -> Platform.exit());
         
-    }    
+    }
+
+    public void launchGame(){
+        try {
+            System.out.println("[ToF]\tLoading the game interface...");
+            Parent ui = FXMLLoader.load(ToF.getResource("interface.fxml"));
+            ui.relocate(-255, 0);
+            
+            System.out.println("[ToF]\nCreating the scene...");
+            Scene sc = new Scene(ui, 1000, 600);
+            
+            System.out.println("[ToF]\nSwapping the scene...");
+            ToF.getStage().setScene(sc);
+        } catch (IOException ex) {
+            throw new IllegalStateException("Could not load main UI", ex);
+        }
+    }
     
 }
