@@ -60,7 +60,6 @@ import javax.swing.JFileChooser;
 public class ToF extends Application {
 
     public static World world;
-    private Parent menu;
     private static final long TIME_TURN = 1;
 
     static void gameTick() {
@@ -204,7 +203,7 @@ public class ToF extends Application {
         View view = new View(this, primaryStage);
         
         System.out.println("[ToF]\tLoading general menu...");
-        menu = FXMLLoader.load(getResource("Menu.fxml"));
+        Parent menu = FXMLLoader.load(getResource("Menu.fxml"));
         System.out.println("[ToF]\tMenu loaded.");
         
         System.out.println("[ToF]\tCreating main scene...");
