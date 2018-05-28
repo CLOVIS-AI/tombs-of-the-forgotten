@@ -31,13 +31,8 @@ import static com.cc.world.Direction.EAST;
 import static com.cc.world.Direction.NORTH;
 import static com.cc.world.Direction.SOUTH;
 import static com.cc.world.Direction.WEST;
-import com.cc.world.Location;
-import com.cc.world.Room;
-import com.cc.world.World;
-import com.cc.world.links.Opening;
-import java.io.File;
+import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -120,24 +115,18 @@ public class InterfaceController implements Initializable {
         viewItem(ViewAll);
 
         restPopup(ButtonRest);
-
-        /**
-         * *********************MOVE DIRECTIONS BUTTONS***********************
-         */
-        Player p = new Player();
-        Room r1 = new Room("d").setLocation(new Location());
-        Room r2 = new Room("d").setLocation(new Location(0, 1, 0));
-        ToF.world = new World(World.createTreeMap(Arrays.asList(r1, r2)), p);
-        new Opening(r1, r2).autoLink();
-        update(p);
+        
+        update(ToF.getWorld().getPlayer());
         
         /**
          * ******************************SAVE*********************************
          */
-        ButtonSave.setOnAction(e -> ToF.save((new File("save.json"))));
+        ButtonSave.setOnAction(e -> ToF.save());
         
         updateBars();
-                
+        
+        // Buttons
+        ButtonReadNote.setOnAction(e -> ToF.getWorld().getPlayer().getCurrentRoom().readNotes());
     }
 
     /**
@@ -194,8 +183,8 @@ public class InterfaceController implements Initializable {
             Stage stage = new Stage();
             stage.setScene(new Scene(menu));
             stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            throw new IllegalStateException("Couldn't load the item view.", ex);
         }
     }
 

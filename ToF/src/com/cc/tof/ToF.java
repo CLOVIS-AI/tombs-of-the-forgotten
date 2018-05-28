@@ -37,13 +37,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Writer;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -60,8 +60,10 @@ import javax.swing.JFileChooser;
 public class ToF extends Application {
 
     public static World world;
-    private Parent menu;
     private static final long TIME_TURN = 1;
+    private static Stage stage;
+    
+    private static File SAVE_DIR;
 
     static void gameTick() {
         if (world == null) {
@@ -136,13 +138,16 @@ public class ToF extends Application {
                 InputStreamReader in = new InputStreamReader(input, StandardCharsets.UTF_8);
                 reader = new BufferedReader(in);
             }
-            System.out.print(" reading...");
+            System.out.println(" reading...");
             return reader.lines();
         } catch (NoSuchElementException ex) {
             throw new IllegalArgumentException("Found no resource of the name '"+name+"'", ex);
         }
     }
     
+    /**
+     * Creates a new game and prints a few stats about it.
+     */
     public static void newGame() {
         long time = System.currentTimeMillis();
 
@@ -163,48 +168,74 @@ public class ToF extends Application {
 
     /**
      * Loads the game from a save file.
-     * @param file Loads the game from a file.
+     * @return {@code true} if the loading was successful.
      */
-    public static void load(File file) {
+    public static boolean load() {
+        File file = ToF.selectFile("Load", SAVE_DIR);
+        System.out.println("[Load]\tThe user selected: " + file.getAbsolutePath());
         try {
+            System.out.println("[Load]\tReading the file...");
             byte[] encoded = Files.readAllBytes(file.toPath());
+            
+            System.out.println("[Load]\tParsing the JSON...");
             JsonObject json = Json.parse(
                     new String(encoded, StandardCharsets.UTF_8)).asObject();
+            
+            System.out.println("[Load]\tInstantiating the world...");
             world = new World(json);
+            System.out.println("[Load]\tDone.");
+            return true;
         } catch (IOException ex) {
-            Logger.getLogger(ToF.class.getName()).log(Level.SEVERE, null, ex);
+            if(ex instanceof NoSuchFileException)
+                System.err.println("You canno't load a file that does not exist.");
+            else
+                throw new RuntimeException("Cannot load file", ex);
+            return false;
         }
     }
 
-    public static void save(File file) {
+    /**
+     * Prompts the user for a file then saves the game into that file.
+     */
+    public static void save() {
+        File file = ToF.selectFile("Save", SAVE_DIR);
+        System.out.println("[Save]\tThe user selected: " + file.getAbsolutePath());
+        
+        System.out.println("[Save]\tGenerating the save of the game...");
         JsonObject json = world.save();
         String str = json.toString(WriterConfig.PRETTY_PRINT);
-        System.out.println(str);
+        System.out.println("[Save]\tSave is ready, opening the file...");
         try {
-            JFileChooser jfc = new JFileChooser();
-            jfc.showDialog(null, "Please Select the File");
-            jfc.setVisible(true);
-            File filename = jfc.getSelectedFile();
-            System.out.println("File name " + filename.getName());
             FileWriter fw = new FileWriter(file);
             if (!file.exists()) {
                 file.createNewFile();
+                System.out.println("[Save]\tCreated the file.");
             }
             Writer writer = new FileWriter(file);
             BufferedWriter bw = new BufferedWriter(writer);
+            
+            System.out.println("[Save]\tWriting in the file...");
             bw.write(str);
             bw.close();
+            System.out.println("[Save]\tDone.");
         } catch (IOException ex) {
-            Logger.getLogger(ToF.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException("Cannot open file", ex);
         }
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         View view = new View(this, primaryStage);
+        ToF.stage = primaryStage;
+        ToF.SAVE_DIR = getRootDir("saves");
+        System.out.println("[File]\tSaves are stored in: " + SAVE_DIR.getAbsolutePath());
         
         System.out.println("[ToF]\tLoading general menu...");
+<<<<<<< HEAD
         menu = FXMLLoader.load(getResource("interface.fxml"));
+=======
+        Parent menu = FXMLLoader.load(getResource("Menu.fxml"));
+>>>>>>> dea863fcde552d1c7f3652efb6b2d1c29c22845c
         System.out.println("[ToF]\tMenu loaded.");
         
         System.out.println("[ToF]\tCreating main scene...");
@@ -214,6 +245,59 @@ public class ToF extends Application {
         primaryStage.setTitle("Tombs of the Forgotten");
         System.out.println("[ToF]\tLaunching the game.");
         primaryStage.show();
+    }
+    
+    /**
+     * The stage of the game.
+     * @return The stage of the game.
+     */
+    public static Stage getStage(){
+        return stage;
+    }
+    
+    /**
+     * Prompts a window asking to select a file to the user.
+     * @param message what is written in the button (open...)
+     * @param pos the position of the directory
+     * @return A file object of what the user chose
+     */
+    public static File selectFile(String message, File pos){
+        if(!pos.exists()){
+            System.out.println("[File]\tCreating folder " + pos.getAbsolutePath());
+            pos.mkdir();
+        }
+        
+        System.out.println("[File]\tOpening prompt in " + pos.getAbsolutePath());
+        JFileChooser jfc = new JFileChooser(pos);
+        jfc.showDialog(null, message);
+        jfc.setVisible(true);
+        return jfc.getSelectedFile();
+    }
+    
+    /**
+     * Gets the root directory of the project.
+     * @return The root directory of the project.
+     * @see #getRootDir(java.lang.String) A sub-directory of the root directory
+     */
+    public static File getRoot(){
+        // Inspired from "Get the root of an application"
+        // http://www.rgagnon.com/javadetails/java-0581.html
+        URL u = new ToF().getClass().getProtectionDomain().getCodeSource().getLocation();
+        try {
+            return new File(u.toURI()).getParentFile().getParentFile();
+        } catch (URISyntaxException ex) {
+            throw new IllegalStateException("Could not get the root dir", ex);
+        }
+    }
+    
+    /**
+     * Gets a directory in the root directory of the project.
+     * @param name the name of the directory
+     * @return A file object representing the directory.
+     * @see #getRoot() The root directory
+     */
+    public static File getRootDir(String name){
+        return new File(getRoot(), name);
     }
 
 }

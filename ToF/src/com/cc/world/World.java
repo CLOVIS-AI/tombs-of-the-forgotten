@@ -65,6 +65,7 @@ public class World implements Timable, Save<JsonObject> {
         map.forEach((l, r) -> {
             r.setWorld(this);
             r.setLocation(l);
+            r.endGeneration();
         });
 
         rooms = map;
@@ -74,7 +75,9 @@ public class World implements Timable, Save<JsonObject> {
         messages = new ArrayDeque<>();
     }
 
+    @SuppressWarnings("LeakingThisInConstructor")
     public World(Collection<Room> map, Player player) {
+        map.forEach(r -> {r.setWorld(this); r.endGeneration();});
         rooms = createTreeMap(map);
         this.player = player;
         this.player.setWorld(this);
