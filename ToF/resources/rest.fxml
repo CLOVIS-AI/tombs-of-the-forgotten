@@ -10,6 +10,11 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="400.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cc.view.RestController">
    <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="182.0" layoutX="8.0" layoutY="8.0" stroke="#4d6a7f" strokeType="INSIDE" strokeWidth="2.0" width="382.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="10.0" layoutX="3.0" layoutY="21.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="10.0" layoutX="20.0" layoutY="6.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="10.0" layoutX="364.0" layoutY="7.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="10.0" layoutX="381.0" layoutY="21.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
       <Label fx:id="RestText" layoutX="66.0" layoutY="46.0" text="How many turns do you need for resting?" textFill="#517086" />
       <Separator layoutX="81.0" layoutY="83.0" prefWidth="240.0" />
       <Spinner fx:id="RestSpinner" editable="true" layoutX="94.0" layoutY="109.0">
@@ -19,10 +24,5 @@
       </Spinner>
       <Button fx:id="RestCancel" cancelButton="true" layoutX="170.0" layoutY="150.0" mnemonicParsing="false" onAction="#closeRest" style="-fx-background-color: #4d6a7f;" text="Cancel" textFill="WHITE" />
       <Button fx:id="RestOK" layoutX="276.0" layoutY="109.0" mnemonicParsing="false" style="-fx-background-color: #4d6a7f;" text="OK" textFill="WHITE" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffff00" height="182.0" layoutX="8.0" layoutY="8.0" stroke="#4d6a7f" strokeType="INSIDE" strokeWidth="2.0" width="382.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" height="10.0" layoutX="3.0" layoutY="21.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" height="10.0" layoutX="20.0" layoutY="6.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" height="10.0" layoutX="364.0" layoutY="7.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" height="10.0" layoutX="381.0" layoutY="21.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
    </children>
 </AnchorPane>

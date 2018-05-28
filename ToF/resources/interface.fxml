@@ -344,7 +344,7 @@
       </AnchorPane>
       <AnchorPane layoutX="518.0" layoutY="345.0" prefHeight="255.0" prefWidth="456.0">
          <children>
-            <AnchorPane layoutX="344.0" layoutY="42.0" prefHeight="156.0" prefWidth="95.0">
+            <AnchorPane layoutX="348.0" layoutY="50.0" prefHeight="156.0" prefWidth="95.0">
                <children>
             <Polygon fx:id="MoveNorth" layoutX="50.0" layoutY="20.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
                <points>
@@ -425,6 +425,10 @@
                   <Font size="30.0" />
                </font>
             </Label>
+            <Button fx:id="ButtonUpstairs" layoutX="356.0" layoutY="16.0" mnemonicParsing="false" style="-fx-background-color: BLACK;" text="UPSTAIRS" textFill="WHITE" />
+            <Button fx:id="ButtonDownstairs" layoutX="343.0" layoutY="172.0" mnemonicParsing="false" style="-fx-background-color: BLACK;" text="DOWNSTAIRS" textFill="WHITE" />
+            <Button fx:id="ButtonUpstairsS" layoutX="356.0" layoutY="16.0" mnemonicParsing="false" style="-fx-background-color: snow;" text="UPSTAIRS" />
+            <Button fx:id="ButtonDownstairs1" layoutX="343.0" layoutY="172.0" mnemonicParsing="false" style="-fx-background-color: snow;" text="DOWNSTAIRS" />
          </children></AnchorPane>
       <AnchorPane layoutX="508.0" prefHeight="345.0" prefWidth="746.0">
          <children>
