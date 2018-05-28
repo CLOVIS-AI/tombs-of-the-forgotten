@@ -31,12 +31,15 @@ import static com.cc.world.Direction.EAST;
 import static com.cc.world.Direction.NORTH;
 import static com.cc.world.Direction.SOUTH;
 import static com.cc.world.Direction.WEST;
+import com.cc.world.Location;
+import com.cc.world.Room;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -48,7 +51,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -74,6 +79,9 @@ public class InterfaceController implements Initializable {
     @FXML
     private Button ButtonRest, ButtonSave, ButtonOpen, ButtonClose, ButtonReadNote,
             ButtonSearchRoom, ButtonGrabItem, ButtonDropItem;
+    
+    @FXML
+    private AnchorPane Map;
     
     @FXML
     private ProgressBar BarHP, BarMana, BarStamina, BarPods;
@@ -127,6 +135,14 @@ public class InterfaceController implements Initializable {
         
         // Buttons
         ButtonReadNote.setOnAction(e -> ToF.getWorld().getPlayer().getCurrentRoom().readNotes());
+        
+        // Map
+        Map.setClip(new Ellipse(
+                Map.getPrefWidth()/2, 
+                Map.getPrefHeight()/2, 
+                Map.getPrefWidth()/2, 
+                Map.getPrefHeight()/2));
+        updateMap();
     }
 
     /**
@@ -281,6 +297,7 @@ public class InterfaceController implements Initializable {
         move(p, SOUTH, (Shape) MoveSouth);
         move(p, EAST, (Shape) MoveEast);
         move(p, WEST, (Shape) MoveWest);
+        updateMap();
     }
     
     public void fillBar(Bar b, ProgressBar bar) {
@@ -293,5 +310,31 @@ public class InterfaceController implements Initializable {
         fillBar(ToF.getWorld().getPlayer().getManaBar(), BarMana);
         fillBar(ToF.getWorld().getPlayer().getStaminaBar(), BarStamina);
         fillBar(ToF.getWorld().getPlayer().getWeightBar(), BarPods);
+    }
+    
+    Location player;
+    
+    public void updateMap() {
+        ObservableList<Node> nodes = Map.getChildren();
+        nodes.clear();
+        player = ToF.getWorld().getPlayer().getLocation();
+        ToF.getWorld()
+                .selectRoomsByLocation(l -> l.getZ() == player.getZ())
+                .forEach(this::drawRoom);
+    }
+    
+    public void drawRoom(Room r) {
+        // Position
+        Location relative = r.getLocation().remove(player);
+        Ellipse e = new Ellipse(
+                relative.getY()*30+Map.getPrefWidth()/2,
+                relative.getX()*30+Map.getPrefHeight()/2,
+                10, 10);
+        
+        // Color
+        if(r.getLocation().equals(player))
+            e.setFill(Color.AQUAMARINE);
+        
+        Map.getChildren().add(e);
     }
 }
