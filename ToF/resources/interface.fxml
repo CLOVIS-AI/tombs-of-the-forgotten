@@ -432,11 +432,6 @@
                      </stops>
                   </LinearGradient>
                </stroke></Rectangle>
-            <Label layoutX="227.0" layoutY="124.0" text="Welcome wanderer!" textFill="WHITE">
-               <font>
-                  <Font size="33.0" />
-               </font>
-            </Label>
             <Polygon blendMode="MULTIPLY" layoutX="157.0" layoutY="74.0" opacity="0.41" rotate="180.0" stroke="#ffffff00" strokeType="INSIDE">
                <points>
                   <Double fx:value="-50.0" />
@@ -563,7 +558,7 @@
                   </RadialGradient>
                </fill>
             </Polygon>
-            <Label layoutY="6.0" prefHeight="339.0" prefWidth="747.0" text="welcome wanderer!" />
+            <Label alignment="TOP_LEFT" contentDisplay="RIGHT" layoutY="30.0" prefHeight="315.0" prefWidth="747.0" text="welcome wanderer!" textFill="#7e9eb5" />
          </children>
       </AnchorPane>
       <Line endY="600.0" layoutX="254.0" />

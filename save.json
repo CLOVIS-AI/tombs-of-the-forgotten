@@ -1,0 +1,102 @@
+{
+  "rooms": [
+    {
+      "desc": "d",
+      "items": {
+        "description": "d",
+        "items": [
+          
+        ]
+      },
+      "location": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    {
+      "desc": "d",
+      "items": {
+        "description": "d",
+        "items": [
+          
+        ]
+      },
+      "location": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      }
+    }
+  ],
+  "links": [
+    {
+      "room1": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "room2": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      },
+      "isOpen": true,
+      "type": "openning"
+    }
+  ],
+  "player": {
+    "name": "Player",
+    "health": {
+      "name": "Health",
+      "min": 0,
+      "max": 20,
+      "value": 20,
+      "bonuses": [
+        
+      ]
+    },
+    "stamina": {
+      "name": "Stamina",
+      "min": 0,
+      "max": 2,
+      "value": 2,
+      "bonuses": [
+        
+      ]
+    },
+    "mana": {
+      "name": "Mana",
+      "min": 0,
+      "max": 5,
+      "value": 0,
+      "bonuses": [
+        
+      ]
+    },
+    "location": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "inventory": {
+      "description": "Inventory",
+      "items": [
+        
+      ],
+      "weight": {
+        "name": "Pods",
+        "min": 0,
+        "max": 10,
+        "value": 0,
+        "bonuses": [
+          
+        ]
+      }
+    },
+    "luck": 0
+  },
+  "entities": [
+    
+  ]
+}

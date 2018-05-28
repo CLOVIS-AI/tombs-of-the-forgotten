@@ -1,92 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.Double?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.shape.Rectangle?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="725.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="725.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f7f7f700" height="450.0" layoutX="450.0" layoutY="25.0" stroke="BLACK" strokeType="INSIDE" width="250.0" />
-      <AnchorPane layoutX="25.0" layoutY="25.0" prefHeight="450.0" prefWidth="250.0" />
       <AnchorPane layoutX="27.0" layoutY="25.0" prefHeight="450.0" prefWidth="250.0">
          <children>
-            <Label layoutX="113.0" layoutY="14.0" text="Loot" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="450.0" stroke="#4d6a7f" strokeType="INSIDE" strokeWidth="2.0" width="250.0" />
+            <ListView layoutX="3.0" layoutY="51.0" prefHeight="397.0" prefWidth="245.0" />
+            <Label layoutX="113.0" layoutY="14.0" text="Loot" textFill="#4d6a7f" />
             <Separator layoutX="25.0" layoutY="41.0" prefWidth="200.0" />
-            <AnchorPane layoutX="3.0" layoutY="57.0" prefHeight="392.0" prefWidth="244.0">
-               <children>
-                  <ScrollPane prefHeight="392.0" prefWidth="242.0">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="390.0" prefWidth="239.0">
-                           <children>
-                              <VBox layoutX="3.0" prefHeight="392.0" prefWidth="242.0">
-                                 <children>
-                                    <MenuButton fx:id="LootItem" mnemonicParsing="false" popupSide="RIGHT" text="Item">
-                                      <items>
-                                        <MenuItem mnemonicParsing="false" text="View" />
-                                          <MenuItem mnemonicParsing="false" text="Add" />
-                                      </items>
-                                    </MenuButton>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </AnchorPane>
-                    </content>
-                  </ScrollPane>
-               </children>
-            </AnchorPane>
          </children>
       </AnchorPane>
       <AnchorPane layoutX="450.0" layoutY="25.0" prefHeight="450.0" prefWidth="250.0">
          <children>
-            <Label layoutX="100.0" layoutY="14.0" text="Inventory" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f7f7f700" height="450.0" stroke="#4d6a7f" strokeType="INSIDE" strokeWidth="2.0" width="250.0" />
+            <Label layoutX="100.0" layoutY="14.0" text="Inventory" textFill="#4d6a7f" />
             <Separator layoutX="25.0" layoutY="41.0" prefWidth="200.0" />
-            <AnchorPane layoutX="3.0" layoutY="57.0" prefHeight="392.0" prefWidth="244.0">
-               <children>
-                  <ScrollPane prefHeight="392.0" prefWidth="242.0">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="390.0" prefWidth="239.0">
-                           <children>
-                              <VBox layoutX="3.0" prefHeight="392.0" prefWidth="242.0">
-                                 <children>
-                                    <MenuButton fx:id="LootItem1" mnemonicParsing="false" popupSide="RIGHT" text="Item">
-                                       <items>
-                                          <MenuItem mnemonicParsing="false" text="View" />
-                                       </items>
-                                    </MenuButton>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </AnchorPane>
-                     </content>
-                  </ScrollPane>
-               </children>
-            </AnchorPane>
+            <ListView layoutX="3.0" layoutY="51.0" prefHeight="397.0" prefWidth="245.0" />
          </children>
       </AnchorPane>
-      <Pane layoutX="311.0" layoutY="382.0" prefHeight="51.0" prefWidth="85.0">
-         <children>
-            <Polygon fill="#8f8f8f" layoutX="53.0" layoutY="35.0" rotate="90.0" scaleX="0.5" scaleY="0.65" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
-              <points>
-                <Double fx:value="-50.0" />
-                <Double fx:value="40.0" />
-                <Double fx:value="50.0" />
-                <Double fx:value="40.0" />
-                <Double fx:value="0.0" />
-                <Double fx:value="-60.0" />
-              </points>
-            </Polygon>
-            <Label alignment="CENTER" layoutX="22.0" layoutY="17.0" text="ADD ALL" textAlignment="CENTER" />
-         </children>
-      </Pane>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="450.0" layoutX="25.0" layoutY="25.0" stroke="BLACK" strokeType="INSIDE" width="250.0" />
+      <Button fx:id="AddAll" layoutX="314.0" layoutY="414.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="98.0" style="-fx-background-color: #4d6a7f;" text="ADD ALL" textFill="WHITE" />
+      <Polygon fill="#4d6a7f" layoutX="388.0" layoutY="253.0" rotate="90.0" scaleX="0.4" scaleY="0.5" stroke="BLACK" strokeType="INSIDE">
+        <points>
+          <Double fx:value="-50.0" />
+          <Double fx:value="40.0" />
+          <Double fx:value="50.0" />
+          <Double fx:value="40.0" />
+          <Double fx:value="0.0" />
+          <Double fx:value="-60.0" />
+        </points>
+      </Polygon>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4d6a7f" height="20.0" layoutX="333.0" layoutY="233.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="40.0" />
+      <Button fx:id="AddIf" layoutX="317.0" layoutY="79.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="92.0" style="-fx-background-color: #4d6a7f;" text="ADD" textFill="WHITE" />
    </children>
 </AnchorPane>
