@@ -204,11 +204,12 @@ public class ToF extends Application {
         View view = new View(this, primaryStage);
         
         System.out.println("[ToF]\tLoading general menu...");
-        menu = FXMLLoader.load(getResource("Menu.fxml"));
+        menu = FXMLLoader.load(getResource("interface.fxml"));
         System.out.println("[ToF]\tMenu loaded.");
         
         System.out.println("[ToF]\tCreating main scene...");
         Scene scene = new Scene(menu, 1000, 600);
+        menu.relocate(-255, 0);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Tombs of the Forgotten");
         System.out.println("[ToF]\tLaunching the game.");
