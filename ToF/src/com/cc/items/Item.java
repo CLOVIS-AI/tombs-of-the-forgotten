@@ -201,7 +201,7 @@ public final class Item implements Save<JsonObject> {
         
         return new JsonObject()
                 .add("name", name)
-                .add("description", name)
+                .add("description", description)
                 .add("rarity", rarity.name())
                 .add("weight", weight)
                 .add("actions", acts)
