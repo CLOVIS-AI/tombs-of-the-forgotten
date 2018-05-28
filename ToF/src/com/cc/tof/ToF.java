@@ -231,11 +231,7 @@ public class ToF extends Application {
         System.out.println("[File]\tSaves are stored in: " + SAVE_DIR.getAbsolutePath());
         
         System.out.println("[ToF]\tLoading general menu...");
-<<<<<<< HEAD
-        menu = FXMLLoader.load(getResource("interface.fxml"));
-=======
         Parent menu = FXMLLoader.load(getResource("Menu.fxml"));
->>>>>>> dea863fcde552d1c7f3652efb6b2d1c29c22845c
         System.out.println("[ToF]\tMenu loaded.");
         
         System.out.println("[ToF]\tCreating main scene...");
