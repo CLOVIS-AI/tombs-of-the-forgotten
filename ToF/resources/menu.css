@@ -5,3 +5,13 @@
 .mainFxmlClass {
     background: linear-gradient(to bottom, #b3cfe5 0%,#5c98c9 19%,#1a2c51 61%,#000000 100%);
 }
+
+
+.buttonUD {
+    -fx-background-color : BLACK;
+}
+
+.buttonUD:hover {
+    -fx-background-color : SNOW;
+    -fx-text-fill : BLACK;
+}
