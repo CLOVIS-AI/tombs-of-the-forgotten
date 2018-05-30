@@ -24,6 +24,10 @@
 package com.cc.world.links;
 
 import com.cc.players.Entity;
+import com.cc.world.Room;
+import com.cc.world.World;
+import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.WriterConfig;
 
 /**
  *
@@ -31,7 +35,21 @@ import com.cc.players.Entity;
  */
 public class KeyDoor extends Link {
     
-    private int id;
+    private final int id;
+    
+    public KeyDoor(int id, Room[] rooms){
+        super(rooms);
+        this.id = id;
+    }
+    
+    public KeyDoor(World world, JsonObject json){
+        super(world, json);
+        id = json.getInt("id", 0);
+        
+        if(id == 0)
+            throw new IllegalStateException("Found no key in the JSON: " +
+                    json.toString(WriterConfig.PRETTY_PRINT));
+    }
     
     private boolean hasKey(Entity e){
         return e.getInventory().stream().anyMatch(i -> i.getId() == id);
@@ -46,15 +64,12 @@ public class KeyDoor extends Link {
     public boolean canClose(Entity e) {
         return hasKey(e);
     }
-
+    
     @Override
-    public boolean open(Entity e) {
-        return !isOpen && canOpen(e);
-    }
-
-    @Override
-    public boolean close(Entity e) {
-        return isOpen && canClose(e);
+    public JsonObject save(){
+        return super.save()
+                .add("type", "key")
+                .add("key", id);
     }
     
 }

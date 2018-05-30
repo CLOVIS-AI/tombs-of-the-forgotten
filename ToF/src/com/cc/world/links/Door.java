@@ -73,16 +73,6 @@ public class Door extends Link {
     public boolean canClose(Entity e) {
         return true;
     }
-
-    @Override
-    public boolean open(Entity e) {
-        return isOpen = true;
-    }
-
-    @Override
-    public boolean close(Entity e) {
-        return isOpen = false;
-    }
     
     @Override
     public JsonObject save() {

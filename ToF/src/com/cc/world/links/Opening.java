@@ -69,16 +69,6 @@ public final class Opening extends Link {
     public boolean canClose(Entity e) {
         return false;
     }
-
-    @Override
-    public boolean open(Entity e) {
-        return true;
-    }
-
-    @Override
-    public boolean close(Entity e) {
-        return true;
-    }
     
     @Override
     public JsonObject save() {
