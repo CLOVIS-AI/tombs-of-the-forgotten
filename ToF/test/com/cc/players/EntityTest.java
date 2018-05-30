@@ -88,7 +88,7 @@ public class EntityTest {
         Location l = new Location(0, 0, 0);
         TreeMap<Location, Room> map = new TreeMap<>();
         World w = new World(map, p);
-        Room r = new Room("d", l, w);
+        Room r = new Room("d", l, w, false);
         
         map.put(l, r);
         p.addItem(i);

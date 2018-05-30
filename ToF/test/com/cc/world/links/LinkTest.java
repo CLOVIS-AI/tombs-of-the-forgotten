@@ -19,10 +19,10 @@ import java.util.Map.Entry;
 import java.util.stream.Stream;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -154,16 +154,6 @@ public class LinkTest {
 
         @Override
         public boolean canClose(Entity e) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public boolean open(Entity e) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public boolean close(Entity e) {
             throw new UnsupportedOperationException();
         }
     }

@@ -45,6 +45,7 @@ public final class Item implements Save<JsonObject> {
     private final Rarity rarity;
     private final int weight;
     private final Bar durability;
+    private int id;
     
     /**
      * Creates a new Item.
@@ -62,6 +63,7 @@ public final class Item implements Save<JsonObject> {
         this.weight = weight;
         this.durability = new Bar(durability);
         actions = new ArrayList<>();
+        id = 0;
     }
     
     /**
@@ -105,10 +107,30 @@ public final class Item implements Save<JsonObject> {
                             json.getInt("weight", 0),
                     new Bar(json.get("durability").asObject()));
         
+        id = json.getInt("id", 0);
+        
         JsonArray acts = json.get("actions").asArray();
         for(JsonValue j : acts){
             actions.add(Action.load(j.asObject()));
         }
+    }
+    
+    /**
+     * Sets the unique identifier of this item.
+     * @param id The identifier.
+     */
+    public void setId(int id){
+        this.id = id;
+    }
+    
+    /**
+     * Gets the unique identifier of this item.
+     * <p>An ID is not always needed for items. When there is no ID, it defaults
+     * to 0. IDs are used (for example) by LockedDoors.
+     * @return The identifier
+     */
+    public int getId(){
+        return id;
     }
     
     /**
@@ -205,6 +227,7 @@ public final class Item implements Save<JsonObject> {
                 .add("rarity", rarity.name())
                 .add("weight", weight)
                 .add("actions", acts)
-                .add("durability", durability.save());
+                .add("durability", durability.save())
+                .add("id", id);
     }
 }

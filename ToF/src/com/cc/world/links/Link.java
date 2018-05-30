@@ -24,6 +24,7 @@ package com.cc.world.links;
 
 import com.cc.players.Entity;
 import com.cc.utils.Save;
+import com.cc.utils.messages.Message;
 import com.cc.world.Direction;
 import static com.cc.world.Direction.fromCoordinates;
 import com.cc.world.Location;
@@ -192,14 +193,24 @@ public abstract class Link implements Save<JsonObject> {
      * @param e the entity that wants to open it
      * @return The state of the link after the call; {@code true} if it is open.
      */
-    public abstract boolean open(Entity e);
+    public final boolean open(Entity e){
+        if(!isOpen && canOpen(e)){
+            isOpen = true;
+            room1.getWorld().newMessage(new Message().add("You opened the door."));
+        }
+        return isOpen;
+    }
     
     /**
      * Closes this link.
      * @param e the entity that wants to close it
      * @return The state of the link after the call; {@code true} if it is open.
      */
-    public abstract boolean close(Entity e);
+    public final boolean close(Entity e){
+        if(isOpen && canClose(e))
+            isOpen = false;
+        return isOpen;
+    }
 
     @Override
     public int hashCode() {
@@ -229,6 +240,7 @@ public abstract class Link implements Save<JsonObject> {
         switch(json.getString("type", null)){
             case "door":        return new Door(world, json);
             case "openning":    return new Opening(world, json);
+            case "key":         return new KeyDoor(world, json);
             default:
                 throw new IllegalArgumentException("Cannot find the field 'type'"
                         + "in the provided JSON: " + json);

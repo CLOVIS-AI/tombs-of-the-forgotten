@@ -1,24 +1,25 @@
-/* MIT License
+/*
+ * The MIT License
  *
- * Copyright (c) 2018 Canet Ivan & Chourouq Sarah
- * 
+ * Copyright 2018 Canet Ivan & Chourouq Sarah.
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * 
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package com.cc.world.links;
 
@@ -26,58 +27,53 @@ import com.cc.players.Entity;
 import com.cc.world.Room;
 import com.cc.world.World;
 import com.eclipsesource.json.JsonObject;
+import com.eclipsesource.json.WriterConfig;
 
 /**
- * A Door is a Link that can be opened by any entity.
- * @author Ivan Canet
+ *
+ * @author icanet
  */
-public class Door extends Link {
-
-    /**
-     * Creates a closed door.
-     * @param r1 one of the linked rooms
-     * @param r2 the other linked room
-     */
-    public Door(Room r1, Room r2) {
-        this(r1, r2, false);
+public class KeyDoor extends Link {
+    
+    private final int id;
+    
+    public KeyDoor(int id, Room[] rooms){
+        this(id, rooms[0], rooms[1]);
     }
     
-    /**
-     * Creates a door.
-     * @param r1 one of the linked rooms
-     * @param r2 the other linked room
-     * @param openByDefault {@code true} if the door is opened
-     */
-    public Door(Room r1, Room r2, boolean openByDefault) {
-        super(r1, r2, openByDefault);
+    public KeyDoor(int id, Room r1, Room r2){
+        super(r1, r2);
+        this.id = id;
     }
     
-    /**
-     * Creates a door between two rooms.
-     * @param rooms the two rooms
-     */
-    public Door(Room... rooms) {
-        this(rooms[0], rooms[1]);
-    }
-    
-    public Door(World world, JsonObject json){
+    public KeyDoor(World world, JsonObject json){
         super(world, json);
+        id = json.getInt("id", 0);
+        
+        if(id == 0)
+            throw new IllegalStateException("Found no key in the JSON: " +
+                    json.toString(WriterConfig.PRETTY_PRINT));
+    }
+    
+    private boolean hasKey(Entity e){
+        return e.getInventory().stream().anyMatch(i -> i.getId() == id);
     }
 
     @Override
     public boolean canOpen(Entity e) {
-        return true;
+        return hasKey(e);
     }
 
     @Override
     public boolean canClose(Entity e) {
-        return true;
+        return hasKey(e);
     }
     
     @Override
-    public JsonObject save() {
+    public JsonObject save(){
         return super.save()
-                .add("type", "door");
+                .add("type", "key")
+                .add("key", id);
     }
     
 }

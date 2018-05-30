@@ -23,6 +23,8 @@
  */
 package com.cc.world.generator;
 
+import com.cc.items.Item;
+import com.cc.items.Rarity;
 import com.cc.players.Player;
 import com.cc.utils.Pair;
 import com.cc.world.Direction;
@@ -31,10 +33,11 @@ import com.cc.world.Note;
 import com.cc.world.Room;
 import com.cc.world.World;
 import com.cc.world.links.Door;
+import com.cc.world.links.KeyDoor;
 import com.cc.world.links.Link;
 import com.cc.world.links.Opening;
+import static java.lang.Math.abs;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +45,6 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.TreeMap;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -90,7 +92,7 @@ public class DefaultGenerator implements Generator {
         
         random = randomizer;
         rooms = new TreeMap<>();
-        addRoom(new Room("This is where you spawn."), new Location());
+        addRoom(new Room("This is where you spawn.").explore(), new Location());
         int number = random.nextInt(50) + 10;
         for(int i = 0; i < number; i++){
             iteration();
@@ -101,22 +103,39 @@ public class DefaultGenerator implements Generator {
     }
     
     void iteration(){
-        Pair<Supplier<Room>, Function<Room[], Link>> p1 = createPair();
-        Pair<Supplier<Room>, Function<Room[], Link>> p2 = createPair();
+        Pair<Room, Function<Room[], Link>> pair1 = new Pair<>(createRandomRoom(), this::createRandomLink);
+        Function<Room[], Pair<Room, Link>> pair2 = createPair();
         
-        {   // Swap the links
-            Function<Room[], Link> temp = p1.getSecond();
-            p1.setSecond(p2.getSecond());
-            p2.setSecond(temp);
-        }
-        for(Pair<Supplier<Room>, Function<Room[], Link>> p : Arrays.asList(p1, p2)){
-            Pair<Room, Location> picked = pickRoom();
-            Room candidate = p.getFirst().get();
-            addRoom(candidate, picked.getSecond());
-            p.getSecond()
-                    .apply(new Room[] { picked.getFirst(), candidate }
-                    ).autoLink();
-        }
+        /* How it works:
+         *      Room   Link    Pick
+         * 1    2      6       1
+         * 2    5      3       4
+         * 
+         * The rooms are placed in 6 stages.
+         */
+        
+        // 1 Pick 'p1': (Room, Location)
+        Pair<Room, Location> p1 = pickRoom();
+        
+        // 2 Create 'r1': Room
+        Room r1 = pair1.getFirst();
+        addRoom(r1, p1.getSecond());
+        
+        // 3 Create 'l2': Link of (r1, p1.first)
+        Pair<Room, Link> pl2 = pair2.apply(new Room[]{r1, p1.getFirst()});
+        Link l2 = pl2.getSecond();
+        l2.autoLink();
+        
+        // 4 Pick 'p2': (Room, Location)
+        Pair<Room, Location> p2 = pickRoom();
+        
+        // 5 Create 'r2': Room
+        Room r2 = pl2.getFirst();
+        addRoom(r2, p2.getSecond());
+        
+        // 6 Create 'l1': Link of (r2, p2.first)
+        Link l1 = pair1.getSecond().apply(new Room[]{r2, p2.getFirst()});
+        l1.autoLink();
     }
     
     void addRoom(Room r, Location l){
@@ -124,9 +143,9 @@ public class DefaultGenerator implements Generator {
         r.setLocation(l);
     }
     
-    Pair<Supplier<Room>, Function<Room[], Link>> createPair(){
+    Function<Room[], Pair<Room, Link>> createPair(){
         int choice = random.nextInt(TOTAL+1);
-        for (Entry<Integer, Pair<Supplier<Room>, Function<Room[], Link>>> pair : PAIRS.entrySet()) {
+        for (Entry<Integer, Function<Room[], Pair<Room, Link>>> pair : PAIRS.entrySet()) {
             int poss = pair.getKey();
             if(poss > (choice -= poss))
                 return pair.getValue();
@@ -161,33 +180,53 @@ public class DefaultGenerator implements Generator {
         return new Pair<>(r, l);
     }
     
-    // ************************************************************* S T A T I C
+    private final Map<Integer, Function<Room[], Pair<Room, Link>>> PAIRS;
+    private final int TOTAL;
     
-    private static final Map<Integer, Pair<Supplier<Room>, Function<Room[], Link>>> PAIRS;
-    private static final int TOTAL;
-    
-    static {
+    {
         PAIRS = new HashMap<>();
-        PAIRS.put(15, new Pair<>(DefaultGenerator::createRandomRoom, Opening::new));
-        PAIRS.put( 5, new Pair<>(DefaultGenerator::createRandomRoom, Door::new));
+        PAIRS.put(15, (rs) -> new Pair<>(createRandomRoom(), new Opening(rs)));
+        PAIRS.put( 5, (rs) -> new Pair<>(createRandomRoom(), new Door(rs)));
+        PAIRS.put( 1, this::lockedDoor);
         
         TOTAL = PAIRS.keySet().stream()
                 .mapToInt(v -> (int)v)
                 .sum();
     }
     
-    private static Room createRandomRoom(){
+    private Room createRandomRoom(){
         Room randomizedRoom = new Room("Random room");
         
-        for(int i = 0; i < new Random().nextInt(3); i++){
+        for(int i = 0; i < random.nextInt(3); i++){
             List<Integer> notes = new ArrayList<>(Note.getIDs());
-            randomizedRoom.addNote(new Note(notes.get(new Random().nextInt(notes.size()))));
+            randomizedRoom.addNote(new Note(notes.get(random.nextInt(notes.size()))));
         }
         
         return randomizedRoom;
     }
     
-    private static String exportPairs(){
+    private Item createRandomItem(){
+        return new Item("", "", Rarity.RARE, 1, 1);
+    }
+    
+    private Link createRandomLink(Room[] rooms){
+        int luck = random.nextInt(100);
+        return luck < 75 ? new Opening(rooms):
+                           new Door(rooms);
+    }
+    
+    private Pair<Room, Link> lockedDoor(Room[] rooms){
+        
+        int key = abs(random.nextInt(Integer.MAX_VALUE-1)+1);
+        Room room2 = createRandomRoom();
+        Item item = createRandomItem();
+        item.setId(key);
+        room2.getItems().add(item);
+        
+        return new Pair<>(room2, new KeyDoor(key, rooms));
+    }
+    
+    private String exportPairs(){
         StringBuilder sb = new StringBuilder();
         
         PAIRS.forEach((key, value) -> sb
