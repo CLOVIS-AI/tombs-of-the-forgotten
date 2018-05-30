@@ -479,6 +479,14 @@ public class Room implements Save<JsonObject> {
     }
     
     /**
+     * The world this room is in.
+     * @return The world this room is in.
+     */
+    public World getWorld() {
+        return world;
+    }
+    
+    /**
      * Has this room been explored by the player yet?
      * @return {@code true} if this room has been explored by the player.
      */

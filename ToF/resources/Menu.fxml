@@ -271,7 +271,7 @@
                </fill>
             </Polygon>
             <Line endX="100.0" layoutX="892.0" layoutY="395.0" startX="-100.0" stroke="WHITE" />
-            <Label fx:id="MainTitle" alignment="CENTER" layoutX="396.0" layoutY="236.0" text="The Younger Scrolls X" textFill="WHITE">
+            <Label fx:id="MainTitle" alignment="CENTER" layoutX="396.0" layoutY="236.0" text="The Younger Scrolls VI" textFill="WHITE">
                <font>
                   <Font size="24.0" />
                </font>
