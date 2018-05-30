@@ -161,6 +161,16 @@ public class World implements Timable, Save<JsonObject> {
     public Player getPlayer() {
         return player;
     }
+    
+    /**
+     * The percent of exploration.
+     * @return The percent of exploration.
+     */
+    public double getPercentExploration() {
+        return rooms.values().stream()
+                .filter(Room::isExplored)
+                .count() / rooms.size() * 100;
+    }
 
     /**
      * Get every room of the World.
