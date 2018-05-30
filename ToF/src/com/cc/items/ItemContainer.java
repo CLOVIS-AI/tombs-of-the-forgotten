@@ -22,10 +22,20 @@
  */
 package com.cc.items;
 
+import static com.cc.items.EntityAction.Mode.PERMANENT;
+import static com.cc.items.EntityAction.Operation.ADD;
+import static com.cc.items.EntityAction.Operation.REMOVE;
+import static com.cc.items.EntityAction.Target.OPPONENT;
+import static com.cc.items.EntityAction.Target.SELF;
+import com.cc.players.Entity.Stat;
+import static com.cc.players.Entity.Stat.HEALTH;
+import static com.cc.players.Entity.Stat.MANA;
+import com.cc.utils.Bar;
 import com.cc.utils.Save;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -76,7 +86,77 @@ public class ItemContainer implements Save<JsonObject> {
      * @return A container.
      */
     public List<Item> getItems() {
-        return new ArrayList<>(items);
+        return Collections.unmodifiableList(items);
+    }
+    
+    /**
+     * Gets all the items that can only be used once.
+     * <p>Note that items that can be used multiple times (eg. 5 times) but were
+     * already almost used (eg. used 4 times, so 1 use is left) <b>are</b>
+     * included.
+     * @return The items that can only be used once.
+     */
+    public Stream<Item> getUniqueUsage() {
+        return items.stream()
+                .filter(i -> i.getDurability() == 1);
+    }
+    
+    /**
+     * Gets all the weapons.
+     * <p>The weapons are the items that deal damage to the opponent - that is,
+     * items that have at least one action similar to OPPONENT HEALTH REMOVE...
+     * @return The weapons.
+     */
+    public Stream<Item> getWeapons() {
+        return items.stream()
+                .filter(i -> i.getActions()
+                                .map(a -> (EntityAction) a)
+                                .anyMatch(a -> a.getTarget() == OPPONENT
+                                            && a.getStat() == HEALTH
+                                            && a.getOperation() == REMOVE));
+    }
+    
+    /**
+     * Gets all the wearables.
+     * <p>The wearables are items that can be worn - that is, items that have at
+     * least one action similar to SELF PERMANENT...
+     * @return The items you can wear.
+     */
+    public Stream<Item> getWearables() {
+        return items.stream()
+                .filter(i -> i.getActions()
+                                .map(a -> (EntityAction) a)
+                                .anyMatch(a -> a.getTarget() == SELF
+                                            && a.getMode() == PERMANENT));
+    }
+    
+    /**
+     * Gets all the scrolls.
+     * <p>The scrolls are the items that {@link #getUniqueUsage() can only be
+     * used once} and cost mana.
+     * @return The scrolls.
+     */
+    public Stream<Item> getScrolls() {
+        return getUniqueUsage()
+                .filter(i -> i.getActions()
+                                .map(a -> (EntityAction) a)
+                                .anyMatch(a -> a.getTarget() == SELF
+                                            && a.getOperation() == REMOVE
+                                            && a.getStat() == MANA));
+    }
+    
+    /**
+     * Gets all the edible items.
+     * <p>The edible items are the items that {@link #getUniqueUsage() can only
+     * be used once} and increase any of the user's stats.
+     * @return The scrolls.
+     */
+    public Stream<Item> getEdible() {
+        return getUniqueUsage()
+                .filter(i -> i.getActions()
+                                .map(a -> (EntityAction) a)
+                                .anyMatch(a -> a.getOperation() == ADD
+                                            && a.getTarget() == SELF));
     }
 
     /**
@@ -161,6 +241,17 @@ public class ItemContainer implements Save<JsonObject> {
         return new JsonObject()
                 .add("description", description.orElse(""))
                 .add("items", items);
+    }
+    
+    /**
+     * Adds to the bar the total amount of every bonus of type "permanent".
+     * @param stat the stat that is linked to the bar
+     * @param bar the bar
+     */
+    public void applyWears(Stat stat, Bar bar){
+        for(Item item : items){
+            bar.addBonus(1, item.getWear(stat), false);
+        }
     }
     
     /**

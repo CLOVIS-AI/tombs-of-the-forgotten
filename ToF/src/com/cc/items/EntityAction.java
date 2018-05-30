@@ -22,6 +22,7 @@
  */
 package com.cc.items;
 
+import static com.cc.items.EntityAction.Mode.MODIFICATION;
 import static com.cc.items.EntityAction.Operation.ADD;
 import com.cc.players.Entity;
 import com.cc.players.Entity.Stat;
@@ -38,8 +39,9 @@ public class EntityAction implements Action {
 
     private final Stat stat;
     private final Target target;
-    private final int value;
+    private final int value, turns;
     private final Operation operation;
+    private final Mode mode;
     
     /**
      * Creates a new Action
@@ -47,12 +49,16 @@ public class EntityAction implements Action {
      * @param operation the operation that will be executed on that target
      * @param stat the stat that will be modified
      * @param value how much it will be modified
+     * @param mode the mode of use of this item
      */
-    public EntityAction(Target target, Operation operation, Stat stat, int value){
+    public EntityAction(Target target, Operation operation, Stat stat, int value,
+            Mode mode){
         this.target = target;
         this.stat = stat;
         this.value = value;
         this.operation = operation;
+        this.mode = mode;
+        this.turns = 1;
     }
     
     /**
@@ -60,8 +66,8 @@ public class EntityAction implements Action {
      * @param target the target of the action
      * @param operation the operation that will be executed on that target 
      */
-    public EntityAction(Target target, Operation operation){
-        this(target, operation, null, 0);
+    public EntityAction(Target target, Operation operation, Mode mode){
+        this(target, operation, null, 0, mode);
     }
     
     /**
@@ -72,16 +78,18 @@ public class EntityAction implements Action {
         this(Target.valueOf(   json.getString("target", null)),
              Operation.valueOf(json.getString("operation", null)),
              Stat.valueOf(     json.getString("stat", null)),
-                               json.getInt("value", 0));
+                               json.getInt("value", 0),
+             Mode.valueOf(     json.getString("mode", null)));
     }
     
     @Override
     public JsonObject save() {
         return new JsonObject()
-                .add("target", target.toString())
-                .add("stat", stat.toString())
+                .add("target", target.name())
+                .add("stat", stat.name())
                 .add("value", value)
-                .add("operation", operation.toString());
+                .add("operation", operation.name())
+                .add("mode", mode.name());
     }
     
     /**
@@ -90,20 +98,26 @@ public class EntityAction implements Action {
      */
     @Override
     public void execute(Entity e){
-        operation.execute(target.select(e), stat, value);
+        mode.execute(target.select(e), stat, value, turns);
     }
 
     @Override
     public Message getEffects() {
         return new Message()
                 .add(stat)
+                .add(mode != MODIFICATION ? " ("+mode+")" : "")
                 .add(": ")
                 .add(operation == ADD ? value : -value);
     }
 
     @Override
     public boolean canUse(Entity entity) {
-        return operation.canExecute(target.select(entity), stat, value);
+        return mode.canExecute(target.select(entity), stat, value);
+    }
+
+    @Override
+    public int getWear(Stat requested) {
+        return mode.getWear(stat, requested, value);
     }
     
     // ************************************************************* S T A T I C
@@ -142,24 +156,50 @@ public class EntityAction implements Action {
         }
         
         /**
-         * Executes this operation.
+         * Calculates the effect of an operation.
          * @param entity the entity the operation is executed on
-         * @param stat the entity's stat that is modified
          * @param value how effective this operation is
+         * @return The amount of effect this operation has.
          */
-        public void execute(Entity entity, Stat stat, int value){
-            stat.set(entity, modifier.apply(value));
+        public int getValue(Entity entity, int value){
+            return modifier.apply(value);
         }
+    }
+    
+    public enum Mode {
+        MODIFICATION {
+            @Override
+            public void execute(Entity e, Stat s, int value, int turns) {
+                s.increment(e, value);
+            }
+            @Override
+            public boolean canExecute(Entity e, Stat s, int value) {
+                return s.canIncrement(e, value);
+            }
+        }, BONUS {
+            @Override
+            public void execute(Entity e, Stat s, int value, int turns) {
+                s.newBonus(e, turns, value);
+            }
+        }, PERMANENT {
+            @Override
+            public void execute(Entity e, Stat s, int value, int turns) {
+                throw new IllegalStateException("You cannot execute a permanent item!");
+            }
+            @Override
+            public boolean canExecute(Entity e, Stat s, int value) {
+                return false;
+            }
+            @Override
+            public int getWear(Stat current, Stat requested, int value) {
+                return current == requested ? value : 0;
+            }
+        };
         
-        /**
-         * Is it possible to execute this operation?
-         * @param entity the entity the operation is executed one
-         * @param stat the entity's stat that is modified
-         * @param value how effective the operation is
-         * @return {@code true} if the operation can be performed.
-         */
-        public boolean canExecute(Entity entity, Stat stat, int value){
-            return stat.canSet(entity, modifier.apply(value));
+        public abstract void execute(Entity e, Stat s, int value, int turns);
+        public boolean canExecute(Entity e, Stat s, int value){ return true; }
+        public int getWear(Stat current, Stat requested, int value){ 
+            throw new IllegalStateException("Cannot wear this action: "+this);
         }
     }
     
@@ -172,6 +212,7 @@ public class EntityAction implements Action {
         hash = 37 * hash + Objects.hashCode(this.target);
         hash = 37 * hash + this.value;
         hash = 37 * hash + Objects.hashCode(this.operation);
+        hash = 37 * hash + Objects.hashCode(this.mode);
         return hash;
     }
 
@@ -199,7 +240,15 @@ public class EntityAction implements Action {
         if (this.operation != other.operation) {
             return false;
         }
+        if (this.mode != other.mode) {
+            return false;
+        }
         return true;
+    }
+    
+    @Override
+    public String toString() {
+        return mode + ":" + target + ":" + stat + ":" + operation + ":" + value;
     }
     
     /**
@@ -212,5 +261,31 @@ public class EntityAction implements Action {
         public static CannotUseItem noOpponent(){
             return new CannotUseItem("No opponent was found.");
         }
+    }
+    
+    // *********************************************************** G E T T E R S
+    
+    public Stat getStat() {
+        return stat;
+    }
+
+    public Target getTarget() {
+        return target;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public int getTurns() {
+        return turns;
+    }
+
+    public Operation getOperation() {
+        return operation;
+    }
+
+    public Mode getMode() {
+        return mode;
     }
 }

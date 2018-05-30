@@ -6,13 +6,12 @@
 package com.cc.utils;
 
 import static com.cc.utils.Bar.Behavior.ACCEPT;
-import java.util.function.Consumer;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -62,7 +61,7 @@ public class EventBarTest {
         System.out.println("EventBar#setOnFull:addBonus");
         EventBar e3 = new EventBar("test", 0, 5, 4);
         e3.setOnFull(b -> b.remove(5, ACCEPT));
-        e3.addBonus(1, 1);
+        e3.addBonus(1, 1, true);
         switch (e1.getReal()) {
             case 0:  assertTrue(true); break;
             case 5:  fail("The lambda-exp was not called."); break;
@@ -93,7 +92,7 @@ public class EventBarTest {
         System.out.println("EventBar#setOnEmpty:end of a bonus");
         EventBar e3 = new EventBar("test", 0, 5, 0);
         e3.setOnEmpty(b -> b.add(5, ACCEPT));
-        e3.addBonus(1, 1);
+        e3.addBonus(1, 1, true);
         e3.nextTick();
         switch (e1.getReal()) {
             case 5:  assertTrue(true); break;
