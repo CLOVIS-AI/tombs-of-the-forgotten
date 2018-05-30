@@ -48,7 +48,7 @@ public class KeyDoor extends Link {
     
     public KeyDoor(World world, JsonObject json){
         super(world, json);
-        id = json.getInt("id", 0);
+        id = json.getInt("key", 0);
         
         if(id == 0)
             throw new IllegalStateException("Found no key in the JSON: " +
