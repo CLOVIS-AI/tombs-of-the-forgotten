@@ -25,6 +25,7 @@ package com.cc.world;
 import com.cc.items.ItemContainer;
 import com.cc.players.Entity;
 import com.cc.utils.Save;
+import com.cc.utils.messages.Message;
 import com.cc.world.Note.Notes;
 import com.cc.world.Path.UnreachableRoomException;
 import com.cc.world.links.Link;
@@ -57,15 +58,19 @@ public class Room implements Save<JsonObject> {
     private ItemContainer items;
     private Notes notes;
     
+    private boolean explored;
+    
     public Room(String description){
-        this(description, null, null);
+        this(description, null, null, false);
         isGenerated = false;
     }
     
-    public Room(String description, Location location, World world){
+    public Room(String description, Location location, World world,
+            boolean explored){
         this.description = description;
         this.location = location;
         this.world = world;
+        this.explored = explored;
         isGenerated = true;
         items = new ItemContainer(description);
         notes = new Notes();
@@ -82,6 +87,7 @@ public class Room implements Save<JsonObject> {
         this.items =    new ItemContainer(  json.get("items").asObject()    );
         this.location = new Location(       json.get("location").asObject() );
         this.notes =    new Notes(          json.get("notes").asArray()     );
+        this.explored =                     json.getBoolean("explored", false);
     }
     
     /**
@@ -471,6 +477,46 @@ public class Room implements Save<JsonObject> {
     public List<Note> getNotes() {
         return Collections.unmodifiableList(notes);
     }
+    
+    /**
+     * The world this room is in.
+     * @return The world this room is in.
+     */
+    public World getWorld() {
+        return world;
+    }
+    
+    /**
+     * Has this room been explored by the player yet?
+     * @return {@code true} if this room has been explored by the player.
+     */
+    public boolean isExplored() {
+        return explored;
+    }
+    
+    /**
+     * Marks this room has explored. If it is already explored, doesn't do
+     * anything.
+     * @return This room itself, to allow method-chaining.
+     */
+    public Room explore() {
+        explored = true;
+        return this;
+    }
+    
+    /**
+     * Adds the content of the notes in the World message log.
+     */
+    public void readNotes() {
+        if(hasNotes())
+            world.newMessage(new Message().add("There are " + notes.size() + " notes"
+                + "in this room. You read them..."));
+        else
+            world.newMessage(new Message().add("There are no notes in this room."));
+        
+        for(Note n : notes)
+            world.newMessage(new Message().add(n.print()));
+    }
 
     @Override
     public int hashCode() {
@@ -529,7 +575,8 @@ public class Room implements Save<JsonObject> {
                 .add("desc", description)
                 .add("items", items.save())
                 .add("location", location.save())
-                .add("notes", notes.save());
+                .add("notes", notes.save())
+                .add("explored", explored);
     }
     
 }

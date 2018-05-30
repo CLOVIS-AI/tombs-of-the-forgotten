@@ -101,6 +101,19 @@ public class Note implements Save<JsonValue> {
         return Json.value(ID);
     }
     
+    @Override
+    public String toString() {
+        return "note #" + ID;
+    }
+    
+    /**
+     * Returns the text of this note.
+     * @return The text of this note.
+     */
+    public String print() {
+        return text;
+    }
+    
     // ************************************************************* S T A T I C
     
     private static final Map<Integer, String> notes;

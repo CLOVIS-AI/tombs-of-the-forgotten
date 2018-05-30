@@ -26,6 +26,7 @@ import com.cc.items.Item;
 import com.cc.players.Entity.Stat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A Message.
@@ -73,9 +74,12 @@ public class Message {
             add((String) o);
         else if(o instanceof Stat)
             add((Stat) o);
-        else
-            throw new IllegalArgumentException("Cannot recognize " + o + " "
-                    + "as any allowed objects.");
+        else if(o instanceof Integer)
+            add((int) o);
+        else {
+            System.err.println("[Msg]\tCannot recognize type of " + o);
+            add(o.toString());
+        }
         
         return this;
     }
@@ -172,6 +176,12 @@ public class Message {
         for(MessagePart m : parts)
             sb.append(m).append(", ");
         return sb.delete(sb.length()-2, sb.length()).toString();
+    }
+    
+    public String toStringSimple() {
+        return this.parts.stream()
+                .map(MessagePart::getText)
+                .collect(Collectors.joining(" "));
     }
     
 }

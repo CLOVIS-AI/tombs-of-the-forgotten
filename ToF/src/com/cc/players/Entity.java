@@ -328,6 +328,17 @@ public abstract class Entity implements Timable, Save<JsonObject> {
     public boolean canMoveTo(Direction d) {
         return getCurrentRoom().canMove(d);
     }
+    
+    /**
+     * Can the entity reach that Direction?
+     * 
+     * @param d the direction
+     * @return Whether the Entity can move in that Direction, according to
+     * {@link Room#canReach(com.cc.world.Direction, com.cc.players.Entity) Room.canReach(Direction,Entity)}.
+     */
+    public boolean canReach(Direction d) {
+        return getCurrentRoom().canReach(d, this);
+    }
 
     /**
      * Moves this Entity in that Direction (if allowed).
@@ -337,6 +348,10 @@ public abstract class Entity implements Timable, Save<JsonObject> {
      * Direction.
      */
     public void moveTo(Direction d) {
+        Room crt = getCurrentRoom();
+        if (!crt.canMove(d) && crt.canOpen(d, this))
+            crt.open(d, this);
+        
         if (!canMoveTo(d)) {
             throw new IllegalStateException("This Entity (" + this + ") located in "
                     + location + " cannot move in that Direction (" + d + ")");
@@ -432,6 +447,22 @@ public abstract class Entity implements Timable, Save<JsonObject> {
         a.add(stamina);
         a.add(inventory.getWeightBar());
         return a;
+    }
+    
+    public Bar getHealthBar() {
+        return health;
+    }
+    
+    public Bar getManaBar() {
+        return mana;
+    }
+    
+    public Bar getStaminaBar() {
+        return stamina;
+    }
+    
+    public Bar getWeightBar() {
+        return inventory.getWeightBar();
     }
 
     /**

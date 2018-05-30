@@ -107,6 +107,35 @@ public class Location implements Comparable<Location>, Save<JsonObject> {
     }
     
     /**
+     * The absolute location of this location; that is, the location with the
+     * same coordinates but all positive.
+     * @return The absolute location of this location.
+     */
+    public Location abs(){
+        return new Location(Math.abs(X), Math.abs(Y), Math.abs(Z));
+    }
+    
+    /**
+     * The distance between this location and an other one.
+     * @param l the other location
+     * @return The distance between two locations.
+     */
+    public int dist(Location l){
+        Location dist = remove(l).abs();
+        return Math.max(Math.max(dist.X, dist.Y), dist.Z);
+    }
+    
+    /**
+     * Is this location next to an other one?
+     * @param l the other location
+     * @return {@code true} if the two locations touch each other (their 
+     * distance is 1 according to {@link #dist(com.cc.world.Location) }).
+     */
+    public boolean isNextTo(Location l){
+        return dist(l) <= 1;
+    }
+    
+    /**
      * The opposite location.
      * <p>For every location (x, y, z), it's opposite is (-x, -y, -z).
      * @return The opposite location.

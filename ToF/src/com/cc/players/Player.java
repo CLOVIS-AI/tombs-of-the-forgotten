@@ -22,6 +22,7 @@
  */
 package com.cc.players;
 
+import com.cc.world.Direction;
 import com.eclipsesource.json.JsonObject;
 
 
@@ -74,6 +75,12 @@ public class Player extends Entity {
     public Player(JsonObject json) {
         super(json);
         searchLuck = json.getInt("luck", 0);
+    }
+    
+    @Override
+    public void moveTo(Direction d) {
+        super.moveTo(d);
+        super.getCurrentRoom().explore();
     }
     
     @Override
