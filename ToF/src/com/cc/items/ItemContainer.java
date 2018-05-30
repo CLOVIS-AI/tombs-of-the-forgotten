@@ -23,6 +23,7 @@
 package com.cc.items;
 
 import static com.cc.items.EntityAction.Mode.PERMANENT;
+import static com.cc.items.EntityAction.Operation.ADD;
 import static com.cc.items.EntityAction.Operation.REMOVE;
 import static com.cc.items.EntityAction.Target.OPPONENT;
 import static com.cc.items.EntityAction.Target.SELF;
@@ -142,6 +143,20 @@ public class ItemContainer implements Save<JsonObject> {
                                 .anyMatch(a -> a.getTarget() == SELF
                                             && a.getOperation() == REMOVE
                                             && a.getStat() == MANA));
+    }
+    
+    /**
+     * Gets all the edible items.
+     * <p>The edible items are the items that {@link #getUniqueUsage() can only
+     * be used once} and increase any of the user's stats.
+     * @return The scrolls.
+     */
+    public Stream<Item> getEdible() {
+        return getUniqueUsage()
+                .filter(i -> i.getActions()
+                                .map(a -> (EntityAction) a)
+                                .anyMatch(a -> a.getOperation() == ADD
+                                            && a.getTarget() == SELF));
     }
 
     /**
