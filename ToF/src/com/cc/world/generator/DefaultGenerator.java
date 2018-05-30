@@ -139,6 +139,9 @@ public class DefaultGenerator implements Generator {
     }
     
     void addRoom(Room r, Location l){
+        if(rooms.containsKey(l))
+            throw new IllegalStateException("There is already a room here!");
+        
         rooms.put(l, r);
         r.setLocation(l);
     }
@@ -168,14 +171,18 @@ public class DefaultGenerator implements Generator {
             final Room ro = candidates.get(random.nextInt(candidates.size()));
             List<Location> locs = Stream.of(Direction.values())
                     .filter((Direction d) -> !ro.getNeighbor(d).isPresent())
+                    .filter(d -> !rooms.containsKey(ro.getLocation().add(d)))
                     .map(d -> ro.getLocation().add(d))
                     .collect(Collectors.toList());
             l = locs.isEmpty() ? null : locs.get(random.nextInt(locs.size()));
             r = ro; // two variables so the Stream doesn't complain about not final
             
-            if(safeguard++ > 10)
+            if(safeguard++ > 100)
                 throw new IllegalStateException("Detected an infinite loop!");
         } while(l == null);
+        
+        if(rooms.containsKey(l))
+            throw new IllegalStateException("The generated location is already used!");
         
         return new Pair<>(r, l);
     }
@@ -195,7 +202,7 @@ public class DefaultGenerator implements Generator {
     }
     
     private Room createRandomRoom(){
-        Room randomizedRoom = new Room("Random room");
+        Room randomizedRoom = new Room("Random room " + random.nextInt());
         
         for(int i = 0; i < random.nextInt(3); i++){
             List<Integer> notes = new ArrayList<>(Note.getIDs());

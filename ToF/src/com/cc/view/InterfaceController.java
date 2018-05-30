@@ -345,7 +345,6 @@ public class InterfaceController implements Initializable {
         player = ToF.getWorld().getPlayer().getLocation();
         ToF.getWorld()
                 .selectRoomsByLocation(l -> l.getZ() == player.getZ())
-                .filter(Room::isExplored)
                 .forEach(this::drawRoom);
     }
 
@@ -362,6 +361,13 @@ public class InterfaceController implements Initializable {
             e.setFill(Color.AQUAMARINE);
         } else if (ToF.getWorld().getEntities(false).anyMatch(en -> en.getLocation().equals(relative))){
             e.setFill(Color.CRIMSON);
+        }
+        
+        if (!r.isExplored()){
+            Color p = (Color) e.getFill();
+            e.setFill(new Color(p.getRed(), p.getGreen(), p.getRed(),
+                    0.5/(r.getLocation().dist(player)+0.5)
+            ));
         }
 
         Map.getChildren().add(e);
