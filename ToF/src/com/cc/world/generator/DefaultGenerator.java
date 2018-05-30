@@ -24,6 +24,7 @@
 package com.cc.world.generator;
 
 import com.cc.items.Item;
+import com.cc.items.Rarity;
 import com.cc.players.Player;
 import com.cc.utils.Pair;
 import com.cc.world.Direction;
@@ -102,18 +103,39 @@ public class DefaultGenerator implements Generator {
     }
     
     void iteration(){
-        Pair<Room, Function<Room, Link>> pair1 = new Pair<>(createRandomRoom(), this::createRandomLink);
-        Function<Room, Pair<Room, Link>> pair2 = createPair();
+        Pair<Room, Function<Room[], Link>> pair1 = new Pair<>(createRandomRoom(), this::createRandomLink);
+        Function<Room[], Pair<Room, Link>> pair2 = createPair();
         
-        Pair<Room, Location> picked1 = pickRoom();
-        Pair<Room, Link> p2 = pair2.apply(picked1.getFirst());
-        addRoom(pair1.getFirst(), picked1.getSecond());
-        p2.getSecond().autoLink();
+        /* How it works:
+         *      Room   Link    Pick
+         * 1    2      6       1
+         * 2    5      3       4
+         * 
+         * The rooms are placed in 6 stages.
+         */
         
-        Pair<Room, Location> picked2 = pickRoom();
-        Link l2 = pair1.getSecond().apply(p2.getFirst());
-        addRoom(p2.getFirst(), picked2.getSecond());
+        // 1 Pick 'p1': (Room, Location)
+        Pair<Room, Location> p1 = pickRoom();
+        
+        // 2 Create 'r1': Room
+        Room r1 = pair1.getFirst();
+        addRoom(r1, p1.getSecond());
+        
+        // 3 Create 'l2': Link of (r1, p1.first)
+        Pair<Room, Link> pl2 = pair2.apply(new Room[]{r1, p1.getFirst()});
+        Link l2 = pl2.getSecond();
         l2.autoLink();
+        
+        // 4 Pick 'p2': (Room, Location)
+        Pair<Room, Location> p2 = pickRoom();
+        
+        // 5 Create 'r2': Room
+        Room r2 = pl2.getFirst();
+        addRoom(r2, p2.getSecond());
+        
+        // 6 Create 'l1': Link of (r2, p2.first)
+        Link l1 = pair1.getSecond().apply(new Room[]{r2, p2.getFirst()});
+        l1.autoLink();
     }
     
     void addRoom(Room r, Location l){
@@ -121,9 +143,9 @@ public class DefaultGenerator implements Generator {
         r.setLocation(l);
     }
     
-    Function<Room, Pair<Room, Link>> createPair(){
+    Function<Room[], Pair<Room, Link>> createPair(){
         int choice = random.nextInt(TOTAL+1);
-        for (Entry<Integer, Function<Room, Pair<Room, Link>>> pair : PAIRS.entrySet()) {
+        for (Entry<Integer, Function<Room[], Pair<Room, Link>>> pair : PAIRS.entrySet()) {
             int poss = pair.getKey();
             if(poss > (choice -= poss))
                 return pair.getValue();
@@ -158,7 +180,7 @@ public class DefaultGenerator implements Generator {
         return new Pair<>(r, l);
     }
     
-    private final Map<Integer, Function<Room, Pair<Room, Link>>> PAIRS;
+    private final Map<Integer, Function<Room[], Pair<Room, Link>>> PAIRS;
     private final int TOTAL;
     
     {
@@ -184,17 +206,16 @@ public class DefaultGenerator implements Generator {
     }
     
     private Item createRandomItem(){
-        return null;
+        return new Item("", "", Rarity.RARE, 1, 1);
     }
     
-    private Link createRandomLink(Room room){
+    private Link createRandomLink(Room[] rooms){
         int luck = random.nextInt(100);
-        Room other = createRandomRoom();
-        return luck < 75 ? new Opening(room, other):
-                           new Door(room, other);
+        return luck < 75 ? new Opening(rooms):
+                           new Door(rooms);
     }
     
-    private Pair<Room, Link> lockedDoor(Room[] room){
+    private Pair<Room, Link> lockedDoor(Room[] rooms){
         
         int key = abs(random.nextInt(Integer.MAX_VALUE-1)+1);
         Room room2 = createRandomRoom();
@@ -202,7 +223,7 @@ public class DefaultGenerator implements Generator {
         item.setId(key);
         room2.getItems().add(item);
         
-        return new Pair<>(room2, new KeyDoor(key, room[0], room2));
+        return new Pair<>(room2, new KeyDoor(key, rooms));
     }
     
     private String exportPairs(){
