@@ -345,6 +345,7 @@ public class InterfaceController implements Initializable {
         player = ToF.getWorld().getPlayer().getLocation();
         ToF.getWorld()
                 .selectRoomsByLocation(l -> l.getZ() == player.getZ())
+                .filter(Room::isExplored)
                 .forEach(this::drawRoom);
     }
 

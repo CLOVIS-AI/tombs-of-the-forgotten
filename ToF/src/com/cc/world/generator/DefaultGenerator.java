@@ -90,7 +90,7 @@ public class DefaultGenerator implements Generator {
         
         random = randomizer;
         rooms = new TreeMap<>();
-        addRoom(new Room("This is where you spawn."), new Location());
+        addRoom(new Room("This is where you spawn.").explore(), new Location());
         int number = random.nextInt(50) + 10;
         for(int i = 0; i < number; i++){
             iteration();
