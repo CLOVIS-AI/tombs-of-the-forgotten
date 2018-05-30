@@ -262,4 +262,30 @@ public class EntityAction implements Action {
             return new CannotUseItem("No opponent was found.");
         }
     }
+    
+    // *********************************************************** G E T T E R S
+    
+    public Stat getStat() {
+        return stat;
+    }
+
+    public Target getTarget() {
+        return target;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public int getTurns() {
+        return turns;
+    }
+
+    public Operation getOperation() {
+        return operation;
+    }
+
+    public Mode getMode() {
+        return mode;
+    }
 }
