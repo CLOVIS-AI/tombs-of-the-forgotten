@@ -65,7 +65,7 @@ public class World implements Timable, Save<JsonObject> {
         map.forEach((l, r) -> {
             r.setWorld(this);
             r.setLocation(l);
-            r.endGeneration();
+            //r.endGeneration();
         });
 
         rooms = map;
