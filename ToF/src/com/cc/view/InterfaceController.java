@@ -27,9 +27,11 @@ import com.cc.players.Player;
 import com.cc.tof.ToF;
 import com.cc.utils.Bar;
 import com.cc.world.Direction;
+import static com.cc.world.Direction.DOWN;
 import static com.cc.world.Direction.EAST;
 import static com.cc.world.Direction.NORTH;
 import static com.cc.world.Direction.SOUTH;
+import static com.cc.world.Direction.UP;
 import static com.cc.world.Direction.WEST;
 import com.cc.world.Location;
 import com.cc.world.Room;
@@ -79,7 +81,7 @@ public class InterfaceController implements Initializable {
     @FXML
     private Button ButtonRest, ButtonSave, ButtonOpen, ButtonClose, ButtonReadNote,
             ButtonSearchRoom, ButtonGrabItem, ButtonDropItem,
-            ButtonUpstairs, ButtonDownstairs, ButtonUpstairsS, ButtonDownstairsS;
+            ButtonUpstairs, ButtonDownstairs;
 
     @FXML
     private AnchorPane Map;
@@ -124,6 +126,7 @@ public class InterfaceController implements Initializable {
         viewItem(ViewAll);
 
         restPopup(ButtonRest);
+        lootPopup(ButtonOpen);
 
         update(ToF.getWorld().getPlayer());
 
@@ -144,6 +147,9 @@ public class InterfaceController implements Initializable {
                 Map.getPrefWidth() / 2,
                 Map.getPrefHeight() / 2));
         updateMap();
+        
+        // Faire en sorte d'ouvrir la page loot lorsque l'on gagne un combat ou
+        // lorsque l'on fouille un coffre.
     }
 
     /**
@@ -283,6 +289,17 @@ public class InterfaceController implements Initializable {
         button.setFill(getColor(p.canMoveTo(d)));
     }
 
+    public void move(Player p, Direction d, Button b) {
+        b.setVisible(true);
+        if(!p.canMoveTo(d)){
+            b.setVisible(false);
+        }
+        b.setOnMouseReleased(e ->{
+            p.moveTo(d);
+            update(p);
+        });
+    }
+    
     /**
      * The color of a direction button
      *
@@ -303,6 +320,8 @@ public class InterfaceController implements Initializable {
         move(p, SOUTH, (Shape) MoveSouth);
         move(p, EAST, (Shape) MoveEast);
         move(p, WEST, (Shape) MoveWest);
+        move(p, UP, ButtonUpstairs);
+        move(p, DOWN, ButtonDownstairs);
         updateMap();
     }
 
