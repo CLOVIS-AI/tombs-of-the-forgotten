@@ -171,7 +171,7 @@ public class DefaultGenerator implements Generator {
         PAIRS = new HashMap<>();
         PAIRS.put(15, new Pair<>(this::createRandomRoom, Opening::new));
         PAIRS.put( 5, new Pair<>(this::createRandomRoom, Door::new));
-        PAIRS.put( 1, this::lockedDoor);
+        PAIRS.put( 1, lockedDoor());
         
         TOTAL = PAIRS.keySet().stream()
                 .mapToInt(v -> (int)v)
