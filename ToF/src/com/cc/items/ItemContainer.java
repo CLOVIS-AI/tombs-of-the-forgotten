@@ -22,8 +22,10 @@
  */
 package com.cc.items;
 
+import static com.cc.items.EntityAction.Mode.PERMANENT;
 import static com.cc.items.EntityAction.Operation.REMOVE;
 import static com.cc.items.EntityAction.Target.OPPONENT;
+import static com.cc.items.EntityAction.Target.SELF;
 import com.cc.players.Entity.Stat;
 import static com.cc.players.Entity.Stat.HEALTH;
 import com.cc.utils.Bar;
@@ -100,7 +102,7 @@ public class ItemContainer implements Save<JsonObject> {
     /**
      * Gets all the weapons.
      * <p>The weapons are the items that deal damage to the opponent - that is,
-     * items that have at least one action similar to OPPONENT HEALTH REMOVE.
+     * items that have at least one action similar to OPPONENT HEALTH REMOVE...
      * @return The weapons.
      */
     public Stream<Item> getWeapons() {
@@ -110,6 +112,20 @@ public class ItemContainer implements Save<JsonObject> {
                                 .anyMatch(a -> a.getTarget() == OPPONENT
                                             && a.getStat() == HEALTH
                                             && a.getOperation() == REMOVE));
+    }
+    
+    /**
+     * Gets all the wearables.
+     * <p>The wearables are items that can be worn - that is, items that have at
+     * least one action similar to SELF PERMANENT...
+     * @return The items you can wear.
+     */
+    public Stream<Item> getWearables() {
+        return items.stream()
+                .filter(i -> i.getActions()
+                                .map(a -> (EntityAction) a)
+                                .anyMatch(a -> a.getTarget() == SELF
+                                            && a.getMode() == PERMANENT));
     }
 
     /**
