@@ -48,7 +48,7 @@ import java.util.stream.Stream;
  *
  * @author Ivan Canet
  */
-public class World implements Timable, Save<JsonObject> {
+public final class World implements Timable, Save<JsonObject> {
 
     // Package private to enable access for the tests
     final TreeMap<Location, Room> rooms;
@@ -106,6 +106,9 @@ public class World implements Timable, Save<JsonObject> {
 
         concludeLoading();
         messages = new ArrayDeque<>();
+        
+        System.out.println("[ToF]\tA world was loaded, exploration: "
+                + getPercentExploration() + "%");
     }
 
     final void concludeLoading() {
@@ -169,7 +172,7 @@ public class World implements Timable, Save<JsonObject> {
     public double getPercentExploration() {
         return rooms.values().stream()
                 .filter(Room::isExplored)
-                .count() / rooms.size() * 100;
+                .count() * 100.0 / rooms.size();
     }
 
     /**
