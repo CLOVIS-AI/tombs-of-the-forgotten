@@ -24,6 +24,7 @@ package com.cc.world.links;
 
 import com.cc.players.Entity;
 import com.cc.utils.Save;
+import com.cc.utils.messages.Message;
 import com.cc.world.Direction;
 import static com.cc.world.Direction.fromCoordinates;
 import com.cc.world.Location;
@@ -193,8 +194,10 @@ public abstract class Link implements Save<JsonObject> {
      * @return The state of the link after the call; {@code true} if it is open.
      */
     public final boolean open(Entity e){
-        if(!isOpen && canOpen(e))
+        if(!isOpen && canOpen(e)){
             isOpen = true;
+            room1.getWorld().newMessage(new Message().add("You opened the door."));
+        }
         return isOpen;
     }
     

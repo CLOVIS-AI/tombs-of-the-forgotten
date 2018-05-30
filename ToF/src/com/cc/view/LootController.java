@@ -36,10 +36,12 @@ import javafx.scene.control.ListView;
 public class LootController implements Initializable {
 
     @FXML
-    private ListView<String> listViewLoot, listViewInventory;
+    private ListView listViewLoot, listViewInventory;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        listViewLoot.getItems().addAll("Jimin", "Jungkook", "saranghae", "jhopie");
+        
         /*ObservableList<String> data = FXCollections.observableArrayList(
                 "hello", "wassup", "JHOPE", "JiminieBabo<3");
         listViewLoot.setItems(data);*/

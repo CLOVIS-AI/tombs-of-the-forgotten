@@ -279,19 +279,19 @@ public class InterfaceController implements Initializable {
      * @param button the direction button
      */
     public void move(Player p, Direction d, Shape button) {
-        button.setDisable(!p.canMoveTo(d));
+        button.setDisable(!p.canReach(d));
         button.setOnMouseEntered(e -> button.setFill(SELECTED));
-        button.setOnMouseExited(e -> button.setFill(getColor(p.canMoveTo(d))));
+        button.setOnMouseExited(e -> button.setFill(getColor(p.canReach(d))));
         button.setOnMouseReleased(e -> {
             p.moveTo(d);
             update(p);
         });
-        button.setFill(getColor(p.canMoveTo(d)));
+        button.setFill(getColor(p.canReach(d)));
     }
 
     public void move(Player p, Direction d, Button b) {
         b.setVisible(true);
-        if(!p.canMoveTo(d)){
+        if(!p.canReach(d)){
             b.setVisible(false);
         }
         b.setOnMouseReleased(e ->{
@@ -360,6 +360,8 @@ public class InterfaceController implements Initializable {
         // Color
         if (r.getLocation().equals(player)) {
             e.setFill(Color.AQUAMARINE);
+        } else if (ToF.getWorld().getEntities(false).anyMatch(en -> en.getLocation().equals(relative))){
+            e.setFill(Color.CRIMSON);
         }
 
         Map.getChildren().add(e);
