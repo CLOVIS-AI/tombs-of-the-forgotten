@@ -38,7 +38,11 @@ public class KeyDoor extends Link {
     private final int id;
     
     public KeyDoor(int id, Room[] rooms){
-        super(rooms);
+        this(id, rooms[0], rooms[1]);
+    }
+    
+    public KeyDoor(int id, Room r1, Room r2){
+        super(r1, r2);
         this.id = id;
     }
     
