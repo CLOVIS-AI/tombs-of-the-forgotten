@@ -28,6 +28,7 @@ import static com.cc.items.EntityAction.Target.OPPONENT;
 import static com.cc.items.EntityAction.Target.SELF;
 import com.cc.players.Entity.Stat;
 import static com.cc.players.Entity.Stat.HEALTH;
+import static com.cc.players.Entity.Stat.MANA;
 import com.cc.utils.Bar;
 import com.cc.utils.Save;
 import com.eclipsesource.json.JsonArray;
@@ -126,6 +127,21 @@ public class ItemContainer implements Save<JsonObject> {
                                 .map(a -> (EntityAction) a)
                                 .anyMatch(a -> a.getTarget() == SELF
                                             && a.getMode() == PERMANENT));
+    }
+    
+    /**
+     * Gets all the scrolls.
+     * <p>The scrolls are the items that {@link #getUniqueUsage() can only be
+     * used once} and cost mana.
+     * @return The scrolls.
+     */
+    public Stream<Item> getScrolls() {
+        return getUniqueUsage()
+                .filter(i -> i.getActions()
+                                .map(a -> (EntityAction) a)
+                                .anyMatch(a -> a.getTarget() == SELF
+                                            && a.getOperation() == REMOVE
+                                            && a.getStat() == MANA));
     }
 
     /**
