@@ -22,7 +22,10 @@
  */
 package com.cc.items;
 
+import static com.cc.items.EntityAction.Operation.REMOVE;
+import static com.cc.items.EntityAction.Target.OPPONENT;
 import com.cc.players.Entity.Stat;
+import static com.cc.players.Entity.Stat.HEALTH;
 import com.cc.utils.Bar;
 import com.cc.utils.Save;
 import com.eclipsesource.json.JsonArray;
@@ -92,6 +95,21 @@ public class ItemContainer implements Save<JsonObject> {
     public Stream<Item> getUniqueUsage() {
         return items.stream()
                 .filter(i -> i.getDurability() == 1);
+    }
+    
+    /**
+     * Gets all the weapons.
+     * <p>The weapons are the items that deal damage to the opponent - that is,
+     * items that have at least one action similar to OPPONENT HEALTH REMOVE.
+     * @return The weapons.
+     */
+    public Stream<Item> getWeapons() {
+        return items.stream()
+                .filter(i -> i.getActions()
+                                .map(a -> (EntityAction) a)
+                                .anyMatch(a -> a.getTarget() == OPPONENT
+                                            && a.getStat() == HEALTH
+                                            && a.getOperation() == REMOVE));
     }
 
     /**
