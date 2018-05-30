@@ -382,6 +382,8 @@
                   </Polygon>
                </children>
             </AnchorPane>
+            <Button fx:id="ButtonUpstairs" layoutX="356.0" layoutY="16.0" mnemonicParsing="false" styleClass="buttonUD" text="UPSTAIRS" textFill="WHITE" />
+            <Button fx:id="ButtonDownstairs" layoutX="343.0" layoutY="172.0" mnemonicParsing="false" styleClass="buttonUD" text="DOWNSTAIRS" textFill="WHITE" />
             <Button fx:id="ButtonRest" layoutX="169.0" layoutY="53.0" mnemonicParsing="false" style="-fx-background-color: #517086;" text="REST" textFill="WHITE">
                <font>
                   <Font size="16.0" />
@@ -419,10 +421,6 @@
                   <Font size="30.0" />
                </font>
             </Label>
-            <Button fx:id="ButtonUpstairs" layoutX="356.0" layoutY="16.0" mnemonicParsing="false" style="-fx-background-color: BLACK;" text="UPSTAIRS" textFill="WHITE" />
-            <Button fx:id="ButtonDownstairs" layoutX="343.0" layoutY="172.0" mnemonicParsing="false" style="-fx-background-color: BLACK;" text="DOWNSTAIRS" textFill="WHITE" />
-            <Button fx:id="ButtonUpstairsS" layoutX="356.0" layoutY="16.0" mnemonicParsing="false" style="-fx-background-color: snow;" text="UPSTAIRS" />
-            <Button fx:id="ButtonDownstairs1" layoutX="343.0" layoutY="172.0" mnemonicParsing="false" style="-fx-background-color: snow;" text="DOWNSTAIRS" />
          </children></AnchorPane>
       <AnchorPane layoutX="508.0" prefHeight="345.0" prefWidth="746.0">
          <children>

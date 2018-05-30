@@ -27,9 +27,11 @@ import com.cc.players.Player;
 import com.cc.tof.ToF;
 import com.cc.utils.Bar;
 import com.cc.world.Direction;
+import static com.cc.world.Direction.DOWN;
 import static com.cc.world.Direction.EAST;
 import static com.cc.world.Direction.NORTH;
 import static com.cc.world.Direction.SOUTH;
+import static com.cc.world.Direction.UP;
 import static com.cc.world.Direction.WEST;
 import com.cc.world.Location;
 import com.cc.world.Room;
@@ -78,11 +80,12 @@ public class InterfaceController implements Initializable {
 
     @FXML
     private Button ButtonRest, ButtonSave, ButtonOpen, ButtonClose, ButtonReadNote,
-            ButtonSearchRoom, ButtonGrabItem, ButtonDropItem;
-    
+            ButtonSearchRoom, ButtonGrabItem, ButtonDropItem,
+            ButtonUpstairs, ButtonDownstairs;
+
     @FXML
     private AnchorPane Map;
-    
+
     @FXML
     private ProgressBar BarHP, BarMana, BarStamina, BarPods;
 
@@ -123,26 +126,30 @@ public class InterfaceController implements Initializable {
         viewItem(ViewAll);
 
         restPopup(ButtonRest);
-        
+        lootPopup(ButtonOpen);
+
         update(ToF.getWorld().getPlayer());
-        
+
         /**
          * ******************************SAVE*********************************
          */
         ButtonSave.setOnAction(e -> ToF.save());
-        
+
         updateBars();
-        
+
         // Buttons
         ButtonReadNote.setOnAction(e -> ToF.getWorld().getPlayer().getCurrentRoom().readNotes());
-        
+
         // Map
         Map.setClip(new Ellipse(
-                Map.getPrefWidth()/2, 
-                Map.getPrefHeight()/2, 
-                Map.getPrefWidth()/2, 
-                Map.getPrefHeight()/2));
+                Map.getPrefWidth() / 2,
+                Map.getPrefHeight() / 2,
+                Map.getPrefWidth() / 2,
+                Map.getPrefHeight() / 2));
         updateMap();
+        
+        // Faire en sorte d'ouvrir la page loot lorsque l'on gagne un combat ou
+        // lorsque l'on fouille un coffre.
     }
 
     /**
@@ -218,6 +225,7 @@ public class InterfaceController implements Initializable {
 
     /**
      * Load a new JavaFx window.
+     *
      * @param event the event
      */
     public void restPopup(ActionEvent event) {
@@ -234,13 +242,14 @@ public class InterfaceController implements Initializable {
 
     /**
      * Press a specific button resulting in opening a new JavaFX window.
+     *
      * @param b the button
      * @see #restPopup(javafx.event.ActionEvent) Load a new JavaFX window
      */
     public void restPopup(Button b) {
         b.setOnAction(e -> restPopup(e));
     }
-    
+
     public void lootPopup(ActionEvent event) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(ToF.getResource("Loot.fxml"));
@@ -252,7 +261,7 @@ public class InterfaceController implements Initializable {
             e.printStackTrace();
         }
     }
-    
+
     public void lootPopup(Button b) {
         b.setOnAction(e -> lootPopup(e));
     }
@@ -262,8 +271,9 @@ public class InterfaceController implements Initializable {
     private static final Color SELECTED = Color.SNOW;
 
     /**
-     * Set a specific color on a button depending whether the player can 
-     * go to a certain direction or not.
+     * Set a specific color on a button depending whether the player can go to a
+     * certain direction or not.
+     *
      * @param p the player
      * @param d the direction
      * @param button the direction button
@@ -279,8 +289,20 @@ public class InterfaceController implements Initializable {
         button.setFill(getColor(p.canMoveTo(d)));
     }
 
+    public void move(Player p, Direction d, Button b) {
+        b.setVisible(true);
+        if(!p.canMoveTo(d)){
+            b.setVisible(false);
+        }
+        b.setOnMouseReleased(e ->{
+            p.moveTo(d);
+            update(p);
+        });
+    }
+    
     /**
      * The color of a direction button
+     *
      * @param canMove True if the player can move to a certain direction
      * @return True if the player can move, false else
      */
@@ -290,6 +312,7 @@ public class InterfaceController implements Initializable {
 
     /**
      * Reinitialize every direction button's color each time the player moves.
+     *
      * @param p the player
      */
     public void update(Player p) {
@@ -297,23 +320,25 @@ public class InterfaceController implements Initializable {
         move(p, SOUTH, (Shape) MoveSouth);
         move(p, EAST, (Shape) MoveEast);
         move(p, WEST, (Shape) MoveWest);
+        move(p, UP, ButtonUpstairs);
+        move(p, DOWN, ButtonDownstairs);
         updateMap();
     }
-    
+
     public void fillBar(Bar b, ProgressBar bar) {
-        
-        bar.setProgress(b.getCurrent()*1.0/b.getMaximum());
+
+        bar.setProgress(b.getCurrent() * 1.0 / b.getMaximum());
     }
-    
+
     public void updateBars() {
         fillBar(ToF.getWorld().getPlayer().getHealthBar(), BarHP);
         fillBar(ToF.getWorld().getPlayer().getManaBar(), BarMana);
         fillBar(ToF.getWorld().getPlayer().getStaminaBar(), BarStamina);
         fillBar(ToF.getWorld().getPlayer().getWeightBar(), BarPods);
     }
-    
+
     Location player;
-    
+
     public void updateMap() {
         ObservableList<Node> nodes = Map.getChildren();
         nodes.clear();
@@ -323,19 +348,20 @@ public class InterfaceController implements Initializable {
                 .filter(Room::isExplored)
                 .forEach(this::drawRoom);
     }
-    
+
     public void drawRoom(Room r) {
         // Position
         Location relative = r.getLocation().remove(player);
         Ellipse e = new Ellipse(
-                relative.getY()*30+Map.getPrefWidth()/2,
-                relative.getX()*30+Map.getPrefHeight()/2,
+                relative.getY() * 30 + Map.getPrefWidth() / 2,
+                relative.getX() * 30 + Map.getPrefHeight() / 2,
                 10, 10);
-        
+
         // Color
-        if(r.getLocation().equals(player))
+        if (r.getLocation().equals(player)) {
             e.setFill(Color.AQUAMARINE);
-        
+        }
+
         Map.getChildren().add(e);
     }
 }
