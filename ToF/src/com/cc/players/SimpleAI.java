@@ -68,7 +68,7 @@ public class SimpleAI extends Entity {
                 return;
             }
         }
-        if(new Random().nextInt(100) < 80)
+        if(!isFighting() && new Random().nextInt(100) < 30)
             moveTo(pathToPlayer.moveToNext());
     }
 }
