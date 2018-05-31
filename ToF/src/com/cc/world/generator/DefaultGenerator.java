@@ -86,6 +86,16 @@ public class DefaultGenerator implements Generator {
     TreeMap<Location, Room> rooms;
     boolean isGenerated = false;
     
+    private static final int NBR_ROOMS_MAX = 30;
+    private static final int NBR_ROOMS_MIN = 10;
+    
+    private static final int NBR_SHORT_MAX = 30;
+    private static final int NBR_SHORT_MIN = 10;
+    
+    private static final int ROOM_PICK_MAX_TRIES = 100;
+    
+    private static final int NBR_NOTES_MAX = 3;
+    
     @Override
     public World generate(Random randomizer) {
         if(isGenerated)
@@ -94,11 +104,11 @@ public class DefaultGenerator implements Generator {
         random = randomizer;
         rooms = new TreeMap<>();
         addRoom(new Room("This is where you spawn.").explore(), new Location());
-        int number = random.nextInt(50) + 10;
+        int number = random.nextInt(NBR_ROOMS_MAX - NBR_ROOMS_MIN) + NBR_ROOMS_MIN;
         for(int i = 0; i < number; i++)
             iteration();
         
-        int nbrShortcuts = random.nextInt(20) + 10;
+        int nbrShortcuts = random.nextInt(NBR_SHORT_MAX - NBR_SHORT_MIN) + NBR_SHORT_MIN;
         for(int i = 0; i < nbrShortcuts; i++)
             i -= shortcut() ? 0 : 1;
         
@@ -198,7 +208,7 @@ public class DefaultGenerator implements Generator {
             l = locs.isEmpty() ? null : locs.get(random.nextInt(locs.size()));
             r = ro; // two variables so the Stream doesn't complain about not final
             
-            if(safeguard++ > 100)
+            if(safeguard++ > ROOM_PICK_MAX_TRIES)
                 throw new IllegalStateException("Detected an infinite loop!");
         } while(l == null);
         
@@ -225,7 +235,8 @@ public class DefaultGenerator implements Generator {
     private Room createRandomRoom(){
         Room randomizedRoom = new Room("Random room " + random.nextInt());
         
-        for(int i = 0; i < random.nextInt(3); i++){
+        int number = random.nextInt(NBR_NOTES_MAX);
+        for(int i = 0; i < number; i++){
             List<Integer> notes = new ArrayList<>(Note.getIDs());
             randomizedRoom.addNote(new Note(notes.get(random.nextInt(notes.size()))));
         }
