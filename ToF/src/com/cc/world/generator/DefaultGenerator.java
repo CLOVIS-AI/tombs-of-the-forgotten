@@ -42,6 +42,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Random;
 import java.util.TreeMap;
 import java.util.function.Function;
@@ -94,12 +95,32 @@ public class DefaultGenerator implements Generator {
         rooms = new TreeMap<>();
         addRoom(new Room("This is where you spawn.").explore(), new Location());
         int number = random.nextInt(50) + 10;
-        for(int i = 0; i < number; i++){
+        for(int i = 0; i < number; i++)
             iteration();
-        }
+        
+        int nbrShortcuts = random.nextInt(20) + 10;
+        for(int i = 0; i < nbrShortcuts; i++)
+            i -= shortcut() ? 0 : 1;
         
         isGenerated = true;
         return new World(rooms.values(), new Player());
+    }
+    
+    boolean shortcut(){
+        Room r1 = new ArrayList<>(rooms.values())
+                .get(random.nextInt(rooms.size()));
+        
+        Optional<Room> r2 = Stream.of(Direction.values())                       // For each direction
+                .filter(d -> !r1.getNeighbor(d).isPresent())                    // where there are no neighbors
+                .map(d -> rooms.get(r1.getLocation().add(d)))
+                .filter(r -> r != null)                                         // but there is a room
+                .findAny();                                                     // Choose one
+        
+        if(r2.isPresent()){
+            createRandomLink(new Room[]{r1, r2.get()}).autoLink();
+            return true;
+        } else
+            return false;
     }
     
     void iteration(){
