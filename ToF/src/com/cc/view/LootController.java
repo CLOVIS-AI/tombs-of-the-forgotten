@@ -76,6 +76,7 @@ public class LootController implements Initializable {
         listViewLoot.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         AddIf.setOnAction(e -> onItemClicked());
+        
     }
 
     public void onItemClicked() {

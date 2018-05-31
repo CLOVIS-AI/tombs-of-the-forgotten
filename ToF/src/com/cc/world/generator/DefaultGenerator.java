@@ -99,7 +99,7 @@ public class DefaultGenerator implements Generator {
         }
         
         isGenerated = true;
-        return new World(rooms.values(), new Player());
+        return new World(rooms.values(), new Player("Player", 20, 10, 10, 20000, 0));
     }
     
     void iteration(){

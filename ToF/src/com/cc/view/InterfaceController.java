@@ -127,7 +127,7 @@ public class InterfaceController implements Initializable {
         viewItem(ViewAll);
 
         restPopup(ButtonRest);
-        ButtonOpen.setOnAction(e -> lootPopup(null));
+        ButtonOpen.setOnAction(e -> lootPopup(ToF.getWorld().getPlayer().getCurrentRoom().getItems()));
 
         update(ToF.getWorld().getPlayer());
 
