@@ -186,7 +186,7 @@ public class ToF extends Application {
             JsonObject json = Json.parse(
                     new String(encoded, StandardCharsets.UTF_8)).asObject();
             
-            println("Load", "Instantiating the world...");
+            print("Load", "Instantiating the world...");
             world = new World(json);
             done();
             return true;
@@ -219,7 +219,7 @@ public class ToF extends Application {
             Writer writer = new FileWriter(file);
             BufferedWriter bw = new BufferedWriter(writer);
             
-            println("Save", "Writing in the file...");
+            print("Save", "Writing in the file...");
             bw.write(str);
             bw.close();
             done();

@@ -205,9 +205,7 @@ public abstract class Entity implements Timable, Save<JsonObject> {
 
     @Override
     public void nextTick() {
-        health.nextTick();
-        stamina.nextTick();
-        mana.nextTick();
+        getBars().forEach(Bar::nextTick);
         
         opponent = findHere();
         
