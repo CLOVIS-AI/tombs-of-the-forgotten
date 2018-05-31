@@ -25,8 +25,6 @@ package com.cc.view;
 
 import com.cc.items.Item;
 import com.cc.items.ItemContainer;
-import com.cc.items.Rarity;
-import com.cc.tof.ToF;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
@@ -36,6 +34,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 
 /**
  *
@@ -65,9 +65,6 @@ public class LootController implements Initializable {
     public void setInventories(ItemContainer items1, ItemContainer items2) {
         inventory = items1;
         loot = items2;
-
-        ToF.getWorld().getPlayer().addItem(new Item("TEST", "", Rarity.RARE, 15, 35));
-        ToF.getWorld().getPlayer().getCurrentRoom().getItems().add(new Item("TEST ROOM", "", Rarity.RARE, 15, 35));
 
         generateList(listViewInventory, inventory);
         generateList(listViewLoot, loot);
@@ -102,6 +99,9 @@ public class LootController implements Initializable {
     }
 
     private void generateList(ListView<Item> list, ItemContainer items) {
+        // Inspired from
+        // https://stackoverflow.com/questions/28264907/javafx-listview-contextmenu
+        
         list.getItems().clear();
         items.stream()
                 .forEach(e -> list.getItems().add(e));
@@ -113,6 +113,10 @@ public class LootController implements Initializable {
                     setText(null);
                 } else {
                     setText(item.getName());
+                    setOnMouseReleased((MouseEvent e) -> {
+                        if(e.getButton() == MouseButton.SECONDARY)
+                            InterfaceController.contextMenuItem(item, this, e);
+                    });
                 }
             }
         });
