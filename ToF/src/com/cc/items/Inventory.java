@@ -42,6 +42,8 @@ public class Inventory extends ItemContainer {
     /** Weigth bar. Can't add item into the inventory when full.*/
     private final EventBar weight;
     
+    private int mods = 0;
+    
     /**
      * Loads the inventory from JSON
      * @param json the saved data
@@ -49,11 +51,13 @@ public class Inventory extends ItemContainer {
     public Inventory(JsonObject json) {
         super(json);
         weight = new EventBar(new Bar(json.get("weight").asObject()));
+        fullUpdate();
     }
     
     public Inventory(String description, int maxWeight) {
         super(description);
         weight = new EventBar("Pods", 0, maxWeight, 0);
+        fullUpdate();
     }
     
      /**
@@ -76,6 +80,8 @@ public class Inventory extends ItemContainer {
      */
     @Override
     public boolean add(Item item) {
+        if(++mods < 10) fullUpdate();
+        
         if (canAdd(item)) {
             super.add(item);
             weight.add(item.getWeight(), ACCEPT);
@@ -105,10 +111,22 @@ public class Inventory extends ItemContainer {
     
     @Override
     public boolean remove(Item item) {
+        if(++mods < 10) fullUpdate();
+        
         boolean b;
         if(b = super.remove(item))
             weight.remove(item.getWeight(), ACCEPT);
         return b;
+    }
+    
+    private void fullUpdate() {
+        weight.set(
+                stream()
+                    .mapToInt(Item::getWeight)
+                    .sum(),
+                ACCEPT
+        );
+        mods = 0;
     }
     
     /**
