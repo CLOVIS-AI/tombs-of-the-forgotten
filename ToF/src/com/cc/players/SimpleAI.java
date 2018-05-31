@@ -27,6 +27,7 @@ import static com.cc.tof.ToF.println;
 import com.cc.world.Location;
 import com.cc.world.Path;
 import com.eclipsesource.json.JsonObject;
+import java.util.Random;
 
 /**
  * 
@@ -35,6 +36,7 @@ import com.eclipsesource.json.JsonObject;
 public class SimpleAI extends Entity {
     
     private Path pathToPlayer;
+    private final int PERCENT_CHANCE_USE_ITEM = 30;
     
     public SimpleAI(String name, int maxHealth, int maxStrength, int maxMana,
             int maxWeight, Location location) {
@@ -49,7 +51,7 @@ public class SimpleAI extends Entity {
     public void nextTick(){
         super.nextTick();
         
-        if(isFighting()){
+        if(isFighting() || new Random().nextInt(100) < PERCENT_CHANCE_USE_ITEM){
             getInventory().getItems().stream()
                     .filter(i -> i.canUse(this))
                     .findAny()
