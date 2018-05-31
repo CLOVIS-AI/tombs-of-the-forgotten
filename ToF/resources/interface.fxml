@@ -8,6 +8,7 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
@@ -158,24 +159,7 @@
             <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
             <AnchorPane fx:id="Inventory" layoutX="31.0" layoutY="53.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="204.0">
                <children>
-                  <ScrollPane layoutX="1.0" layoutY="-2.0" prefHeight="522.0" prefWidth="204.0">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="517.0" prefWidth="202.0">
-                           <children>
-                              <VBox alignment="TOP_CENTER" layoutY="-1.0" prefHeight="515.0" prefWidth="200.0">
-                                 <children>
-                                    <MenuButton fx:id="YourWeapon" mnemonicParsing="false" text="YourWeapon">
-                                      <items>
-                                        <MenuItem fx:id="ViewWeapon" mnemonicParsing="false" text="View" />
-                                          <MenuItem fx:id="DropWeapon" mnemonicParsing="false" text="Drop" />
-                                      </items>
-                                    </MenuButton>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </AnchorPane>
-                     </content>
-                  </ScrollPane>
+                  <ListView fx:id="MenuWeapon" prefHeight="517.0" prefWidth="202.0" />
                </children>
             </AnchorPane>
          </children>
@@ -185,25 +169,8 @@
             <Label layoutX="98.0" layoutY="14.0" text="APPAREL" />
             <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
             <AnchorPane fx:id="Inventory1" layoutX="31.0" layoutY="53.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="204.0">
-               <children>
-                  <ScrollPane layoutX="1.0" layoutY="-2.0" prefHeight="522.0" prefWidth="204.0">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="517.0" prefWidth="202.0">
-                           <children>
-                              <VBox alignment="TOP_CENTER" layoutY="-1.0" prefHeight="515.0" prefWidth="200.0">
-                                 <children>
-                                    <MenuButton fx:id="YourApparel" mnemonicParsing="false" text="YourApparel">
-                                       <items>
-                                          <MenuItem fx:id="ViewApparel" mnemonicParsing="false" text="View" />
-                                          <MenuItem fx:id="DropApparel" mnemonicParsing="false" text="Drop" />
-                                       </items>
-                                    </MenuButton>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </AnchorPane>
-                     </content>
-                  </ScrollPane>
+                <children>
+                    <ListView fx:id="MenuApparel" prefHeight="522.0" prefWidth="202.0" />
                </children>
             </AnchorPane>
          </children>
@@ -213,25 +180,7 @@
             <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
             <AnchorPane fx:id="Inventory11" layoutX="31.0" layoutY="53.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="204.0">
                <children>
-                  <ScrollPane layoutX="1.0" layoutY="-2.0" prefHeight="522.0" prefWidth="204.0">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="517.0" prefWidth="202.0">
-                           <children>
-                              <VBox alignment="TOP_CENTER" layoutY="-1.0" prefHeight="515.0" prefWidth="200.0">
-                                 <children>
-                                    <MenuButton fx:id="YourPotion" mnemonicParsing="false" text="YourEatable">
-                                       <items>
-                                          <MenuItem fx:id="UseEatable" mnemonicParsing="false" text="Use" />
-                                          <MenuItem fx:id="DropEatable" mnemonicParsing="false" text="Drop" />
-                                          <MenuItem fx:id="ViewEatable" mnemonicParsing="false" text="View" />
-                                       </items>
-                                    </MenuButton>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </AnchorPane>
-                     </content>
-                  </ScrollPane>
+                   <ListView fx:id="MenuEdible" prefHeight="522.0" prefWidth="204.0" />
                </children>
             </AnchorPane>
             <Label layoutX="104.0" layoutY="14.0" text="EATABLE" />
@@ -243,25 +192,7 @@
             <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
             <AnchorPane fx:id="Inventory111" layoutX="31.0" layoutY="53.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="204.0">
                <children>
-                  <ScrollPane layoutX="1.0" layoutY="-2.0" prefHeight="522.0" prefWidth="204.0">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="517.0" prefWidth="202.0">
-                           <children>
-                              <VBox alignment="TOP_CENTER" layoutY="-1.0" prefHeight="515.0" prefWidth="200.0">
-                                 <children>
-                                    <MenuButton fx:id="YourScroll" mnemonicParsing="false" text="YourScroll">
-                                       <items>
-                                          <MenuItem fx:id="UseScroll" mnemonicParsing="false" text="Use" />
-                                          <MenuItem fx:id="DropScroll" mnemonicParsing="false" text="Drop" />
-                                          <MenuItem fx:id="ViewScroll" mnemonicParsing="false" text="View" />
-                                       </items>
-                                    </MenuButton>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </AnchorPane>
-                     </content>
-                  </ScrollPane>
+                   <ListView fx:id="MenuScroll" prefHeight="522.0" prefWidth="204.0" />
                </children>
             </AnchorPane>
          </children>
@@ -272,24 +203,7 @@
             <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
             <AnchorPane fx:id="Inventory111111" layoutX="31.0" layoutY="53.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="204.0">
                <children>
-                  <ScrollPane layoutX="1.0" layoutY="-2.0" prefHeight="522.0" prefWidth="204.0">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="517.0" prefWidth="202.0">
-                           <children>
-                              <VBox alignment="TOP_CENTER" layoutY="-1.0" prefHeight="515.0" prefWidth="200.0">
-                                 <children>
-                                    <MenuButton fx:id="YourFood11" mnemonicParsing="false" text="YourAll">
-                                       <items>
-                                          <MenuItem fx:id="ViewAll" mnemonicParsing="false" text="View" />
-                                          <MenuItem fx:id="DropAll" mnemonicParsing="false" text="Drop" />
-                                       </items>
-                                    </MenuButton>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </AnchorPane>
-                     </content>
-                  </ScrollPane>
+                   <ListView fx:id="MenuAll" prefHeight="522.0" prefWidth="204.0" />
                </children>
             </AnchorPane>
          </children>
@@ -300,24 +214,7 @@
             <Separator layoutX="33.0" layoutY="38.0" prefWidth="200.0" />
             <AnchorPane fx:id="Inventory1111111" layoutX="31.0" layoutY="53.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="204.0">
                <children>
-                  <ScrollPane layoutX="1.0" layoutY="-2.0" prefHeight="522.0" prefWidth="204.0">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="517.0" prefWidth="202.0">
-                           <children>
-                              <VBox alignment="TOP_CENTER" layoutY="-1.0" prefHeight="515.0" prefWidth="200.0">
-                                 <children>
-                                    <MenuButton fx:id="YourFood111" mnemonicParsing="false" text="YourOther">
-                                       <items>
-                                          <MenuItem fx:id="ViewOther" mnemonicParsing="false" text="View" />
-                                          <MenuItem fx:id="DropOther11" mnemonicParsing="false" text="Drop" />
-                                       </items>
-                                    </MenuButton>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </AnchorPane>
-                     </content>
-                  </ScrollPane>
+                   <ListView fx:id="MenuOther" prefHeight="522.0" prefWidth="204.0" />
                </children>
             </AnchorPane>
          </children>

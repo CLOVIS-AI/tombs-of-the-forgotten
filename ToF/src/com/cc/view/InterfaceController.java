@@ -56,6 +56,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tooltip;
@@ -84,6 +85,9 @@ public class InterfaceController implements Initializable {
     @FXML
     private MenuItem ViewWeapon, ViewApparel, ViewEatable, ViewScroll, ViewOther,
             ViewAll;
+    
+    @FXML
+    private ListView<Item> MenuWeapon, MenuApparel, MenuEdible, MenuScroll, MenuOther, MenuAll;
 
     @FXML
     private Button ButtonRest, ButtonSave, ButtonOpen, ButtonClose, ButtonReadNote,
