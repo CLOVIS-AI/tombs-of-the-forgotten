@@ -161,6 +161,8 @@ public class InterfaceController implements Initializable {
         ToF.getWorld().newMessage(new Message()
                 .add("There are " + items.getItems().size() + " items:")
                 .addAuto(items.getItems().toArray()));
+        
+        ToF.getWorld().nextTick();
     }
 
     /**
@@ -337,6 +339,8 @@ public class InterfaceController implements Initializable {
         
         if(ToF.getWorld().isFullyExplored())
             ToF.getWorld().newMessage(new Message().add("You have explored everything!"));
+        
+        ToF.getWorld().nextTick();
     }
 
     public void fillBar(Bar b, ProgressBar bar) {
