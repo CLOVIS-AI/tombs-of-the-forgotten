@@ -23,9 +23,11 @@
  */
 package com.cc.view;
 
+import com.cc.items.ItemContainer;
 import com.cc.players.Player;
 import com.cc.tof.ToF;
 import com.cc.utils.Bar;
+import com.cc.utils.messages.Message;
 import com.cc.world.Direction;
 import static com.cc.world.Direction.DOWN;
 import static com.cc.world.Direction.EAST;
@@ -148,8 +150,17 @@ public class InterfaceController implements Initializable {
                 Map.getPrefHeight() / 2));
         updateMap();
         
+        ButtonSearchRoom.setOnAction(e -> onSearch());
+        
         // Faire en sorte d'ouvrir la page loot lorsque l'on gagne un combat ou
         // lorsque l'on fouille un coffre.
+    }
+    
+    private void onSearch() {
+        ItemContainer items = ToF.getWorld().getPlayer().getCurrentRoom().getItems();
+        ToF.getWorld().newMessage(new Message()
+                .add("There are " + items.getItems().size() + " items:")
+                .addAuto(items.getItems().toArray()));
     }
 
     /**
