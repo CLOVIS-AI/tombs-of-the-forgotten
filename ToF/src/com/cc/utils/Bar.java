@@ -25,6 +25,7 @@ package com.cc.utils;
 import static com.cc.utils.Bar.Behavior.ACCEPT;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
+import static java.lang.Integer.max;
 import static java.lang.Integer.min;
 import java.util.ArrayList;
 import java.util.List;
@@ -115,6 +116,26 @@ public class Bar implements Save<JsonObject> {
     public boolean canAdd(int value){
         return value >= 0 ? real + value <= maximum
                           : canRemove(value);
+    }
+    
+    /**
+     * Sets the value of the bar.
+     * @param value the new value of the bar
+     * @param mode what should do this method if the maximum or minimum value is reached.
+     */
+    public void set(int value, Behavior mode){
+        if(mode == ACCEPT)
+            real = min(max(value, minimum), maximum);
+        else {
+            if(value >= minimum && value <= maximum)
+                real = value;
+            else
+                throw new IllegalArgumentException(String.format("Setting this "
+                        + "value (%d) to the %d is not allowed, because the "
+                        + "value should be smaller than %d and greater than %d",
+                        real, value, 
+                        maximum, minimum));
+        }
     }
     
     /**
