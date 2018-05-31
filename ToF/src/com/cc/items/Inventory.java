@@ -42,6 +42,8 @@ public class Inventory extends ItemContainer {
     /** Weigth bar. Can't add item into the inventory when full.*/
     private final EventBar weight;
     
+    private int mods = 0;
+    
     /**
      * Loads the inventory from JSON
      * @param json the saved data
@@ -49,11 +51,13 @@ public class Inventory extends ItemContainer {
     public Inventory(JsonObject json) {
         super(json);
         weight = new EventBar(new Bar(json.get("weight").asObject()));
+        fullUpdate();
     }
     
     public Inventory(String description, int maxWeight) {
         super(description);
         weight = new EventBar("Pods", 0, maxWeight, 0);
+        fullUpdate();
     }
     
      /**
@@ -63,6 +67,11 @@ public class Inventory extends ItemContainer {
      * @return Whether one player is strong enough to take this item.
      */
     public boolean canAdd(Item item) {
+        if(item == null){
+            System.err.println("'item' shouldn't be null");
+            return false;
+        }
+        
         return weight.getCurrent() + item.getWeight() < weight.getMaximum();
     }
     
@@ -76,6 +85,8 @@ public class Inventory extends ItemContainer {
      */
     @Override
     public boolean add(Item item) {
+        if(++mods < 10) fullUpdate();
+        
         if (canAdd(item)) {
             super.add(item);
             weight.add(item.getWeight(), ACCEPT);
@@ -101,6 +112,26 @@ public class Inventory extends ItemContainer {
         }
         
         return couldnt;
+    }
+    
+    @Override
+    public boolean remove(Item item) {
+        if(++mods < 10) fullUpdate();
+        
+        boolean b;
+        if(b = super.remove(item))
+            weight.remove(item.getWeight(), ACCEPT);
+        return b;
+    }
+    
+    private void fullUpdate() {
+        weight.set(
+                stream()
+                    .mapToInt(Item::getWeight)
+                    .sum(),
+                ACCEPT
+        );
+        mods = 0;
     }
     
     /**
@@ -133,9 +164,14 @@ public class Inventory extends ItemContainer {
         
         item.use(entity);
         
-        if(entity == ToF.getWorld().getPlayer())
-            ToF.getWorld().newMessage(new Message().add("You use ").add(item));
-        else if(entity.getLocation().equals(ToF.getWorld().getPlayer().getLocation()))
+        if(entity == ToF.getWorld().getPlayer()){
+            ToF.getWorld().newMessage(new Message().add("You use").add(item));
+            ToF.getWorld().getPlayer().getOpponent().ifPresent(e ->
+                    ToF.getWorld().newMessage(new Message()
+                            .add(e.getName()).add("has")
+                            .add(e.getHealthBar().getCurrent()).add("HP left."))
+            );
+        }else if(entity.getLocation().equals(ToF.getWorld().getPlayer().getLocation()))
             ToF.getWorld().newMessage(new Message().add(entity.getName()).add("uses").add(item));
         
         if(item.isBroken())

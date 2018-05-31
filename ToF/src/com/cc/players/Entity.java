@@ -422,6 +422,15 @@ public abstract class Entity implements Timable, Save<JsonObject> {
         
         return this;
     }
+    
+    /**
+     * Drops an item.
+     * @param item The item.
+     */
+    public void drop(Item item) {
+        inventory.remove(item);
+        getCurrentRoom().addItem(item);
+    }
 
     /**
      * How much item can be added to the inventory without exceeding the weight
@@ -490,15 +499,6 @@ public abstract class Entity implements Timable, Save<JsonObject> {
             throw new IllegalArgumentException("You can't throw away an item you"
                     + "don't possess: " + item);
         }
-    }
-    
-    /**
-     * Drop an item from the player's inventory to the current room.
-     * @param item An item
-     */
-    public void dropItem(Item item) {
-        this.removeItem(item);
-        this.getCurrentRoom().getItems().add(item);
     }
     
     /**

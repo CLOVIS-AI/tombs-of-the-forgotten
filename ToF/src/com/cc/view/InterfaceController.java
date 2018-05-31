@@ -23,6 +23,7 @@
  */
 package com.cc.view;
 
+import com.cc.items.Inventory;
 import com.cc.items.Item;
 import com.cc.items.ItemContainer;
 import com.cc.players.Player;
@@ -42,11 +43,13 @@ import com.cc.world.Room;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.stream.Stream;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -56,6 +59,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tooltip;
@@ -65,6 +70,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
 /**
@@ -84,6 +90,9 @@ public class InterfaceController implements Initializable {
     @FXML
     private MenuItem ViewWeapon, ViewApparel, ViewEatable, ViewScroll, ViewOther,
             ViewAll;
+    
+    @FXML
+    private ListView<Item> MenuWeapon, MenuApparel, MenuEdible, MenuScroll, MenuOther, MenuAll;
 
     @FXML
     private Button ButtonRest, ButtonSave, ButtonOpen, ButtonClose, ButtonReadNote,
@@ -98,9 +107,13 @@ public class InterfaceController implements Initializable {
 
     private boolean isMenu = false;
     private Timeline move = new Timeline();
+    
+    private static InterfaceController me;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        me = this;
+        
         Open.setOnMouseEntered(e -> {
             isMenu = true;
             slideRight(LeftMenu);
@@ -127,14 +140,10 @@ public class InterfaceController implements Initializable {
 
         restPopup(ButtonRest);
 
-        update(ToF.getWorld().getPlayer());
-
         /**
          * ******************************SAVE*********************************
          */
         ButtonSave.setOnAction(e -> ToF.save());
-
-        updateBars();
 
         // Buttons
         ButtonReadNote.setOnAction(e -> ToF.getWorld().getPlayer().getCurrentRoom().readNotes());
@@ -145,9 +154,9 @@ public class InterfaceController implements Initializable {
                 Map.getPrefHeight() / 2,
                 Map.getPrefWidth() / 2,
                 Map.getPrefHeight() / 2));
-        updateMap();
         
         ButtonSearchRoom.setOnAction(e -> onSearch());
+        update(ToF.getWorld().getPlayer());
         
         // Faire en sorte d'ouvrir la page loot lorsque l'on gagne un combat ou
         // lorsque l'on fouille un coffre.
@@ -210,13 +219,13 @@ public class InterfaceController implements Initializable {
      *
      * @param event the event
      */
-    public void restPopup(ActionEvent event) {
+    public static void restPopup(ActionEvent event) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(ToF.getResource("rest.fxml"));
             Parent menu = (Parent) fxmlLoader.load();
             Stage stage = new Stage();
             stage.setScene(new Scene(menu));
-            stage.setOnHidden(e -> update(ToF.getWorld().getPlayer()));
+            stage.setOnHidden(e -> me.update(ToF.getWorld().getPlayer()));
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -233,14 +242,14 @@ public class InterfaceController implements Initializable {
         b.setOnAction(e -> restPopup(e));
     }
 
-    public void lootPopup(ItemContainer other) {
+    public static void lootPopup(ItemContainer other) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(ToF.getResource("Loot.fxml"));
             Parent menu = (Parent) fxmlLoader.load();
             ((LootController)fxmlLoader.getController()).setInventories(ToF.getWorld().getPlayer().getInventory(), other);
             Stage stage = new Stage();
             stage.setScene(new Scene(menu));
-            stage.setOnHidden(e -> update(ToF.getWorld().getPlayer()));
+            stage.setOnHidden(e -> me.update(ToF.getWorld().getPlayer()));
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -307,6 +316,7 @@ public class InterfaceController implements Initializable {
         move(p, DOWN, ButtonDownstairs);
         updateMap();
         updateBars();
+        updateInventory();
         
         if(ToF.getWorld().isFullyExplored())
             ToF.getWorld().newMessage(new Message().add("You have explored everything!"));
@@ -338,6 +348,45 @@ public class InterfaceController implements Initializable {
                 .forEach(this::drawRoom);
     }
     
+    public void updateInventory() {
+        Inventory inventory = ToF.getWorld().getPlayer().getInventory();
+        fillCategory(MenuAll, inventory.stream());
+        fillCategory(MenuApparel, inventory.getWearables());
+        fillCategory(MenuEdible, inventory.getEdible());
+        fillCategory(MenuScroll, inventory.getScrolls());
+        fillCategory(MenuWeapon, inventory.getWeapons());
+        
+        fillCategory(MenuOther, inventory.stream()
+                .filter(i -> inventory.getScrolls()  .noneMatch(i2 -> i.equals(i2)))
+                .filter(i -> inventory.getWearables().noneMatch(i2 -> i.equals(i2)))
+                .filter(i -> inventory.getEdible()   .noneMatch(i2 -> i.equals(i2)))
+                .filter(i -> inventory.getWeapons()  .noneMatch(i2 -> i.equals(i2))));
+    }
+    
+    private void fillCategory(ListView<Item> items, Stream<Item> source) {
+        // Inspired from
+        // https://stackoverflow.com/questions/28264907/javafx-listview-contextmenu
+        
+        items.getItems().clear();
+        source  .sorted((i1, i2) -> i1.getName().compareTo(i2.getName()))
+                .forEachOrdered(e -> items.getItems().add(e));
+        items.setCellFactory(param -> new ListCell<Item>() {
+            @Override
+            protected void updateItem(Item item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                    setOnMouseReleased((MouseEvent e) -> {
+                        InterfaceController.contextMenuItem(item, this, e,
+                                true, true, eh -> updateInventory());
+                    });
+                }
+            }
+        });
+    }
+    
     private static final int MAP_ROOM_SIZE = 5;
     private static final int MAP_ROOM_DIST = 15;
     private static final double TRANSPARENCY_COEF = 0.5;
@@ -367,15 +416,35 @@ public class InterfaceController implements Initializable {
         Map.getChildren().add(e);
     }
     
-    public static void contextMenuItem(Item item, Node node, MouseEvent mouse){
-        println("GUI", "Context menu for the item " + item);
+    public static void contextMenuItem(Item item, Node node, MouseEvent mouse,
+            boolean allowUse, boolean allowDrop, EventHandler<WindowEvent> eh){
+        println("GUI", "Context menu for the item " + item.getName());
+        
+        ContextMenu menu = new ContextMenu();
         
         // View the item
         MenuItem view = new MenuItem("View");
         view.setOnAction(e -> viewItem(item));
+        menu.getItems().add(view);
         
-        ContextMenu menu = new ContextMenu();
-        menu.getItems().addAll(view);
+        // Use the item
+        if(allowUse && item.canUse(ToF.getWorld().getPlayer())){
+            MenuItem use = new MenuItem("Use");
+            use.setOnAction(e -> ToF.getWorld().getPlayer().use(item));
+            menu.getItems().add(use);
+        }
+        
+        // Drop the item
+        if(allowDrop){
+            MenuItem drop = new MenuItem("Drop");
+            drop.setOnAction(e -> 
+                ToF.getWorld().getPlayer().drop(item)
+            );
+            menu.getItems().add(drop);
+        }
+        
+        if(eh != null)
+            menu.setOnHidden(eh);
         menu.show(node, mouse.getScreenX(), mouse.getSceneY());
     }
     

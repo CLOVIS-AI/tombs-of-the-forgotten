@@ -22,7 +22,9 @@
  */
 package com.cc.tof;
 
+import com.cc.players.Entity;
 import com.cc.utils.messages.Message;
+import com.cc.view.InterfaceController;
 import com.cc.view.View;
 import com.cc.world.World;
 import com.cc.world.generator.DefaultGenerator;
@@ -76,6 +78,10 @@ public class ToF extends Application {
 
     public static World getWorld() {
         return world;
+    }
+    
+    public static void opponentDied(Entity opponent) {
+        InterfaceController.lootPopup(opponent.getInventory());
     }
 
     /**

@@ -22,6 +22,8 @@
  */
 package com.cc.players;
 
+import com.cc.items.Item;
+import com.cc.tof.ToF;
 import com.cc.utils.messages.Message;
 import com.cc.world.Direction;
 import com.eclipsesource.json.JsonObject;
@@ -86,6 +88,21 @@ public class Player extends Entity {
         
         if(isFighting())
             getWorld().newMessage(new Message().add("You have an opponent!"));
+    }
+    
+    public void use(Item item) {
+        getInventory().use(item, this);
+        getWorld().nextTick();
+    }
+    
+    @Override
+    public void nextTick() {
+
+        getOpponent()
+                .filter(Entity::isDead)
+                .ifPresent(ToF::opponentDied);
+        
+        super.nextTick();
     }
     
     @Override
