@@ -26,6 +26,7 @@ package com.cc.view;
 import com.cc.items.ItemContainer;
 import com.cc.players.Player;
 import com.cc.tof.ToF;
+import static com.cc.tof.ToF.println;
 import com.cc.utils.Bar;
 import com.cc.utils.messages.Message;
 import com.cc.world.Direction;
@@ -330,6 +331,8 @@ public class InterfaceController implements Initializable {
      * @param p the player
      */
     public void update(Player p) {
+        println("GUI", "Updating the UI...");
+        
         move(p, NORTH, (Shape) MoveNorth);
         move(p, SOUTH, (Shape) MoveSouth);
         move(p, EAST, (Shape) MoveEast);
@@ -341,7 +344,7 @@ public class InterfaceController implements Initializable {
         
         if(ToF.getWorld().isFullyExplored())
             ToF.getWorld().newMessage(new Message().add("You have explored everything!"));
-        
+
         ToF.getWorld().nextTick();
     }
 

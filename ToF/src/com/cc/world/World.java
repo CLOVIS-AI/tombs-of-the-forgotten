@@ -25,6 +25,7 @@ package com.cc.world;
 import com.cc.players.Entity;
 import com.cc.players.Player;
 import com.cc.players.SimpleAI;
+import static com.cc.tof.ToF.println;
 import com.cc.utils.Save;
 import com.cc.utils.messages.Message;
 import com.cc.world.links.Link;
@@ -148,8 +149,8 @@ public final class World implements Timable, Save<JsonObject> {
      */
     @Override
     public void nextTick() {
+        println("ToF", "Updating the world...");
         player.nextTick();
-        
         entities.removeIf(e -> {
             e.nextTick();
             return e.isDead();
