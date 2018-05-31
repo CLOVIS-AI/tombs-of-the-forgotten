@@ -92,7 +92,7 @@ public class EntityTest {
         
         map.put(l, r);
         p.addItem(i);
-        p.dropItem(i);
+        p.drop(i);
         
         assertTrue(p.getCurrentRoom().getItems().contains(i));
         assertFalse(p.hasItem(i));
