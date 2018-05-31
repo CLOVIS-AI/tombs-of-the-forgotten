@@ -23,8 +23,10 @@
  */
 package com.cc.players;
 
+import com.cc.world.Location;
 import com.cc.world.Path;
 import com.eclipsesource.json.JsonObject;
+import java.util.Random;
 
 /**
  * 
@@ -33,9 +35,11 @@ import com.eclipsesource.json.JsonObject;
 public class SimpleAI extends Entity {
     
     private Path pathToPlayer;
+    private final int PERCENT_CHANCE_USE_ITEM = 30;
     
-    public SimpleAI(String name, int maxHealth, int maxStrength, int maxMana, int maxWeight) {
-        super(name, maxHealth, maxStrength, maxMana, maxWeight);
+    public SimpleAI(String name, int maxHealth, int maxStrength, int maxMana,
+            int maxWeight, Location location) {
+        super(name, maxHealth, maxStrength, maxMana, maxWeight, location);
     }
     
     public SimpleAI(JsonObject json) {
@@ -46,19 +50,25 @@ public class SimpleAI extends Entity {
     public void nextTick(){
         super.nextTick();
         
-        if(isFighting()){
+        if(isFighting() || new Random().nextInt(100) < PERCENT_CHANCE_USE_ITEM){
             getInventory().getItems().stream()
                     .filter(i -> i.canUse(this))
                     .findAny()
                     .ifPresent(i -> getInventory().use(i, this));
-        }else{
-            if(pathToPlayer == null){
-                try {
-                    pathToPlayer = getCurrentRoom().pathTo(getWorld().getPlayer().getCurrentRoom(), this);
-                } catch (Path.UnreachableRoomException ex) {return;}
-            }
-            moveTo(pathToPlayer.moveToNext());
         }
         
+        if(pathToPlayer == null || pathToPlayer.size() == 0){
+            try {
+                pathToPlayer = getCurrentRoom().pathTo(getWorld().getPlayer().getCurrentRoom(), this);
+                pathToPlayer.moveToNext();
+            } catch (Path.UnreachableRoomException ex) {return;}
+            
+            if(pathToPlayer.size() == 0){
+                super.nextTick();
+                return;
+            }
+        }
+        if(new Random().nextInt(100) < 80)
+            moveTo(pathToPlayer.moveToNext());
     }
 }

@@ -24,6 +24,7 @@
 package com.cc.view;
 
 import com.cc.tof.ToF;
+import static com.cc.tof.ToF.println;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -86,14 +87,14 @@ public class MenuController implements Initializable {
 
     public void launchGame(){
         try {
-            System.out.println("[ToF]\tLoading the game interface...");
+            println("ToF", "Loading the game interface...");
             Parent ui = FXMLLoader.load(ToF.getResource("interface.fxml"));
             ui.relocate(-255, 0);
             
-            System.out.println("[ToF]\tCreating the scene...");
+            println("ToF", "Creating the scene...");
             Scene sc = new Scene(ui, 1000, 600);
             
-            System.out.println("[ToF]\tSwapping the scene...");
+            println("ToF", "Swapping the scene...");
             ToF.getStage().setScene(sc);
         } catch (IOException ex) {
             throw new IllegalStateException("Could not load main UI", ex);

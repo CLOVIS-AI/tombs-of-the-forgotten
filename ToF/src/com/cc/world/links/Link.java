@@ -196,7 +196,8 @@ public abstract class Link implements Save<JsonObject> {
     public final boolean open(Entity e){
         if(!isOpen && canOpen(e)){
             isOpen = true;
-            room1.getWorld().newMessage(new Message().add("You opened the door."));
+            if(e == room1.getWorld().getPlayer())
+                room1.getWorld().newMessage(new Message().add("You opened the door."));
         }
         return isOpen;
     }

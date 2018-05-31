@@ -25,6 +25,7 @@ package com.cc.world;
 import com.cc.players.Entity;
 import com.cc.players.Player;
 import com.cc.players.SimpleAI;
+import static com.cc.tof.ToF.println;
 import com.cc.utils.Save;
 import com.cc.utils.messages.Message;
 import com.cc.world.links.Link;
@@ -76,12 +77,13 @@ public final class World implements Timable, Save<JsonObject> {
     }
 
     @SuppressWarnings("LeakingThisInConstructor")
-    public World(Collection<Room> map, Player player) {
+    public World(Collection<Room> map, Player player, List<Entity> entities) {
         map.forEach(r -> {r.setWorld(this); r.endGeneration();});
         rooms = createTreeMap(map);
         this.player = player;
         this.player.setWorld(this);
-        this.entities = new ArrayList<>();
+        entities.forEach(e -> e.setWorld(this));
+        this.entities = new ArrayList<>(entities);
         messages = new ArrayDeque<>();
 
     }
@@ -147,8 +149,8 @@ public final class World implements Timable, Save<JsonObject> {
      */
     @Override
     public void nextTick() {
+        println("ToF", "Updating the world...");
         player.nextTick();
-        
         entities.removeIf(e -> {
             e.nextTick();
             return e.isDead();
@@ -173,6 +175,15 @@ public final class World implements Timable, Save<JsonObject> {
         return rooms.values().stream()
                 .filter(Room::isExplored)
                 .count() * 100.0 / rooms.size();
+    }
+    
+    /**
+     * Is this world fully explored?
+     * @return {@code true} if no room has yet to be explored.
+     */
+    public boolean isFullyExplored() {
+        return rooms.values().stream()
+                .allMatch(Room::isExplored);
     }
 
     /**

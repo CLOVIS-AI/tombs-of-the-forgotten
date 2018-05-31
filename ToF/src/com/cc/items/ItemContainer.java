@@ -250,7 +250,9 @@ public class ItemContainer implements Save<JsonObject> {
      */
     public void applyWears(Stat stat, Bar bar){
         for(Item item : items){
-            bar.addBonus(1, item.getWear(stat), false);
+            int wear = item.getWear(stat);
+            if(wear != 0)
+                bar.addBonus(1, wear, false);
         }
     }
     

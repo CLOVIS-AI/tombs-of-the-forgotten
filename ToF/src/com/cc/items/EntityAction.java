@@ -87,6 +87,7 @@ public class EntityAction implements Action {
         return new JsonObject()
                 .add("target", target.name())
                 .add("stat", stat.name())
+                .add("type", "entity")
                 .add("value", value)
                 .add("operation", operation.name())
                 .add("mode", mode.name());
@@ -98,7 +99,7 @@ public class EntityAction implements Action {
      */
     @Override
     public void execute(Entity e){
-        mode.execute(target.select(e), stat, value, turns);
+        mode.execute(target.select(e), stat, operation.getValue(value), turns);
     }
 
     @Override
@@ -112,7 +113,11 @@ public class EntityAction implements Action {
 
     @Override
     public boolean canUse(Entity entity) {
-        return mode.canExecute(target.select(entity), stat, value);
+        try{
+            return mode.canExecute(target.select(entity), stat, operation.getValue(value));
+        }catch(CannotUseItem e){
+            return false;
+        }
     }
 
     @Override
@@ -157,11 +162,10 @@ public class EntityAction implements Action {
         
         /**
          * Calculates the effect of an operation.
-         * @param entity the entity the operation is executed on
          * @param value how effective this operation is
          * @return The amount of effect this operation has.
          */
-        public int getValue(Entity entity, int value){
+        public int getValue(int value){
             return modifier.apply(value);
         }
     }
@@ -199,7 +203,7 @@ public class EntityAction implements Action {
         public abstract void execute(Entity e, Stat s, int value, int turns);
         public boolean canExecute(Entity e, Stat s, int value){ return true; }
         public int getWear(Stat current, Stat requested, int value){ 
-            throw new IllegalStateException("Cannot wear this action: "+this);
+            return 0;
         }
     }
     

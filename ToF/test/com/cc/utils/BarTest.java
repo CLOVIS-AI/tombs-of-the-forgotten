@@ -63,26 +63,6 @@ public class BarTest {
     }
     
     @Test
-    public void addNegatives() {
-        System.out.println("add:negatives");
-        Bar b = new Bar(null, 0, 5, 0);
-        
-        try{
-            b.add(-1, ACCEPT);
-            fail();
-        }catch(IllegalArgumentException e){
-            assertTrue(true);
-        }
-        
-        try{
-            b.add(-1, DENY);
-            fail();
-        }catch(IllegalArgumentException e){
-            assertTrue(true);
-        }
-    }
-    
-    @Test
     public void addDeny() {
         System.out.println("add:deny");
         Bar b = new Bar(null, 0, 10, 10);
