@@ -98,9 +98,13 @@ public class InterfaceController implements Initializable {
 
     private boolean isMenu = false;
     private Timeline move = new Timeline();
+    
+    private static InterfaceController me;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        me = this;
+        
         Open.setOnMouseEntered(e -> {
             isMenu = true;
             slideRight(LeftMenu);
@@ -210,13 +214,13 @@ public class InterfaceController implements Initializable {
      *
      * @param event the event
      */
-    public void restPopup(ActionEvent event) {
+    public static void restPopup(ActionEvent event) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(ToF.getResource("rest.fxml"));
             Parent menu = (Parent) fxmlLoader.load();
             Stage stage = new Stage();
             stage.setScene(new Scene(menu));
-            stage.setOnHidden(e -> update(ToF.getWorld().getPlayer()));
+            stage.setOnHidden(e -> me.update(ToF.getWorld().getPlayer()));
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -233,14 +237,14 @@ public class InterfaceController implements Initializable {
         b.setOnAction(e -> restPopup(e));
     }
 
-    public void lootPopup(ItemContainer other) {
+    public static void lootPopup(ItemContainer other) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(ToF.getResource("Loot.fxml"));
             Parent menu = (Parent) fxmlLoader.load();
             ((LootController)fxmlLoader.getController()).setInventories(ToF.getWorld().getPlayer().getInventory(), other);
             Stage stage = new Stage();
             stage.setScene(new Scene(menu));
-            stage.setOnHidden(e -> update(ToF.getWorld().getPlayer()));
+            stage.setOnHidden(e -> me.update(ToF.getWorld().getPlayer()));
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
