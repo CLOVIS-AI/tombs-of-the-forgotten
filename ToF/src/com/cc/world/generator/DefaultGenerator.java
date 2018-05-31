@@ -39,6 +39,9 @@ import static com.cc.players.Entity.Stat.HEALTH;
 import static com.cc.players.Entity.Stat.STAMINA;
 import com.cc.players.Player;
 import com.cc.players.SimpleAI;
+import static com.cc.tof.ToF.done;
+import static com.cc.tof.ToF.print;
+import static com.cc.tof.ToF.println;
 import com.cc.utils.Pair;
 import com.cc.world.Direction;
 import com.cc.world.Location;
@@ -118,22 +121,31 @@ public class DefaultGenerator implements Generator {
         if(isGenerated)
             throw new IllegalStateException("This generator has already been used.");
         
+        println("RNG", "Beginning random generation...");
         random = randomizer;
         rooms = new TreeMap<>();
+        
+        println("RNG", "Adding the spawn...");
         addRoom(new Room("This is where you spawn.").explore(), new Location());
+        
         int number = rdmNbr(NBR_ROOMS_MIN, NBR_ROOMS_MAX);
+        println("RNG", "Generation of the rooms & links: " + number + " iterations.");
         for(int i = 0; i < number; i++)
             iteration();
+        println("RNG", "Generated " + rooms.size() + " rooms.");
         
         int nbrShortcuts = rdmNbr(NBR_SHORT_MIN, NBR_SHORT_MAX);
+        println("RNG", "Adding shortcuts: " + nbrShortcuts + " shortcuts expected.");
         for(int i = 0; i < nbrShortcuts; i++)
-            i -= shortcut() ? 0 : 1;
+            shortcut();
         
         entities = new ArrayList<>();
-        int nbrEntities = rdmNbr(15, NBR_ROOMS_MAX);
+        int nbrEntities = rdmNbr(1, NBR_ROOMS_MAX/10);
+        println("RNG", "Generation of the AIs: " + nbrEntities + " entities.");
         for(int i = 0; i < nbrEntities; i++)
             entities.add(createRandomEntity());
-        
+
+        println("RNG", "Generation of the player & validation.");
         isGenerated = true;
         return new World(rooms.values(), new Player(), entities);
     }
@@ -331,11 +343,11 @@ public class DefaultGenerator implements Generator {
     private static final List<String> NAMES;
     
     static {
-        System.out.println("[RNG]\tInitilializing the list of item names...");
+        print("RNG", "Initilializing the list of item names...");
         NAMES = Arrays.asList(
                 "of dispair"
         );
-        System.out.println("[RNG]\tDone.");
+        done();
     }
 
     private String crtName(String name){
@@ -345,11 +357,11 @@ public class DefaultGenerator implements Generator {
     private static final List<String> FOOD_NAMES;
     
     static {
-        System.out.println("[RNG]\tInitializing list of foood names...");
+        print("RNG", "Initializing list of foood names...");
         FOOD_NAMES = Arrays.asList(
                 "Bread", "Steacks"
         );
-        System.out.println("[RNG]\tDone.");
+        done();
     }
     
     private String crtFood(){
