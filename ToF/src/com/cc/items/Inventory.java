@@ -72,13 +72,15 @@ public class Inventory extends ItemContainer {
      * <p>If the item is too heavy for the player, nothing is done. See 
      * {@link #canAdd(com.cc.items.Item) canAddItem(Item)}.
      * @param item The item to be added.
+     * @return {@code true} if the item was successfully added.
      */
     @Override
-    public void add(Item item) {
+    public boolean add(Item item) {
         if (canAdd(item)) {
             super.add(item);
             weight.add(item.getWeight(), ACCEPT);
-        }
+            return true;
+        } else return false;
     }
     
     /**

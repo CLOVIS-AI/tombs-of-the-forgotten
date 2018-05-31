@@ -189,9 +189,11 @@ public class ItemContainer implements Save<JsonObject> {
     /**
      * Add an item into this object.
      * @param item The item.
+     * @return {@code true} if the item was successfully added.
      */
-    public void add(Item item) {
+    public boolean add(Item item) {
         items.add(item);
+        return true;
     }
     
     /**
