@@ -103,6 +103,14 @@ public class Inventory extends ItemContainer {
         return couldnt;
     }
     
+    @Override
+    public boolean remove(Item item) {
+        boolean b;
+        if(b = super.remove(item))
+            weight.remove(item.getWeight(), ACCEPT);
+        return b;
+    }
+    
     /**
      * Gets the weight amount of the player's inventory.
      * @return The weight of the inventory.
