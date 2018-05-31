@@ -365,14 +365,18 @@ public class InterfaceController implements Initializable {
                 .selectRoomsByLocation(l -> l.getZ() == player.getZ())
                 .forEach(this::drawRoom);
     }
+    
+    private static final int MAP_ROOM_SIZE = 5;
+    private static final int MAP_ROOM_DIST = 15;
+    private static final double TRANSPARENCY_COEF = 0.5;
 
     public void drawRoom(Room r) {
         // Position
         Location relative = r.getLocation().remove(player);
         Ellipse e = new Ellipse(
-                relative.getY() * 30 + Map.getPrefWidth() / 2,
-                relative.getX() * 30 + Map.getPrefHeight() / 2,
-                10, 10);
+                relative.getY() * MAP_ROOM_DIST + Map.getPrefWidth() / 2,
+                relative.getX() * MAP_ROOM_DIST + Map.getPrefHeight() / 2,
+                MAP_ROOM_SIZE, MAP_ROOM_SIZE);
 
         // Color
         if (r.getLocation().equals(player)) {
@@ -384,7 +388,7 @@ public class InterfaceController implements Initializable {
         if (!r.isExplored()){
             Color p = (Color) e.getFill();
             e.setFill(new Color(p.getRed(), p.getGreen(), p.getRed(),
-                    0.5/(r.getLocation().dist(player)+0.5)
+                    TRANSPARENCY_COEF/(r.getLocation().dist(player)+TRANSPARENCY_COEF)
             ));
         }
 

@@ -104,8 +104,8 @@ public class DefaultGenerator implements Generator {
     List<Entity> entities;
     boolean isGenerated = false;
     
-    private static final int NBR_ROOMS_MAX = 30;
-    private static final int NBR_ROOMS_MIN = 10;
+    private static final int NBR_ROOMS_MAX = 60;
+    private static final int NBR_ROOMS_MIN = 20;
     
     private static final int NBR_SHORT_MAX = 30;
     private static final int NBR_SHORT_MIN = 10;
