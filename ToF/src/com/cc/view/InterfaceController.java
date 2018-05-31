@@ -126,7 +126,6 @@ public class InterfaceController implements Initializable {
         showMenu(BlockAll, All);
 
         restPopup(ButtonRest);
-        ButtonOpen.setOnAction(e -> lootPopup(ToF.getWorld().getPlayer().getCurrentRoom().getItems()));
 
         update(ToF.getWorld().getPlayer());
 
@@ -156,9 +155,10 @@ public class InterfaceController implements Initializable {
     
     private void onSearch() {
         ItemContainer items = ToF.getWorld().getPlayer().getCurrentRoom().getItems();
-        ToF.getWorld().newMessage(new Message()
-                .add("There are " + items.getItems().size() + " items:")
-                .addAuto(items.getItems().toArray()));
+        
+        if(items.getItems().isEmpty())
+            ToF.getWorld().newMessage(new Message().add("There is nothing here..."));
+        else lootPopup(items);
         
         ToF.getWorld().nextTick();
     }
@@ -217,6 +217,7 @@ public class InterfaceController implements Initializable {
             Stage stage = new Stage();
             stage.setScene(new Scene(menu));
             stage.show();
+            update(ToF.getWorld().getPlayer());
         } catch (Exception e) {
             e.printStackTrace();
         }
