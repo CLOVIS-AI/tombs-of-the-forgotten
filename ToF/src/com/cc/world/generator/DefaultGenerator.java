@@ -23,8 +23,18 @@
  */
 package com.cc.world.generator;
 
+import com.cc.items.EntityAction;
+import static com.cc.items.EntityAction.Mode.MODIFICATION;
+import static com.cc.items.EntityAction.Operation.ADD;
+import static com.cc.items.EntityAction.Operation.REMOVE;
+import static com.cc.items.EntityAction.Target.OPPONENT;
+import static com.cc.items.EntityAction.Target.SELF;
 import com.cc.items.Item;
-import com.cc.items.Rarity;
+import com.cc.items.Item.ItemBuilder;
+import static com.cc.items.Rarity.COMMON;
+import static com.cc.items.Rarity.RARE;
+import static com.cc.players.Entity.Stat.HEALTH;
+import static com.cc.players.Entity.Stat.STAMINA;
 import com.cc.players.Player;
 import com.cc.utils.Pair;
 import com.cc.world.Direction;
@@ -38,6 +48,7 @@ import com.cc.world.links.Link;
 import com.cc.world.links.Opening;
 import static java.lang.Math.abs;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,11 +115,11 @@ public class DefaultGenerator implements Generator {
         random = randomizer;
         rooms = new TreeMap<>();
         addRoom(new Room("This is where you spawn.").explore(), new Location());
-        int number = random.nextInt(NBR_ROOMS_MAX - NBR_ROOMS_MIN) + NBR_ROOMS_MIN;
+        int number = rdmNbr(NBR_ROOMS_MIN, NBR_ROOMS_MAX);
         for(int i = 0; i < number; i++)
             iteration();
         
-        int nbrShortcuts = random.nextInt(NBR_SHORT_MAX - NBR_SHORT_MIN) + NBR_SHORT_MIN;
+        int nbrShortcuts = rdmNbr(NBR_SHORT_MIN, NBR_SHORT_MAX);
         for(int i = 0; i < nbrShortcuts; i++)
             i -= shortcut() ? 0 : 1;
         
@@ -245,7 +256,17 @@ public class DefaultGenerator implements Generator {
     }
     
     private Item createRandomItem(){
-        return new Item("", "", Rarity.RARE, 1, 1);
+        int luck = random.nextInt(100);
+        return luck < 10 ? new ItemBuilder(crtName("Sword"), "", COMMON, rdmNbr(4000, 6000), rdmNbr(300, 400))
+                            .add(new EntityAction(OPPONENT, REMOVE, HEALTH, rdmNbr(2, 5), MODIFICATION))
+                            .add(new EntityAction(SELF, REMOVE, STAMINA, rdmNbr(1, 2), MODIFICATION)).get():
+                
+               /*else...*/ new ItemBuilder(crtFood(), "", COMMON, rdmNbr(100, 2000), 1)
+                            .add(new EntityAction(SELF, ADD, HEALTH, rdmNbr(1, 5), MODIFICATION)).get();
+    }
+    
+    private int rdmNbr(int min, int max){
+        return random.nextInt(max - min) + min;
     }
     
     private Link createRandomLink(Room[] rooms){
@@ -258,7 +279,7 @@ public class DefaultGenerator implements Generator {
         
         int key = abs(random.nextInt(Integer.MAX_VALUE-1)+1);
         Room room2 = createRandomRoom();
-        Item item = createRandomItem();
+        Item item = new Item("Key", "", RARE, 1, 1);
         item.setId(key);
         room2.getItems().add(item);
         
@@ -276,6 +297,34 @@ public class DefaultGenerator implements Generator {
         );
         
         return sb.toString();
+    }
+    
+    private static final List<String> NAMES;
+    
+    static {
+        System.out.println("[RNG]\tInitilializing the list of item names...");
+        NAMES = Arrays.asList(
+                "of dispair"
+        );
+        System.out.println("[RNG]\tDone.");
+    }
+
+    private String crtName(String name){
+        return name + " " + NAMES.get(random.nextInt(NAMES.size()));
+    }
+    
+    private static final List<String> FOOD_NAMES;
+    
+    static {
+        System.out.println("[RNG]\tInitializing list of foood names...");
+        FOOD_NAMES = Arrays.asList(
+                "Bread", "Steacks"
+        );
+        System.out.println("[RNG]\tDone.");
+    }
+    
+    private String crtFood(){
+        return FOOD_NAMES.get(random.nextInt(FOOD_NAMES.size()));
     }
     
 }
