@@ -62,6 +62,14 @@ public class Path {
     }
     
     /**
+     * The size of the path.
+     * @return The size of the path.
+     */
+    public int size(){
+        return rooms.size();
+    }
+    
+    /**
      * Verifies that this Path is still valid.
      * <p>A path can become invalid if the entity cannot open doors, and that this
      * path goes through an open door that has been closed since the path's generation.

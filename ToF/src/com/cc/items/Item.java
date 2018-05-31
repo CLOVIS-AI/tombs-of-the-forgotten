@@ -252,6 +252,11 @@ public final class Item implements Save<JsonObject> {
                 .add("id", id);
     }
     
+    @Override
+    public String toString() {
+        return name + ": " + getEffects();
+    }
+    
     /**
      * A class that allows to add actions to an item (because items are read-only
      * objects).

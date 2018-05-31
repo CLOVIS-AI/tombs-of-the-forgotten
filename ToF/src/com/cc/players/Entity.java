@@ -522,6 +522,14 @@ public abstract class Entity implements Timable, Save<JsonObject> {
         return world;
     }
 
+    /**
+     * The name of the entity.
+     * @return The name of the entity.
+     */
+    public String getName() {
+        return name;
+    }
+
     @Override
     public JsonObject save() {
         return new JsonObject()

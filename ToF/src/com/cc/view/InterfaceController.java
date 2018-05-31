@@ -55,6 +55,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
@@ -336,6 +337,7 @@ public class InterfaceController implements Initializable {
         move(p, UP, ButtonUpstairs);
         move(p, DOWN, ButtonDownstairs);
         updateMap();
+        updateBars();
         
         if(ToF.getWorld().isFullyExplored())
             ToF.getWorld().newMessage(new Message().add("You have explored everything!"));
@@ -346,6 +348,7 @@ public class InterfaceController implements Initializable {
     public void fillBar(Bar b, ProgressBar bar) {
 
         bar.setProgress(b.getCurrent() * 1.0 / b.getMaximum());
+        bar.setTooltip(new Tooltip(b.getName() + ": " + b.getCurrent() + "/" + b.getMaximum()));
     }
 
     public void updateBars() {

@@ -23,7 +23,6 @@
  */
 package com.cc.players;
 
-import static com.cc.tof.ToF.println;
 import com.cc.world.Location;
 import com.cc.world.Path;
 import com.eclipsesource.json.JsonObject;
@@ -56,18 +55,20 @@ public class SimpleAI extends Entity {
                     .filter(i -> i.canUse(this))
                     .findAny()
                     .ifPresent(i -> getInventory().use(i, this));
-        }else{
-            if(pathToPlayer == null || pathToPlayer.seePath().count() == 0){
-                println("AI", this + ": Searching for a new path...");
-                try {
-                    pathToPlayer = getCurrentRoom().pathTo(getWorld().getPlayer().getCurrentRoom(), this);
-                    pathToPlayer.moveToNext();
-                } catch (Path.UnreachableRoomException ex) {return;}
-                println("AI", "Found one in " + pathToPlayer.seePath().count() + " steps.");
-            }
-            moveTo(pathToPlayer.moveToNext());
-            println("AI", this + ": moving towards the player, " + pathToPlayer.seePath().count() + " steps left.");
         }
         
+        if(pathToPlayer == null || pathToPlayer.size() == 0){
+            try {
+                pathToPlayer = getCurrentRoom().pathTo(getWorld().getPlayer().getCurrentRoom(), this);
+                pathToPlayer.moveToNext();
+            } catch (Path.UnreachableRoomException ex) {return;}
+            
+            if(pathToPlayer.size() == 0){
+                super.nextTick();
+                return;
+            }
+        }
+        if(new Random().nextInt(100) < 80)
+            moveTo(pathToPlayer.moveToNext());
     }
 }

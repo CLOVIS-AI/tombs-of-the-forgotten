@@ -104,8 +104,8 @@ public class DefaultGenerator implements Generator {
     List<Entity> entities;
     boolean isGenerated = false;
     
-    private static final int NBR_ROOMS_MAX = 60;
-    private static final int NBR_ROOMS_MIN = 20;
+    private static final int NBR_ROOMS_MAX = 150;
+    private static final int NBR_ROOMS_MIN = 50;
     
     private static final int NBR_SHORT_MAX = 30;
     private static final int NBR_SHORT_MIN = 10;
@@ -140,7 +140,7 @@ public class DefaultGenerator implements Generator {
             shortcut();
         
         entities = new ArrayList<>();
-        int nbrEntities = rdmNbr(1, NBR_ROOMS_MAX/10);
+        int nbrEntities = rdmNbr(NBR_ROOMS_MIN/5, NBR_ROOMS_MAX/2);
         println("RNG", "Generation of the AIs: " + nbrEntities + " entities.");
         for(int i = 0; i < nbrEntities; i++)
             entities.add(createRandomEntity());
@@ -303,7 +303,9 @@ public class DefaultGenerator implements Generator {
                            new SimpleAI("Zombie", rdmNbr(10, 30), rdmNbr(5, 10), rdmNbr(5, 10), rdmNbr(30000, 50000), l)
                             .addItem(createRandomItem())
                             .addItem(createRandomItem())
-                            .addItem(createRandomItem());
+                            .addItem(createRandomItem())
+                            .addItem(new ItemBuilder("Bat", "", COMMON, 15, 300)
+                                .add(new EntityAction(OPPONENT, REMOVE, HEALTH, 1, MODIFICATION)).get());
     }
     
     private int rdmNbr(int min, int max){

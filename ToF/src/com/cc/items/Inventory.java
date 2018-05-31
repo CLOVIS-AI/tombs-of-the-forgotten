@@ -23,9 +23,11 @@
 package com.cc.items;
 
 import com.cc.players.Entity;
+import com.cc.tof.ToF;
 import com.cc.utils.Bar;
 import static com.cc.utils.Bar.Behavior.ACCEPT;
 import com.cc.utils.EventBar;
+import com.cc.utils.messages.Message;
 import com.eclipsesource.json.JsonObject;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -128,6 +130,11 @@ public class Inventory extends ItemContainer {
                     + "by this inventory ("+this+")");
         
         item.use(entity);
+        
+        if(entity == ToF.getWorld().getPlayer())
+            ToF.getWorld().newMessage(new Message().add("You use ").add(item));
+        else if(entity.getLocation().equals(ToF.getWorld().getPlayer().getLocation()))
+            ToF.getWorld().newMessage(new Message().add(entity.getName()).add("uses").add(item));
         
         if(item.isBroken())
             remove(item);
