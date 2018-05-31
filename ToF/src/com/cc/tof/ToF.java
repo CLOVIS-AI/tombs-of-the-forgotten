@@ -112,7 +112,7 @@ public class ToF extends Application {
         try {
             enm = new ToF().getClass().getClassLoader().getResources(name);
             URL ret = enm.nextElement();
-            System.out.println("[Data]\tUsing resource " + ret);
+            println("Data", "Using resource " + ret);
             return ret;
         } catch (IOException ex) {
             throw new IllegalArgumentException("Cannot open resource '" + name + "'", ex);
@@ -130,7 +130,7 @@ public class ToF extends Application {
      */
     public static Stream<String> getResourceByLine(String name) {
         try {
-            System.out.print("[Data]\tOpening resource '"+name+"'...");
+            print("Data", "Opening resource '"+name+"'...");
             BufferedReader reader;
             {
                 ClassLoader loader = new ToF().getClass().getClassLoader();
@@ -138,7 +138,7 @@ public class ToF extends Application {
                 InputStreamReader in = new InputStreamReader(input, StandardCharsets.UTF_8);
                 reader = new BufferedReader(in);
             }
-            System.out.println(" reading...");
+            println("reading...");
             return reader.lines();
         } catch (NoSuchElementException ex) {
             throw new IllegalArgumentException("Found no resource of the name '"+name+"'", ex);
@@ -156,14 +156,19 @@ public class ToF extends Application {
 
         time -= System.currentTimeMillis();
 
-        System.out.println("A new game was successfully created! Stats:");
-        System.out.println("> Time: " + (-time) + " ms");
-        System.out.println("> Number of rooms: " + world.getRooms().size());
-        System.out.println("> Average of neighbors: " + world.getRooms().stream()
+        println("ToF", "A new game was successfully created! Stats:");
+        println("ToF", "Time: " + (-time) + " ms");
+        println("ToF", "Number of rooms: " + world.getRooms().size());
+        println("ToF", "Average of neighbors: " + world.getRooms().stream()
                 .mapToLong(r -> r.getAllLinks().count())
                 .average()
                 .getAsDouble()
         );
+        println("ToF", "Average of items/room: " + world.getRooms().stream()
+                .mapToInt(r -> r.getItems().getItems().size())
+                .average()
+                .getAsDouble());
+        println("ToF", "Number of entities (player excluded): " + world.getEntities(false).count());
     }
 
     /**
@@ -172,18 +177,18 @@ public class ToF extends Application {
      */
     public static boolean load() {
         File file = ToF.selectFile("Load", SAVE_DIR);
-        System.out.println("[Load]\tThe user selected: " + file.getAbsolutePath());
+        println("Load", "The user selected: " + file.getAbsolutePath());
         try {
-            System.out.println("[Load]\tReading the file...");
+            println("Load", "Reading the file...");
             byte[] encoded = Files.readAllBytes(file.toPath());
             
-            System.out.println("[Load]\tParsing the JSON...");
+            println("Load", "Parsing the JSON...");
             JsonObject json = Json.parse(
                     new String(encoded, StandardCharsets.UTF_8)).asObject();
             
-            System.out.println("[Load]\tInstantiating the world...");
+            print("Load", "Instantiating the world...");
             world = new World(json);
-            System.out.println("[Load]\tDone.");
+            done();
             return true;
         } catch (IOException ex) {
             if(ex instanceof NoSuchFileException)
@@ -199,25 +204,25 @@ public class ToF extends Application {
      */
     public static void save() {
         File file = ToF.selectFile("Save", SAVE_DIR);
-        System.out.println("[Save]\tThe user selected: " + file.getAbsolutePath());
+        println("Save", "The user selected: " + file.getAbsolutePath());
         
-        System.out.println("[Save]\tGenerating the save of the game...");
+        println("Save", "Generating the save of the game...");
         JsonObject json = world.save();
         String str = json.toString(WriterConfig.PRETTY_PRINT);
-        System.out.println("[Save]\tSave is ready, opening the file...");
+        println("Save", "Save is ready, opening the file...");
         try {
             FileWriter fw = new FileWriter(file);
             if (!file.exists()) {
                 file.createNewFile();
-                System.out.println("[Save]\tCreated the file.");
+                println("Save", "Created the file.");
             }
             Writer writer = new FileWriter(file);
             BufferedWriter bw = new BufferedWriter(writer);
             
-            System.out.println("[Save]\tWriting in the file...");
+            print("Save", "Writing in the file...");
             bw.write(str);
             bw.close();
-            System.out.println("[Save]\tDone.");
+            done();
         } catch (IOException ex) {
             throw new RuntimeException("Cannot open file", ex);
         }
@@ -228,17 +233,17 @@ public class ToF extends Application {
         View view = new View(this, primaryStage);
         ToF.stage = primaryStage;
         ToF.SAVE_DIR = getRootDir("saves");
-        System.out.println("[File]\tSaves are stored in: " + SAVE_DIR.getAbsolutePath());
+        println("File", "Saves are stored in: " + SAVE_DIR.getAbsolutePath());
         
-        System.out.println("[ToF]\tLoading general menu...");
+        println("ToF", "Loading general menu...");
         Parent menu = FXMLLoader.load(getResource("Menu.fxml"));
-        System.out.println("[ToF]\tMenu loaded.");
+        println("ToF", "Menu loaded.");
         
-        System.out.println("[ToF]\tCreating main scene...");
+        println("ToF", "Creating main scene...");
         Scene scene = new Scene(menu, 1000, 600);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Tombs of the Forgotten");
-        System.out.println("[ToF]\tLaunching the game.");
+        println("ToF", "Launching the game.");
         primaryStage.show();
     }
     
@@ -258,11 +263,11 @@ public class ToF extends Application {
      */
     public static File selectFile(String message, File pos){
         if(!pos.exists()){
-            System.out.println("[File]\tCreating folder " + pos.getAbsolutePath());
+            println("File", "Creating folder " + pos.getAbsolutePath());
             pos.mkdir();
         }
         
-        System.out.println("[File]\tOpening prompt in " + pos.getAbsolutePath());
+        println("File", "Opening prompt in " + pos.getAbsolutePath());
         JFileChooser jfc = new JFileChooser(pos);
         jfc.showDialog(null, message);
         jfc.setVisible(true);
@@ -293,6 +298,28 @@ public class ToF extends Application {
      */
     public static File getRootDir(String name){
         return new File(getRoot(), name);
+    }
+    
+    private static String lastId = "";
+    public static void println(String id, String text){
+        if(lastId != id){
+            lastId = id;
+            System.out.println("[" + id + "]\t" + text);
+        }else
+            System.out.println("\t" + text);
+    }
+    public static void print(String id, String text){
+        if(lastId != id){
+            lastId = id;
+            System.out.print("[" + id + "]\t" + text);
+        }else
+            System.out.print("\t" + text);
+    }
+    public static void println(String text){
+        System.out.println(" " + text);
+    }
+    public static void done(){
+        println("[Done]");
     }
 
 }

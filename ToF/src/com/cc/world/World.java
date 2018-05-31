@@ -76,12 +76,13 @@ public final class World implements Timable, Save<JsonObject> {
     }
 
     @SuppressWarnings("LeakingThisInConstructor")
-    public World(Collection<Room> map, Player player) {
+    public World(Collection<Room> map, Player player, List<Entity> entities) {
         map.forEach(r -> {r.setWorld(this); r.endGeneration();});
         rooms = createTreeMap(map);
         this.player = player;
         this.player.setWorld(this);
-        this.entities = new ArrayList<>();
+        entities.forEach(e -> e.setWorld(this));
+        this.entities = new ArrayList<>(entities);
         messages = new ArrayDeque<>();
 
     }
@@ -173,6 +174,15 @@ public final class World implements Timable, Save<JsonObject> {
         return rooms.values().stream()
                 .filter(Room::isExplored)
                 .count() * 100.0 / rooms.size();
+    }
+    
+    /**
+     * Is this world fully explored?
+     * @return {@code true} if no room has yet to be explored.
+     */
+    public boolean isFullyExplored() {
+        return rooms.values().stream()
+                .allMatch(Room::isExplored);
     }
 
     /**

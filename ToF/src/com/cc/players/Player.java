@@ -22,6 +22,7 @@
  */
 package com.cc.players;
 
+import com.cc.utils.messages.Message;
 import com.cc.world.Direction;
 import com.eclipsesource.json.JsonObject;
 
@@ -80,7 +81,11 @@ public class Player extends Entity {
     @Override
     public void moveTo(Direction d) {
         super.moveTo(d);
+        super.getWorld().newMessage(new Message().add("You go " + d.toString()));
         super.getCurrentRoom().explore();
+        
+        if(isFighting())
+            getWorld().newMessage(new Message().add("You have an opponent!"));
     }
     
     @Override

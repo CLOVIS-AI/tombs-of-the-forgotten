@@ -23,9 +23,25 @@
  */
 package com.cc.world.generator;
 
+import com.cc.items.EntityAction;
+import static com.cc.items.EntityAction.Mode.MODIFICATION;
+import static com.cc.items.EntityAction.Operation.ADD;
+import static com.cc.items.EntityAction.Operation.REMOVE;
+import static com.cc.items.EntityAction.Target.OPPONENT;
+import static com.cc.items.EntityAction.Target.SELF;
 import com.cc.items.Item;
-import com.cc.items.Rarity;
+import com.cc.items.Item.ItemBuilder;
+import static com.cc.items.Rarity.COMMON;
+import static com.cc.items.Rarity.EPIC;
+import static com.cc.items.Rarity.RARE;
+import com.cc.players.Entity;
+import static com.cc.players.Entity.Stat.HEALTH;
+import static com.cc.players.Entity.Stat.STAMINA;
 import com.cc.players.Player;
+import com.cc.players.SimpleAI;
+import static com.cc.tof.ToF.done;
+import static com.cc.tof.ToF.print;
+import static com.cc.tof.ToF.println;
 import com.cc.utils.Pair;
 import com.cc.world.Direction;
 import com.cc.world.Location;
@@ -38,10 +54,12 @@ import com.cc.world.links.Link;
 import com.cc.world.links.Opening;
 import static java.lang.Math.abs;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Random;
 import java.util.TreeMap;
 import java.util.function.Function;
@@ -83,23 +101,70 @@ public class DefaultGenerator implements Generator {
 
     Random random;
     TreeMap<Location, Room> rooms;
+    List<Entity> entities;
     boolean isGenerated = false;
+    
+    private static final int NBR_ROOMS_MAX = 60;
+    private static final int NBR_ROOMS_MIN = 20;
+    
+    private static final int NBR_SHORT_MAX = 30;
+    private static final int NBR_SHORT_MIN = 10;
+    
+    private static final int ROOM_PICK_MAX_TRIES = 100;
+    
+    private static final int NBR_NOTES_MAX = 3;
+    
+    private static final int NBR_ITEMS_MAX = 5;
     
     @Override
     public World generate(Random randomizer) {
         if(isGenerated)
             throw new IllegalStateException("This generator has already been used.");
         
+        println("RNG", "Beginning random generation...");
         random = randomizer;
         rooms = new TreeMap<>();
-        addRoom(new Room("This is where you spawn.").explore(), new Location());
-        int number = random.nextInt(50) + 10;
-        for(int i = 0; i < number; i++){
-            iteration();
-        }
         
+        println("RNG", "Adding the spawn...");
+        addRoom(new Room("This is where you spawn.").explore(), new Location());
+        
+        int number = rdmNbr(NBR_ROOMS_MIN, NBR_ROOMS_MAX);
+        println("RNG", "Generation of the rooms & links: " + number + " iterations.");
+        for(int i = 0; i < number; i++)
+            iteration();
+        println("RNG", "Generated " + rooms.size() + " rooms.");
+        
+        int nbrShortcuts = rdmNbr(NBR_SHORT_MIN, NBR_SHORT_MAX);
+        println("RNG", "Adding shortcuts: " + nbrShortcuts + " shortcuts expected.");
+        for(int i = 0; i < nbrShortcuts; i++)
+            shortcut();
+        
+        entities = new ArrayList<>();
+        int nbrEntities = rdmNbr(1, NBR_ROOMS_MAX/10);
+        println("RNG", "Generation of the AIs: " + nbrEntities + " entities.");
+        for(int i = 0; i < nbrEntities; i++)
+            entities.add(createRandomEntity());
+
+        println("RNG", "Generation of the player & validation.");
         isGenerated = true;
-        return new World(rooms.values(), new Player());
+        return new World(rooms.values(), new Player(), entities);
+    }
+    
+    boolean shortcut(){
+        Room r1 = new ArrayList<>(rooms.values())
+                .get(random.nextInt(rooms.size()));
+        
+        Optional<Room> r2 = Stream.of(Direction.values())                       // For each direction
+                .filter(d -> !r1.getNeighbor(d).isPresent())                    // where there are no neighbors
+                .map(d -> rooms.get(r1.getLocation().add(d)))
+                .filter(r -> r != null)                                         // but there is a room
+                .findAny();                                                     // Choose one
+        
+        if(r2.isPresent()){
+            createRandomLink(new Room[]{r1, r2.get()}).autoLink();
+            return true;
+        } else
+            return false;
     }
     
     void iteration(){
@@ -177,7 +242,7 @@ public class DefaultGenerator implements Generator {
             l = locs.isEmpty() ? null : locs.get(random.nextInt(locs.size()));
             r = ro; // two variables so the Stream doesn't complain about not final
             
-            if(safeguard++ > 100)
+            if(safeguard++ > ROOM_PICK_MAX_TRIES)
                 throw new IllegalStateException("Detected an infinite loop!");
         } while(l == null);
         
@@ -204,16 +269,45 @@ public class DefaultGenerator implements Generator {
     private Room createRandomRoom(){
         Room randomizedRoom = new Room("Random room " + random.nextInt());
         
-        for(int i = 0; i < random.nextInt(3); i++){
+        int number = random.nextInt(NBR_NOTES_MAX);
+        for(int i = 0; i < number; i++){
             List<Integer> notes = new ArrayList<>(Note.getIDs());
             randomizedRoom.addNote(new Note(notes.get(random.nextInt(notes.size()))));
         }
+        
+        number = random.nextInt(NBR_ITEMS_MAX);
+        for(int i = 0; i < number; i++)
+            randomizedRoom.addItem(createRandomItem());
         
         return randomizedRoom;
     }
     
     private Item createRandomItem(){
-        return new Item("", "", Rarity.RARE, 1, 1);
+        int luck = random.nextInt(100);
+        return luck < 10 ? new ItemBuilder(crtName("Sword"), "", COMMON, rdmNbr(4000, 6000), rdmNbr(300, 400))
+                            .add(new EntityAction(OPPONENT, REMOVE, HEALTH, rdmNbr(2, 5), MODIFICATION))
+                            .add(new EntityAction(SELF, REMOVE, STAMINA, rdmNbr(1, 2), MODIFICATION)).get():
+                
+               /*else...*/ new ItemBuilder(crtFood(), "", COMMON, rdmNbr(100, 2000), 1)
+                            .add(new EntityAction(SELF, ADD, HEALTH, rdmNbr(1, 5), MODIFICATION)).get();
+    }
+    
+    private Entity createRandomEntity(){
+        List<Location> available = new ArrayList<>(rooms.keySet());
+        Location l = available.get(random.nextInt(available.size()));
+        
+        int luck = random.nextInt(100);
+        return luck < 5 ? new SimpleAI("Miner", rdmNbr(45, 60), rdmNbr(10, 15), rdmNbr(20, 30), rdmNbr(50000, 100000), l)
+                            .addItem(new ItemBuilder(crtName("Pickaxe"), "", EPIC, 10000, 1000)
+                                .add(new EntityAction(OPPONENT, REMOVE, HEALTH, 10, MODIFICATION)).get()):
+                           new SimpleAI("Zombie", rdmNbr(10, 30), rdmNbr(5, 10), rdmNbr(5, 10), rdmNbr(30000, 50000), l)
+                            .addItem(createRandomItem())
+                            .addItem(createRandomItem())
+                            .addItem(createRandomItem());
+    }
+    
+    private int rdmNbr(int min, int max){
+        return random.nextInt(max - min) + min;
     }
     
     private Link createRandomLink(Room[] rooms){
@@ -226,7 +320,7 @@ public class DefaultGenerator implements Generator {
         
         int key = abs(random.nextInt(Integer.MAX_VALUE-1)+1);
         Room room2 = createRandomRoom();
-        Item item = createRandomItem();
+        Item item = new Item("Key", "", RARE, 1, 1);
         item.setId(key);
         room2.getItems().add(item);
         
@@ -244,6 +338,34 @@ public class DefaultGenerator implements Generator {
         );
         
         return sb.toString();
+    }
+    
+    private static final List<String> NAMES;
+    
+    static {
+        print("RNG", "Initilializing the list of item names...");
+        NAMES = Arrays.asList(
+                "of dispair"
+        );
+        done();
+    }
+
+    private String crtName(String name){
+        return name + " " + NAMES.get(random.nextInt(NAMES.size()));
+    }
+    
+    private static final List<String> FOOD_NAMES;
+    
+    static {
+        print("RNG", "Initializing list of foood names...");
+        FOOD_NAMES = Arrays.asList(
+                "Bread", "Steacks"
+        );
+        done();
+    }
+    
+    private String crtFood(){
+        return FOOD_NAMES.get(random.nextInt(FOOD_NAMES.size()));
     }
     
 }

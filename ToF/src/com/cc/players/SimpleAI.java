@@ -23,8 +23,11 @@
  */
 package com.cc.players;
 
+import static com.cc.tof.ToF.println;
+import com.cc.world.Location;
 import com.cc.world.Path;
 import com.eclipsesource.json.JsonObject;
+import java.util.Random;
 
 /**
  * 
@@ -33,9 +36,11 @@ import com.eclipsesource.json.JsonObject;
 public class SimpleAI extends Entity {
     
     private Path pathToPlayer;
+    private final int PERCENT_CHANCE_USE_ITEM = 30;
     
-    public SimpleAI(String name, int maxHealth, int maxStrength, int maxMana, int maxWeight) {
-        super(name, maxHealth, maxStrength, maxMana, maxWeight);
+    public SimpleAI(String name, int maxHealth, int maxStrength, int maxMana,
+            int maxWeight, Location location) {
+        super(name, maxHealth, maxStrength, maxMana, maxWeight, location);
     }
     
     public SimpleAI(JsonObject json) {
@@ -46,18 +51,22 @@ public class SimpleAI extends Entity {
     public void nextTick(){
         super.nextTick();
         
-        if(isFighting()){
+        if(isFighting() || new Random().nextInt(100) < PERCENT_CHANCE_USE_ITEM){
             getInventory().getItems().stream()
                     .filter(i -> i.canUse(this))
                     .findAny()
                     .ifPresent(i -> getInventory().use(i, this));
         }else{
-            if(pathToPlayer == null){
+            if(pathToPlayer == null || pathToPlayer.seePath().count() == 0){
+                println("AI", this + ": Searching for a new path...");
                 try {
                     pathToPlayer = getCurrentRoom().pathTo(getWorld().getPlayer().getCurrentRoom(), this);
+                    pathToPlayer.moveToNext();
                 } catch (Path.UnreachableRoomException ex) {return;}
+                println("AI", "Found one in " + pathToPlayer.seePath().count() + " steps.");
             }
             moveTo(pathToPlayer.moveToNext());
+            println("AI", this + ": moving towards the player, " + pathToPlayer.seePath().count() + " steps left.");
         }
         
     }

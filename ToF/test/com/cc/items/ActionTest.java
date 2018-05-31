@@ -104,7 +104,7 @@ public class ActionTest {
     public void testPermanent() {
         System.out.println("Action:permanent");
         Player p = new Player("p", 20, 20, 20, 20);
-        World w = new World(new ArrayList<>(), p);
+        World w = new World(new ArrayList<>(), p, new ArrayList<>());
         Item i = new Item("i", "i", RARE, 1, 1, Arrays.asList(
                 new EntityAction(SELF, ADD, MANA, 5, PERMANENT)
         ));

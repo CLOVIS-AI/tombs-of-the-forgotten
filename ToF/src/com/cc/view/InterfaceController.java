@@ -23,9 +23,11 @@
  */
 package com.cc.view;
 
+import com.cc.items.ItemContainer;
 import com.cc.players.Player;
 import com.cc.tof.ToF;
 import com.cc.utils.Bar;
+import com.cc.utils.messages.Message;
 import com.cc.world.Direction;
 import static com.cc.world.Direction.DOWN;
 import static com.cc.world.Direction.EAST;
@@ -148,8 +150,19 @@ public class InterfaceController implements Initializable {
                 Map.getPrefHeight() / 2));
         updateMap();
         
+        ButtonSearchRoom.setOnAction(e -> onSearch());
+        
         // Faire en sorte d'ouvrir la page loot lorsque l'on gagne un combat ou
         // lorsque l'on fouille un coffre.
+    }
+    
+    private void onSearch() {
+        ItemContainer items = ToF.getWorld().getPlayer().getCurrentRoom().getItems();
+        ToF.getWorld().newMessage(new Message()
+                .add("There are " + items.getItems().size() + " items:")
+                .addAuto(items.getItems().toArray()));
+        
+        ToF.getWorld().nextTick();
     }
 
     /**
@@ -323,6 +336,11 @@ public class InterfaceController implements Initializable {
         move(p, UP, ButtonUpstairs);
         move(p, DOWN, ButtonDownstairs);
         updateMap();
+        
+        if(ToF.getWorld().isFullyExplored())
+            ToF.getWorld().newMessage(new Message().add("You have explored everything!"));
+        
+        ToF.getWorld().nextTick();
     }
 
     public void fillBar(Bar b, ProgressBar bar) {
@@ -347,26 +365,30 @@ public class InterfaceController implements Initializable {
                 .selectRoomsByLocation(l -> l.getZ() == player.getZ())
                 .forEach(this::drawRoom);
     }
+    
+    private static final int MAP_ROOM_SIZE = 5;
+    private static final int MAP_ROOM_DIST = 15;
+    private static final double TRANSPARENCY_COEF = 0.5;
 
     public void drawRoom(Room r) {
         // Position
         Location relative = r.getLocation().remove(player);
         Ellipse e = new Ellipse(
-                relative.getY() * 30 + Map.getPrefWidth() / 2,
-                relative.getX() * 30 + Map.getPrefHeight() / 2,
-                10, 10);
+                relative.getY() * MAP_ROOM_DIST + Map.getPrefWidth() / 2,
+                relative.getX() * MAP_ROOM_DIST + Map.getPrefHeight() / 2,
+                MAP_ROOM_SIZE, MAP_ROOM_SIZE);
 
         // Color
         if (r.getLocation().equals(player)) {
             e.setFill(Color.AQUAMARINE);
-        } else if (ToF.getWorld().getEntities(false).anyMatch(en -> en.getLocation().equals(relative))){
+        } else if (ToF.getWorld().getEntities(false).anyMatch(en -> en.getLocation().equals(r.getLocation()))){
             e.setFill(Color.CRIMSON);
         }
         
         if (!r.isExplored()){
             Color p = (Color) e.getFill();
             e.setFill(new Color(p.getRed(), p.getGreen(), p.getRed(),
-                    0.5/(r.getLocation().dist(player)+0.5)
+                    TRANSPARENCY_COEF/(r.getLocation().dist(player)+TRANSPARENCY_COEF)
             ));
         }
 
