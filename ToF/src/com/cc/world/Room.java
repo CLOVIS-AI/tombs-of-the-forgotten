@@ -22,6 +22,7 @@
  */
 package com.cc.world;
 
+import com.cc.items.Item;
 import com.cc.items.ItemContainer;
 import com.cc.players.Entity;
 import com.cc.utils.Save;
@@ -160,6 +161,26 @@ public class Room implements Save<JsonObject> {
         return this;
     }
     
+    /**
+     * Adds an item to this room's inventory.
+     * @param i the item
+     * @return This room itself, to allow method-chaining.
+     */
+    public final Room addItem(Item i){
+        if(isGenerated)
+            throw new IllegalStateException("This room has already been generated,"
+                    + " no new items can be added.");
+        
+        if(i == null)
+            throw new IllegalArgumentException("The direction shouldn't be null.");
+        
+        items.add(i);
+        return this;
+    }
+    
+    /**
+     * Ends the generation of this room.
+     */
     public final void endGeneration(){
         if(world == null)
             throw new IllegalStateException("The world is missing, call #setWorld.");

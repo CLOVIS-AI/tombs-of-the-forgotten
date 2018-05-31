@@ -156,14 +156,18 @@ public class ToF extends Application {
 
         time -= System.currentTimeMillis();
 
-        System.out.println("A new game was successfully created! Stats:");
-        System.out.println("> Time: " + (-time) + " ms");
-        System.out.println("> Number of rooms: " + world.getRooms().size());
-        System.out.println("> Average of neighbors: " + world.getRooms().stream()
+        System.out.println("[ToF]\tA new game was successfully created! Stats:");
+        System.out.println("\t> Time: " + (-time) + " ms");
+        System.out.println("\t> Number of rooms: " + world.getRooms().size());
+        System.out.println("\t> Average of neighbors: " + world.getRooms().stream()
                 .mapToLong(r -> r.getAllLinks().count())
                 .average()
                 .getAsDouble()
         );
+        System.out.println("\t> Average of items/room: " + world.getRooms().stream()
+                .mapToInt(r -> r.getItems().getItems().size())
+                .average()
+                .getAsDouble());
     }
 
     /**

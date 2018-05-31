@@ -107,6 +107,8 @@ public class DefaultGenerator implements Generator {
     
     private static final int NBR_NOTES_MAX = 3;
     
+    private static final int NBR_ITEMS_MAX = 5;
+    
     @Override
     public World generate(Random randomizer) {
         if(isGenerated)
@@ -251,6 +253,10 @@ public class DefaultGenerator implements Generator {
             List<Integer> notes = new ArrayList<>(Note.getIDs());
             randomizedRoom.addNote(new Note(notes.get(random.nextInt(notes.size()))));
         }
+        
+        number = random.nextInt(NBR_ITEMS_MAX);
+        for(int i = 0; i < number; i++)
+            randomizedRoom.addItem(createRandomItem());
         
         return randomizedRoom;
     }
