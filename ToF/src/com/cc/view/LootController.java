@@ -84,18 +84,16 @@ public class LootController implements Initializable {
         if (!listViewLoot.getSelectionModel().getSelectedItems().isEmpty()) {
             ObservableList<Item> selectedItemsLoot = listViewLoot.getSelectionModel().getSelectedItems();
             
-            for (Item i : selectedItemsLoot) {
-                inventory.add(i);
-                loot.remove(i);
-            }
+            for (Item i : selectedItemsLoot)
+                if(inventory.add(i))
+                    loot.remove(i);
 
         } else {
             ObservableList<Item> selectedItems = listViewInventory.getSelectionModel().getSelectedItems();
             
-            for (Item i : selectedItems) {
-                inventory.remove(i);
-                loot.add(i);
-            }
+            for (Item i : selectedItems)
+                if(loot.add(i))
+                    inventory.remove(i);
         }
 
         generateList(listViewInventory, inventory);
