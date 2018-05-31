@@ -23,6 +23,7 @@
  */
 package com.cc.view;
 
+import com.cc.items.ItemContainer;
 import com.cc.players.Player;
 import com.cc.tof.ToF;
 import com.cc.utils.Bar;
@@ -126,7 +127,7 @@ public class InterfaceController implements Initializable {
         viewItem(ViewAll);
 
         restPopup(ButtonRest);
-        lootPopup(ButtonOpen);
+        ButtonOpen.setOnAction(e -> lootPopup(null));
 
         update(ToF.getWorld().getPlayer());
 
@@ -250,20 +251,17 @@ public class InterfaceController implements Initializable {
         b.setOnAction(e -> restPopup(e));
     }
 
-    public void lootPopup(ActionEvent event) {
+    public void lootPopup(ItemContainer other) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(ToF.getResource("Loot.fxml"));
             Parent menu = (Parent) fxmlLoader.load();
+            ((LootController)fxmlLoader.getController()).setInventories(ToF.getWorld().getPlayer().getInventory(), other);
             Stage stage = new Stage();
             stage.setScene(new Scene(menu));
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void lootPopup(Button b) {
-        b.setOnAction(e -> lootPopup(e));
     }
 
     private static final Color CANNOT_MOVE = Color.SLATEGRAY;
