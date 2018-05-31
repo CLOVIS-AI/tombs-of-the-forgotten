@@ -159,9 +159,14 @@ public class Inventory extends ItemContainer {
         
         item.use(entity);
         
-        if(entity == ToF.getWorld().getPlayer())
-            ToF.getWorld().newMessage(new Message().add("You use ").add(item));
-        else if(entity.getLocation().equals(ToF.getWorld().getPlayer().getLocation()))
+        if(entity == ToF.getWorld().getPlayer()){
+            ToF.getWorld().newMessage(new Message().add("You use").add(item));
+            ToF.getWorld().getPlayer().getOpponent().ifPresent(e ->
+                    ToF.getWorld().newMessage(new Message()
+                            .add(e.getName()).add("has")
+                            .add(e.getHealthBar().getCurrent()).add("HP left."))
+            );
+        }else if(entity.getLocation().equals(ToF.getWorld().getPlayer().getLocation()))
             ToF.getWorld().newMessage(new Message().add(entity.getName()).add("uses").add(item));
         
         if(item.isBroken())
