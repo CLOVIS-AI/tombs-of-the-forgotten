@@ -27,6 +27,7 @@ package com.cc.view;
 import com.cc.items.Item;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -63,7 +64,7 @@ public class ItemController implements Initializable {
         Rarity.setText(item.getRarity().toString());
         Weight.setText("" + item.getWeight());
         Durability.setText(item.getDurability() + "/" + item.getMaxDurability());
-        Description.setText(item.getDescription());
+        Description.setText(item.getEffects().stream().map(e -> e.toStringSimple()).collect(Collectors.joining("\n")));
     }
     
 }

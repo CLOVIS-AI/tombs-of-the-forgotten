@@ -105,10 +105,12 @@ public class EntityAction implements Action {
     @Override
     public Message getEffects() {
         return new Message()
+                .add(target.toString())
+                .add(":")
                 .add(stat)
-                .add(mode != MODIFICATION ? " ("+mode+")" : "")
-                .add(": ")
-                .add(operation == ADD ? value : -value);
+                .add(operation == ADD ? "+" : "-")
+                .add(value)
+                .add(mode != MODIFICATION ? " ("+mode+")" : "");
     }
 
     @Override
@@ -143,6 +145,11 @@ public class EntityAction implements Action {
         }
         Entity select(Entity e){
             return f.apply(e);
+        }
+        
+        @Override
+        public String toString(){
+            return name().substring(0, 1) + name().substring(1).toLowerCase();
         }
     }
     
