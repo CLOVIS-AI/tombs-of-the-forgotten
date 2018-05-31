@@ -23,6 +23,7 @@
  */
 package com.cc.view;
 
+import com.cc.items.Item;
 import com.cc.items.ItemContainer;
 import com.cc.players.Player;
 import com.cc.tof.ToF;
@@ -53,10 +54,12 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tooltip;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
@@ -122,15 +125,7 @@ public class InterfaceController implements Initializable {
         showMenu(BlockOther, Other);
         showMenu(BlockAll, All);
 
-        viewItem(ViewWeapon);
-        viewItem(ViewApparel);
-        viewItem(ViewEatable);
-        viewItem(ViewScroll);
-        viewItem(ViewOther);
-        viewItem(ViewAll);
-
         restPopup(ButtonRest);
-        lootPopup(ButtonOpen);
 
         update(ToF.getWorld().getPlayer());
 
@@ -160,9 +155,10 @@ public class InterfaceController implements Initializable {
     
     private void onSearch() {
         ItemContainer items = ToF.getWorld().getPlayer().getCurrentRoom().getItems();
-        ToF.getWorld().newMessage(new Message()
-                .add("There are " + items.getItems().size() + " items:")
-                .addAuto(items.getItems().toArray()));
+        
+        if(items.getItems().isEmpty())
+            ToF.getWorld().newMessage(new Message().add("There is nothing here..."));
+        else lootPopup(items);
         
         ToF.getWorld().nextTick();
     }
@@ -210,35 +206,6 @@ public class InterfaceController implements Initializable {
     }
 
     /**
-     * Load a new fxml file.
-     *
-     * @param event the event
-     */
-    public void viewItem(ActionEvent event) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(ToF.getResource("Item.fxml"));
-            Parent menu = (Parent) fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(menu));
-            stage.show();
-        } catch (IOException ex) {
-            throw new IllegalStateException("Couldn't load the item view.", ex);
-        }
-    }
-
-    /**
-     * Press a specific button resulting in opening a new fxml file.
-     *
-     * @param i The button
-     * @see #viewItem(javafx.event.ActionEvent) load a new fxml file
-     */
-    public void viewItem(MenuItem i) {
-        i.setOnAction(e -> {
-            viewItem(e);
-        });
-    }
-
-    /**
      * Load a new JavaFx window.
      *
      * @param event the event
@@ -249,6 +216,7 @@ public class InterfaceController implements Initializable {
             Parent menu = (Parent) fxmlLoader.load();
             Stage stage = new Stage();
             stage.setScene(new Scene(menu));
+            stage.setOnHidden(e -> update(ToF.getWorld().getPlayer()));
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -265,20 +233,18 @@ public class InterfaceController implements Initializable {
         b.setOnAction(e -> restPopup(e));
     }
 
-    public void lootPopup(ActionEvent event) {
+    public void lootPopup(ItemContainer other) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(ToF.getResource("Loot.fxml"));
             Parent menu = (Parent) fxmlLoader.load();
+            ((LootController)fxmlLoader.getController()).setInventories(ToF.getWorld().getPlayer().getInventory(), other);
             Stage stage = new Stage();
             stage.setScene(new Scene(menu));
+            stage.setOnHidden(e -> update(ToF.getWorld().getPlayer()));
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void lootPopup(Button b) {
-        b.setOnAction(e -> lootPopup(e));
     }
 
     private static final Color CANNOT_MOVE = Color.SLATEGRAY;
@@ -399,5 +365,35 @@ public class InterfaceController implements Initializable {
         }
 
         Map.getChildren().add(e);
+    }
+    
+    public static void contextMenuItem(Item item, Node node, MouseEvent mouse){
+        println("GUI", "Context menu for the item " + item);
+        
+        // View the item
+        MenuItem view = new MenuItem("View");
+        view.setOnAction(e -> viewItem(item));
+        
+        ContextMenu menu = new ContextMenu();
+        menu.getItems().addAll(view);
+        menu.show(node, mouse.getScreenX(), mouse.getSceneY());
+    }
+    
+    /**
+     * Load a new fxml file.
+     *
+     * @param item the item
+     */
+    private static void viewItem(Item item) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(ToF.getResource("Item.fxml"));
+            Parent menu = (Parent) fxmlLoader.load();
+            ((ItemController)fxmlLoader.getController()).setItem(item);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(menu));
+            stage.show();
+        } catch (IOException ex) {
+            throw new IllegalStateException("Couldn't load the item view.", ex);
+        }
     }
 }

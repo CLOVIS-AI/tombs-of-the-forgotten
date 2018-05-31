@@ -227,6 +227,15 @@ public final class Item implements Save<JsonObject> {
     }
     
     /**
+     * The maximum durability of this Item.
+     * @return How many times can this item be used from its creation until it
+     *         breaks.
+     */
+    public int getMaxDurability(){
+        return durability.getMaximum();
+    }
+    
+    /**
      * Gets the way a stat is modified by worn effects of this object.
      * @param stat the stat
      * @return The effect on the specified stat

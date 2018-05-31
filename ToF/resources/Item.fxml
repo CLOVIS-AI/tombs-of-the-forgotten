@@ -6,7 +6,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="Item" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="425.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="Item" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="425.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cc.view.ItemController">
    <children>
       <Label fx:id="ItemName" layoutX="176.0" layoutY="30.0" text="ITEM" textFill="#dbdee1">
          <font>
@@ -20,7 +20,7 @@
       <Label fx:id="Weight" layoutX="109.0" layoutY="117.0" text="WEIGHT" />
       <Label layoutX="231.0" layoutY="117.0" text="Durability :" textFill="#4d6a7f" />
       <Label fx:id="Durability" layoutX="317.0" layoutY="117.0" text="DURABILITY" />
-      <Label fx:id="Description" alignment="CENTER" contentDisplay="CENTER" layoutX="168.0" layoutY="167.0" text="DESCRIPTION" textFill="#4d6a7f" />
+      <Label fx:id="Description" alignment="CENTER" contentDisplay="CENTER" layoutX="31.0" layoutY="142.0" prefHeight="89.0" prefWidth="364.0" text="DESCRIPTION" textFill="#4d6a7f" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="240.0" layoutX="5.0" layoutY="5.0" stroke="#4d6a7f" strokeType="INSIDE" strokeWidth="2.0" width="415.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="10.0" layoutX="21.0" layoutY="4.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" height="10.0" layoutX="4.0" layoutY="18.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />

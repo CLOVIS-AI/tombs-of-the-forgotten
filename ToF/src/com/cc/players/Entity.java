@@ -639,5 +639,10 @@ public abstract class Entity implements Timable, Save<JsonObject> {
         public void newBonus(Entity e, int turns, int value){
             bar.apply(e).addBonus(turns, value, true);
         }
+        
+        @Override
+        public String toString(){
+            return name().substring(0, 1) + name().substring(1).toLowerCase();
+        }
     }
 }

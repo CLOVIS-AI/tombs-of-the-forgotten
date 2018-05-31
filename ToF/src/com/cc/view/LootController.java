@@ -23,11 +23,19 @@
  */
 package com.cc.view;
 
+import com.cc.items.Item;
+import com.cc.items.ItemContainer;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 
 /**
  *
@@ -35,16 +43,83 @@ import javafx.scene.control.ListView;
  */
 public class LootController implements Initializable {
 
+    private ItemContainer loot, inventory;
+
     @FXML
-    private ListView listViewLoot, listViewInventory;
+    private ListView<Item> listViewLoot;
+
+    @FXML
+    private ListView<Item> listViewInventory;
+
+    @FXML
+    private Button AddIf;
+
+    @FXML
+    private Button AddAll;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        listViewLoot.getItems().addAll("Jimin", "Jungkook", "saranghae", "jhopie");
+
+    }
+
+    public void setInventories(ItemContainer items1, ItemContainer items2) {
+        inventory = items1;
+        loot = items2;
+
+        generateList(listViewInventory, inventory);
+        generateList(listViewLoot, loot);
+
+        listViewInventory.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        listViewLoot.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        AddIf.setOnAction(e -> onItemClicked());
         
-        /*ObservableList<String> data = FXCollections.observableArrayList(
-                "hello", "wassup", "JHOPE", "JiminieBabo<3");
-        listViewLoot.setItems(data);*/
+    }
+
+    public void onItemClicked() {
+        
+        if (!listViewLoot.getSelectionModel().getSelectedItems().isEmpty()) {
+            ObservableList<Item> selectedItemsLoot = listViewLoot.getSelectionModel().getSelectedItems();
+            
+            for (Item i : selectedItemsLoot)
+                if(inventory.add(i))
+                    loot.remove(i);
+
+        } else {
+            ObservableList<Item> selectedItems = listViewInventory.getSelectionModel().getSelectedItems();
+            
+            for (Item i : selectedItems)
+                if(loot.add(i))
+                    inventory.remove(i);
+        }
+
+        generateList(listViewInventory, inventory);
+        generateList(listViewLoot, loot);
+
+    }
+
+    private void generateList(ListView<Item> list, ItemContainer items) {
+        // Inspired from
+        // https://stackoverflow.com/questions/28264907/javafx-listview-contextmenu
+        
+        list.getItems().clear();
+        items.stream()
+                .forEach(e -> list.getItems().add(e));
+        list.setCellFactory(param -> new ListCell<Item>() {
+            @Override
+            protected void updateItem(Item item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                    setOnMouseReleased((MouseEvent e) -> {
+                        if(e.getButton() == MouseButton.SECONDARY)
+                            InterfaceController.contextMenuItem(item, this, e);
+                    });
+                }
+            }
+        });
     }
 
 }
