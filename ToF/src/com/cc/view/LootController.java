@@ -79,23 +79,34 @@ public class LootController implements Initializable {
     }
 
     public void onItemClicked() {
+        
+        
+        if (!listViewLoot.getSelectionModel().getSelectedItems().isEmpty()) {
+            ObservableList selectedItemsLoot = listViewLoot.getSelectionModel().getSelectedItems();
+            
+            for (Object i : selectedItemsLoot) {
+                inventory.add((Item) i);
+            }
 
-        // 1 Récupérer la liste des items sélectionnés
-        ObservableList selectedItems = listViewLoot.getSelectionModel().getSelectedItems();
+            for (Object i : selectedItemsLoot) {
+                loot.remove((Item) i);
+            }
 
-        // 2 Les ajouter à l'inventaire target
-        for (Object i : selectedItems) {
-            inventory.add((Item) i);
+        } else {
+            ObservableList selectedItems = listViewInventory.getSelectionModel().getSelectedItems();
+            
+            for (Object i : selectedItems) {
+                inventory.remove((Item) i);
+            }
+
+            for (Object i : selectedItems) {
+                loot.add((Item) i);
+            }
         }
 
-        // 3 Enlever de la source les items qui ont pu être transmis
-        for (Object i : selectedItems) {
-            loot.remove((Item) i);
-        }
-
-        // 4 Refresh les listview
         generateList(listViewInventory, inventory);
         generateList(listViewLoot, loot);
+
     }
 
     private void generateList(ListView<Item> list, ItemContainer items) {
