@@ -23,6 +23,7 @@
  */
 package com.cc.view;
 
+import com.cc.items.ItemContainer;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -36,15 +37,17 @@ import javafx.scene.control.ListView;
 public class LootController implements Initializable {
 
     @FXML
-    private ListView listViewLoot, listViewInventory;
+    private ListView<String> listViewLoot;
+    
+    @FXML
+    private ListView<String> listViewInventory;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        listViewLoot.getItems().addAll("Jimin", "Jungkook", "saranghae", "jhopie");
+    }
+    
+    public void setInventories(ItemContainer items1, ItemContainer items2){
         
-        /*ObservableList<String> data = FXCollections.observableArrayList(
-                "hello", "wassup", "JHOPE", "JiminieBabo<3");
-        listViewLoot.setItems(data);*/
     }
 
 }
