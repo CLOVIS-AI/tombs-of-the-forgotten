@@ -115,7 +115,8 @@ public class LootController implements Initializable {
                     setText(item.getName());
                     setOnMouseReleased((MouseEvent e) -> {
                         if(e.getButton() == MouseButton.SECONDARY)
-                            InterfaceController.contextMenuItem(item, this, e);
+                            InterfaceController.contextMenuItem(item, this, e,
+                                    false, false, null);
                     });
                 }
             }
