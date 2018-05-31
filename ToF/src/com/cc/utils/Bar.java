@@ -125,7 +125,7 @@ public class Bar implements Save<JsonObject> {
      */
     public void add(int value, Behavior mode){
         if(value < 0)
-            remove(value, mode);
+            remove(-value, mode);
         
         if(canAdd(value))
            real += value;

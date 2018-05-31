@@ -99,7 +99,7 @@ public class EntityAction implements Action {
      */
     @Override
     public void execute(Entity e){
-        mode.execute(target.select(e), stat, value, turns);
+        mode.execute(target.select(e), stat, operation.getValue(value), turns);
     }
 
     @Override
@@ -114,7 +114,7 @@ public class EntityAction implements Action {
     @Override
     public boolean canUse(Entity entity) {
         try{
-            return mode.canExecute(target.select(entity), stat, value);
+            return mode.canExecute(target.select(entity), stat, operation.getValue(value));
         }catch(CannotUseItem e){
             return false;
         }
@@ -162,11 +162,10 @@ public class EntityAction implements Action {
         
         /**
          * Calculates the effect of an operation.
-         * @param entity the entity the operation is executed on
          * @param value how effective this operation is
          * @return The amount of effect this operation has.
          */
-        public int getValue(Entity entity, int value){
+        public int getValue(int value){
             return modifier.apply(value);
         }
     }

@@ -104,10 +104,10 @@ public class DefaultGenerator implements Generator {
     List<Entity> entities;
     boolean isGenerated = false;
     
-    private static final int NBR_ROOMS_MAX = 60;
-    private static final int NBR_ROOMS_MIN = 20;
+    private static final int NBR_ROOMS_MAX = 100;
+    private static final int NBR_ROOMS_MIN = 50;
     
-    private static final int NBR_SHORT_MAX = 30;
+    private static final int NBR_SHORT_MAX = 50;
     private static final int NBR_SHORT_MIN = 10;
     
     private static final int ROOM_PICK_MAX_TRIES = 100;
@@ -128,6 +128,12 @@ public class DefaultGenerator implements Generator {
         println("RNG", "Adding the spawn...");
         addRoom(new Room("This is where you spawn.").explore(), new Location());
         
+        int nbrLines = rdmNbr(2, 15);
+        println("RNG", "Adding " + nbrLines + " lines...");
+        for(int i = 0; i < nbrLines; i++)
+            line();
+        println("RNG", "Generated the lines.");
+        
         int number = rdmNbr(NBR_ROOMS_MIN, NBR_ROOMS_MAX);
         println("RNG", "Generation of the rooms & links: " + number + " iterations.");
         for(int i = 0; i < number; i++)
@@ -140,7 +146,7 @@ public class DefaultGenerator implements Generator {
             shortcut();
         
         entities = new ArrayList<>();
-        int nbrEntities = rdmNbr(1, NBR_ROOMS_MAX/10);
+        int nbrEntities = rdmNbr(NBR_ROOMS_MIN/5, NBR_ROOMS_MAX/2);
         println("RNG", "Generation of the AIs: " + nbrEntities + " entities.");
         for(int i = 0; i < nbrEntities; i++)
             entities.add(createRandomEntity());
@@ -201,6 +207,31 @@ public class DefaultGenerator implements Generator {
         // 6 Create 'l1': Link of (r2, p2.first)
         Link l1 = pair1.getSecond().apply(new Room[]{r2, p2.getFirst()});
         l1.autoLink();
+        
+        if(random.nextInt(100) < 10)
+            line();
+    }
+    
+    void line(){
+        Direction dir = Direction.values()[random.nextInt(4)];
+        
+        int maxSize = random.nextInt(15);
+        Pair<Room, Location> r = pickRoom();
+        for(int i = 0; i < maxSize; i++){
+            Room other = createRandomRoom();
+            addRoom(other, r.getSecond());
+            createRandomLink(new Room[]{r.getFirst(), other}).autoLink();
+            
+            Optional<Location> lo = Stream.of(dir)
+                    .filter(d -> !other.getNeighbor(d).isPresent())
+                    .map(d -> other.getLocation().add(d))
+                    .filter(l -> !rooms.containsKey(l))
+                    .findAny();
+            
+            if(lo.isPresent())
+                r = new Pair<>(other, lo.get());
+            else break;
+        }
     }
     
     void addRoom(Room r, Location l){
@@ -303,7 +334,9 @@ public class DefaultGenerator implements Generator {
                            new SimpleAI("Zombie", rdmNbr(10, 30), rdmNbr(5, 10), rdmNbr(5, 10), rdmNbr(30000, 50000), l)
                             .addItem(createRandomItem())
                             .addItem(createRandomItem())
-                            .addItem(createRandomItem());
+                            .addItem(createRandomItem())
+                            .addItem(new ItemBuilder("Bat", "", COMMON, 15, 300)
+                                .add(new EntityAction(OPPONENT, REMOVE, HEALTH, 1, MODIFICATION)).get());
     }
     
     private int rdmNbr(int min, int max){
