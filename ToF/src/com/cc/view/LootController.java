@@ -29,7 +29,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 
 /**
  *
@@ -42,14 +44,23 @@ public class LootController implements Initializable {
     
     @FXML
     private ListView<Item> listViewInventory;
+    
+    @FXML
+    private Button Addif;
+    
+    @FXML
+    private Button AddAll;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
     }
     
     public void setInventories(ItemContainer items1, ItemContainer items2){
         listViewInventory.getItems().addAll(items1.getItems());
         listViewLoot.getItems().addAll(items2.getItems());
+        listViewInventory.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        listViewLoot.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
 }
