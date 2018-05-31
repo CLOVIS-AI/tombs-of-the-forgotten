@@ -67,6 +67,11 @@ public class Inventory extends ItemContainer {
      * @return Whether one player is strong enough to take this item.
      */
     public boolean canAdd(Item item) {
+        if(item == null){
+            System.err.println("'item' shouldn't be null");
+            return false;
+        }
+        
         return weight.getCurrent() + item.getWeight() < weight.getMaximum();
     }
     
