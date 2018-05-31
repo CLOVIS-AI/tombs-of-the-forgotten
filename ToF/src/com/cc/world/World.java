@@ -174,6 +174,15 @@ public final class World implements Timable, Save<JsonObject> {
                 .filter(Room::isExplored)
                 .count() * 100.0 / rooms.size();
     }
+    
+    /**
+     * Is this world fully explored?
+     * @return {@code true} if no room has yet to be explored.
+     */
+    public boolean isFullyExplored() {
+        return rooms.values().stream()
+                .allMatch(Room::isExplored);
+    }
 
     /**
      * Get every room of the World.

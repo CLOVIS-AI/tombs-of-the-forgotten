@@ -334,6 +334,9 @@ public class InterfaceController implements Initializable {
         move(p, UP, ButtonUpstairs);
         move(p, DOWN, ButtonDownstairs);
         updateMap();
+        
+        if(ToF.getWorld().isFullyExplored())
+            ToF.getWorld().newMessage(new Message().add("You have explored everything!"));
     }
 
     public void fillBar(Bar b, ProgressBar bar) {
