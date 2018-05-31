@@ -59,7 +59,7 @@ jar {
     manifest {
         attributes 'Implementation-Title': project.name,
                    'Implementation-Version': project.version,
-                   'Main-Class': 'com.cc.tof.ToF'
+                   'Main-Class': project.mainClassName
     }
 }
 
