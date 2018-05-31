@@ -29,6 +29,7 @@ import com.cc.items.Rarity;
 import com.cc.tof.ToF;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -42,46 +43,74 @@ import javafx.scene.control.SelectionMode;
  */
 public class LootController implements Initializable {
 
+    private ItemContainer loot, inventory;
+
     @FXML
     private ListView<Item> listViewLoot;
-    
+
     @FXML
     private ListView<Item> listViewInventory;
-    
+
     @FXML
-    private Button Addif;
-    
+    private Button AddIf;
+
     @FXML
     private Button AddAll;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
     }
-    
-    public void setInventories(ItemContainer items1, ItemContainer items2){
-        
+
+    public void setInventories(ItemContainer items1, ItemContainer items2) {
+        inventory = items1;
+        loot = items2;
+
         ToF.getWorld().getPlayer().addItem(new Item("TEST", "", Rarity.RARE, 15, 35));
         ToF.getWorld().getPlayer().getCurrentRoom().getItems().add(new Item("TEST ROOM", "", Rarity.RARE, 15, 35));
-        
-        generateList(listViewInventory, items1);
-        generateList(listViewLoot, items2);
-        
+
+        generateList(listViewInventory, inventory);
+        generateList(listViewLoot, loot);
+
         listViewInventory.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         listViewLoot.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        AddIf.setOnAction(e -> onItemClicked());
     }
-    
-    private void generateList(ListView<Item> list, ItemContainer items){
+
+    public void onItemClicked() {
+
+        // 1 Récupérer la liste des items sélectionnés
+        ObservableList selectedItems = listViewLoot.getSelectionModel().getSelectedItems();
+
+        // 2 Les ajouter à l'inventaire target
+        for (Object i : selectedItems) {
+            inventory.add((Item) i);
+        }
+
+        // 3 Enlever de la source les items qui ont pu être transmis
+        for (Object i : selectedItems) {
+            loot.remove((Item) i);
+        }
+
+        // 4 Refresh les listview
+        generateList(listViewInventory, inventory);
+        generateList(listViewLoot, loot);
+    }
+
+    private void generateList(ListView<Item> list, ItemContainer items) {
+        list.getItems().clear();
         items.stream()
                 .forEach(e -> list.getItems().add(e));
         list.setCellFactory(param -> new ListCell<Item>() {
             @Override
             protected void updateItem(Item item, boolean empty) {
                 super.updateItem(item, empty);
-                if(empty || item == null)
+                if (empty || item == null) {
                     setText(null);
-                else
+                } else {
                     setText(item.getName());
+                }
             }
         });
     }
