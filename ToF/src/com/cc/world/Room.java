@@ -501,6 +501,10 @@ public class Room implements Save<JsonObject> {
      */
     public Room explore() {
         explored = true;
+        
+        if(world != null)
+            world.newMessage(new Message().add(description));
+        
         return this;
     }
     
