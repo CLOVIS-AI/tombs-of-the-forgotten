@@ -216,8 +216,8 @@ public class InterfaceController implements Initializable {
             Parent menu = (Parent) fxmlLoader.load();
             Stage stage = new Stage();
             stage.setScene(new Scene(menu));
+            stage.setOnHidden(e -> update(ToF.getWorld().getPlayer()));
             stage.show();
-            update(ToF.getWorld().getPlayer());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -240,8 +240,8 @@ public class InterfaceController implements Initializable {
             ((LootController)fxmlLoader.getController()).setInventories(ToF.getWorld().getPlayer().getInventory(), other);
             Stage stage = new Stage();
             stage.setScene(new Scene(menu));
+            stage.setOnHidden(e -> update(ToF.getWorld().getPlayer()));
             stage.show();
-            update(ToF.getWorld().getPlayer());
         } catch (Exception e) {
             e.printStackTrace();
         }
