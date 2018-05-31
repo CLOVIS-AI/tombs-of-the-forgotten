@@ -87,6 +87,7 @@ public class EntityAction implements Action {
         return new JsonObject()
                 .add("target", target.name())
                 .add("stat", stat.name())
+                .add("type", "entity")
                 .add("value", value)
                 .add("operation", operation.name())
                 .add("mode", mode.name());
@@ -112,7 +113,11 @@ public class EntityAction implements Action {
 
     @Override
     public boolean canUse(Entity entity) {
-        return mode.canExecute(target.select(entity), stat, value);
+        try{
+            return mode.canExecute(target.select(entity), stat, value);
+        }catch(CannotUseItem e){
+            return false;
+        }
     }
 
     @Override
