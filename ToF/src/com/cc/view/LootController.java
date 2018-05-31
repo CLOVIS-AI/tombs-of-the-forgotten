@@ -25,11 +25,14 @@ package com.cc.view;
 
 import com.cc.items.Item;
 import com.cc.items.ItemContainer;
+import com.cc.items.Rarity;
+import com.cc.tof.ToF;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 
@@ -57,10 +60,30 @@ public class LootController implements Initializable {
     }
     
     public void setInventories(ItemContainer items1, ItemContainer items2){
-        listViewInventory.getItems().addAll(items1.getItems());
-        listViewLoot.getItems().addAll(items2.getItems());
+        
+        ToF.getWorld().getPlayer().addItem(new Item("TEST", "", Rarity.RARE, 15, 35));
+        ToF.getWorld().getPlayer().getCurrentRoom().getItems().add(new Item("TEST ROOM", "", Rarity.RARE, 15, 35));
+        
+        generateList(listViewInventory, items1);
+        generateList(listViewLoot, items2);
+        
         listViewInventory.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         listViewLoot.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+    }
+    
+    private void generateList(ListView<Item> list, ItemContainer items){
+        items.stream()
+                .forEach(e -> list.getItems().add(e));
+        list.setCellFactory(param -> new ListCell<Item>() {
+            @Override
+            protected void updateItem(Item item, boolean empty) {
+                super.updateItem(item, empty);
+                if(empty || item == null)
+                    setText(null);
+                else
+                    setText(item.getName());
+            }
+        });
     }
 
 }
