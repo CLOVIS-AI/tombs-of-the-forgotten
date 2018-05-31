@@ -199,7 +199,7 @@ public class EntityAction implements Action {
         public abstract void execute(Entity e, Stat s, int value, int turns);
         public boolean canExecute(Entity e, Stat s, int value){ return true; }
         public int getWear(Stat current, Stat requested, int value){ 
-            throw new IllegalStateException("Cannot wear this action: "+this);
+            return 0;
         }
     }
     

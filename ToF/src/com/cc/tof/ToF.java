@@ -168,6 +168,7 @@ public class ToF extends Application {
                 .mapToInt(r -> r.getItems().getItems().size())
                 .average()
                 .getAsDouble());
+        System.out.println("\t> Number of entities (player excluded): " + world.getEntities(false).count());
     }
 
     /**

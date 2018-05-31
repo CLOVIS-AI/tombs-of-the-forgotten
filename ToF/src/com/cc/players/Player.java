@@ -83,6 +83,9 @@ public class Player extends Entity {
         super.moveTo(d);
         super.getWorld().newMessage(new Message().add("You go " + d.toString()));
         super.getCurrentRoom().explore();
+        
+        if(isFighting())
+            getWorld().newMessage(new Message().add("You have an opponent!"));
     }
     
     @Override

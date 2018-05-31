@@ -385,7 +385,7 @@ public abstract class Entity implements Timable, Save<JsonObject> {
         moveTo(getCurrentRoom().getDirectionTo(r).orElseThrow(
                 ()->new IllegalArgumentException("The given room ("
                         +r.getLocation()+") is not in a distance of 1 from the "
-                        +"Entity ("+getLocation()+")")
+                        +"Entity '"+this+"'")
         ));
     }
 
@@ -415,11 +415,14 @@ public abstract class Entity implements Timable, Save<JsonObject> {
      * Adds an item to the inventorty.
      *
      * @param item An item.
+     * @return This entity itself, to allow method-chaining. 
      * @see Inventory#add(com.cc.items.Item) add
      */
-    public void addItem(Item item) {
+    public Entity addItem(Item item) {
         inventory.add(item);
         getBars().forEach(Bar::updateBonus);
+        
+        return this;
     }
 
     /**

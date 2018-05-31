@@ -23,6 +23,7 @@
  */
 package com.cc.players;
 
+import com.cc.world.Location;
 import com.cc.world.Path;
 import com.eclipsesource.json.JsonObject;
 
@@ -34,8 +35,9 @@ public class SimpleAI extends Entity {
     
     private Path pathToPlayer;
     
-    public SimpleAI(String name, int maxHealth, int maxStrength, int maxMana, int maxWeight) {
-        super(name, maxHealth, maxStrength, maxMana, maxWeight);
+    public SimpleAI(String name, int maxHealth, int maxStrength, int maxMana,
+            int maxWeight, Location location) {
+        super(name, maxHealth, maxStrength, maxMana, maxWeight, location);
     }
     
     public SimpleAI(JsonObject json) {
@@ -52,9 +54,10 @@ public class SimpleAI extends Entity {
                     .findAny()
                     .ifPresent(i -> getInventory().use(i, this));
         }else{
-            if(pathToPlayer == null){
+            if(pathToPlayer == null || pathToPlayer.seePath().count() == 0){
                 try {
                     pathToPlayer = getCurrentRoom().pathTo(getWorld().getPlayer().getCurrentRoom(), this);
+                    pathToPlayer.moveToNext();
                 } catch (Path.UnreachableRoomException ex) {return;}
             }
             moveTo(pathToPlayer.moveToNext());

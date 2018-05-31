@@ -377,7 +377,7 @@ public class InterfaceController implements Initializable {
         // Color
         if (r.getLocation().equals(player)) {
             e.setFill(Color.AQUAMARINE);
-        } else if (ToF.getWorld().getEntities(false).anyMatch(en -> en.getLocation().equals(relative))){
+        } else if (ToF.getWorld().getEntities(false).anyMatch(en -> en.getLocation().equals(r.getLocation()))){
             e.setFill(Color.CRIMSON);
         }
         

@@ -32,10 +32,13 @@ import static com.cc.items.EntityAction.Target.SELF;
 import com.cc.items.Item;
 import com.cc.items.Item.ItemBuilder;
 import static com.cc.items.Rarity.COMMON;
+import static com.cc.items.Rarity.EPIC;
 import static com.cc.items.Rarity.RARE;
+import com.cc.players.Entity;
 import static com.cc.players.Entity.Stat.HEALTH;
 import static com.cc.players.Entity.Stat.STAMINA;
 import com.cc.players.Player;
+import com.cc.players.SimpleAI;
 import com.cc.utils.Pair;
 import com.cc.world.Direction;
 import com.cc.world.Location;
@@ -95,6 +98,7 @@ public class DefaultGenerator implements Generator {
 
     Random random;
     TreeMap<Location, Room> rooms;
+    List<Entity> entities;
     boolean isGenerated = false;
     
     private static final int NBR_ROOMS_MAX = 30;
@@ -125,8 +129,13 @@ public class DefaultGenerator implements Generator {
         for(int i = 0; i < nbrShortcuts; i++)
             i -= shortcut() ? 0 : 1;
         
+        entities = new ArrayList<>();
+        int nbrEntities = rdmNbr(15, NBR_ROOMS_MAX);
+        for(int i = 0; i < nbrEntities; i++)
+            entities.add(createRandomEntity());
+        
         isGenerated = true;
-        return new World(rooms.values(), new Player());
+        return new World(rooms.values(), new Player(), entities);
     }
     
     boolean shortcut(){
@@ -269,6 +278,20 @@ public class DefaultGenerator implements Generator {
                 
                /*else...*/ new ItemBuilder(crtFood(), "", COMMON, rdmNbr(100, 2000), 1)
                             .add(new EntityAction(SELF, ADD, HEALTH, rdmNbr(1, 5), MODIFICATION)).get();
+    }
+    
+    private Entity createRandomEntity(){
+        List<Location> available = new ArrayList<>(rooms.keySet());
+        Location l = available.get(random.nextInt(available.size()));
+        
+        int luck = random.nextInt(100);
+        return luck < 5 ? new SimpleAI("Miner", rdmNbr(45, 60), rdmNbr(10, 15), rdmNbr(20, 30), rdmNbr(50000, 100000), l)
+                            .addItem(new ItemBuilder(crtName("Pickaxe"), "", EPIC, 10000, 1000)
+                                .add(new EntityAction(OPPONENT, REMOVE, HEALTH, 10, MODIFICATION)).get()):
+                           new SimpleAI("Zombie", rdmNbr(10, 30), rdmNbr(5, 10), rdmNbr(5, 10), rdmNbr(30000, 50000), l)
+                            .addItem(createRandomItem())
+                            .addItem(createRandomItem())
+                            .addItem(createRandomItem());
     }
     
     private int rdmNbr(int min, int max){
