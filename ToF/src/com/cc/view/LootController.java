@@ -25,9 +25,11 @@ package com.cc.view;
 
 import com.cc.items.Item;
 import com.cc.items.ItemContainer;
+import com.cc.tof.ToF;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -36,6 +38,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 /**
  *
@@ -56,6 +59,9 @@ public class LootController implements Initializable {
 
     @FXML
     private Button AddAll;
+    
+    @FXML
+    private Button LootConfirm;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -73,24 +79,29 @@ public class LootController implements Initializable {
         listViewLoot.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         AddIf.setOnAction(e -> onItemClicked());
-        
+        AddAll.setOnAction(e -> addAll());
+
     }
 
     public void onItemClicked() {
-        
+
         if (!listViewLoot.getSelectionModel().getSelectedItems().isEmpty()) {
             ObservableList<Item> selectedItemsLoot = listViewLoot.getSelectionModel().getSelectedItems();
-            
-            for (Item i : selectedItemsLoot)
-                if(inventory.add(i))
+
+            for (Item i : selectedItemsLoot) {
+                if (inventory.add(i)) {
                     loot.remove(i);
+                }
+            }
 
         } else {
             ObservableList<Item> selectedItems = listViewInventory.getSelectionModel().getSelectedItems();
-            
-            for (Item i : selectedItems)
-                if(loot.add(i))
+
+            for (Item i : selectedItems) {
+                if (loot.add(i)) {
                     inventory.remove(i);
+                }
+            }
         }
 
         generateList(listViewInventory, inventory);
@@ -98,10 +109,26 @@ public class LootController implements Initializable {
 
     }
 
+    public void addAll() {
+        
+        if (!listViewLoot.getSelectionModel().getSelectedItems().isEmpty()) {
+            ObservableList<Item> allItems = listViewLoot.getItems();
+
+            for (Item i : allItems) {
+                if (inventory.add(i)) {
+                    loot.remove(i);
+                }
+            }
+        }
+
+        generateList(listViewInventory, inventory);
+        generateList(listViewLoot, loot);
+    }
+
     private void generateList(ListView<Item> list, ItemContainer items) {
         // Inspired from
         // https://stackoverflow.com/questions/28264907/javafx-listview-contextmenu
-        
+
         list.getItems().clear();
         items.stream()
                 .forEach(e -> list.getItems().add(e));
@@ -114,12 +141,19 @@ public class LootController implements Initializable {
                 } else {
                     setText(item.getName());
                     setOnMouseReleased((MouseEvent e) -> {
-                        if(e.getButton() == MouseButton.SECONDARY)
+                        if (e.getButton() == MouseButton.SECONDARY) {
                             InterfaceController.contextMenuItem(item, this, e);
+                        }
                     });
                 }
             }
         });
     }
+    
+    @FXML
+    public void closeLoot(ActionEvent event) {
+    Stage stage = (Stage) LootConfirm.getScene().getWindow();
+    stage.close();
+}
 
 }

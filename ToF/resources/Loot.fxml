@@ -9,7 +9,7 @@
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="725.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cc.view.LootController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="725.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cc.view.LootController">
    <children>
       <AnchorPane layoutX="27.0" layoutY="25.0" prefHeight="450.0" prefWidth="250.0">
          <children>
@@ -27,7 +27,7 @@
             <Separator layoutX="25.0" layoutY="41.0" prefWidth="200.0" />
          </children>
       </AnchorPane>
-      <Button fx:id="AddAll" layoutX="314.0" layoutY="414.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="98.0" style="-fx-background-color: #4d6a7f;" text="ADD ALL" textFill="WHITE" />
+      <Button fx:id="AddAll" layoutX="317.0" layoutY="126.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="92.0" style="-fx-background-color: #4d6a7f;" text="ADD ALL" textFill="WHITE" />
       <Polygon fx:id="ARight" fill="#4d6a7f" layoutX="397.0" layoutY="253.0" rotate="90.0" scaleX="0.4" scaleY="0.5" stroke="BLACK" strokeType="INSIDE">
         <points>
           <Double fx:value="-50.0" />
@@ -38,7 +38,7 @@
           <Double fx:value="-60.0" />
         </points>
       </Polygon>
-      <Button fx:id="AddIf" layoutX="317.0" layoutY="79.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="92.0" style="-fx-background-color: #4d6a7f;" text="ADD" textFill="WHITE" />
+      <Button fx:id="AddIf" layoutX="317.0" layoutY="65.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="92.0" style="-fx-background-color: #4d6a7f;" text="ADD" textFill="WHITE" />
       <Rectangle fx:id="RLeft" arcHeight="5.0" arcWidth="5.0" fill="#4d6a7f" height="20.0" layoutX="343.0" layoutY="233.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="40.0" />
       <Polygon fx:id="ALeft" fill="#4d6a7f" layoutX="326.0" layoutY="253.0" rotate="-90.0" scaleX="0.4" scaleY="0.5" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0">
          <points>
@@ -50,5 +50,7 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
+      <Button fx:id="LootConfirm" layoutX="322.0" layoutY="415.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="98.0" style="-fx-background-color: #4d6a7f;" text="CONFIRM" textFill="WHITE" />
+      <Label layoutX="292.0" layoutY="33.0" text="Right click to view an item." textFill="WHITE" />
    </children>
 </AnchorPane>

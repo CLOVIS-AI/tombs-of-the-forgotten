@@ -39,9 +39,12 @@ import static com.cc.world.Direction.UP;
 import static com.cc.world.Direction.WEST;
 import com.cc.world.Location;
 import com.cc.world.Room;
+import static com.sun.javafx.scene.control.skin.Utils.getResource;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -88,7 +91,8 @@ public class InterfaceController implements Initializable {
     @FXML
     private Button ButtonRest, ButtonSave, ButtonOpen, ButtonClose, ButtonReadNote,
             ButtonSearchRoom, ButtonGrabItem, ButtonDropItem,
-            ButtonUpstairs, ButtonDownstairs;
+            ButtonUpstairs, ButtonDownstairs,
+            BackWin, BackLose;
 
     @FXML
     private AnchorPane Map, WinMenu, LoseMenu;
@@ -130,6 +134,9 @@ public class InterfaceController implements Initializable {
         showMenu(BlockAll, All);
 
         restPopup(ButtonRest);
+        
+        LoseMenu.setVisible(false);
+        WinMenu.setVisible(false);
 
         update(ToF.getWorld().getPlayer());
 
