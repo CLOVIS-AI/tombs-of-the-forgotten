@@ -91,7 +91,7 @@ public class InterfaceController implements Initializable {
             ButtonUpstairs, ButtonDownstairs;
 
     @FXML
-    private AnchorPane Map, GeneralMenu, WinMenu, LoseMenu;
+    private AnchorPane Map, WinMenu, LoseMenu;
 
     @FXML
     private ProgressBar BarHP, BarMana, BarStamina, BarPods;
