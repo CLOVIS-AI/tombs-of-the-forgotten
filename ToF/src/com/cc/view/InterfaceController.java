@@ -50,6 +50,7 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -71,7 +72,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
 /**
@@ -150,7 +150,10 @@ public class InterfaceController implements Initializable {
         ButtonSave.setOnAction(e -> ToF.save());
 
         // Buttons
-        ButtonReadNote.setOnAction(e -> ToF.getWorld().getPlayer().getCurrentRoom().readNotes());
+        ButtonReadNote.setOnAction(e -> {
+            ToF.getWorld().getPlayer().getCurrentRoom().readNotes();
+            update(ToF.getWorld().getPlayer());
+        });
 
         // Map
         Map.setClip(new Ellipse(
@@ -173,7 +176,7 @@ public class InterfaceController implements Initializable {
             ToF.getWorld().newMessage(new Message().add("There is nothing here..."));
         else lootPopup(items);
         
-        ToF.getWorld().nextTick();
+        update(ToF.getWorld().getPlayer());
     }
 
     /**
@@ -229,7 +232,7 @@ public class InterfaceController implements Initializable {
             Parent menu = (Parent) fxmlLoader.load();
             Stage stage = new Stage();
             stage.setScene(new Scene(menu));
-            stage.setOnHidden(e -> me.update(ToF.getWorld().getPlayer()));
+            stage.setOnCloseRequest(e -> me.update(ToF.getWorld().getPlayer()));
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -253,7 +256,7 @@ public class InterfaceController implements Initializable {
             ((LootController)fxmlLoader.getController()).setInventories(ToF.getWorld().getPlayer().getInventory(), other);
             Stage stage = new Stage();
             stage.setScene(new Scene(menu));
-            stage.setOnHidden(e -> me.update(ToF.getWorld().getPlayer()));
+            stage.setOnCloseRequest(e -> me.update(ToF.getWorld().getPlayer()));
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -312,6 +315,8 @@ public class InterfaceController implements Initializable {
     public void update(Player p) {
         println("GUI", "Updating the UI...");
         
+        ToF.getWorld().nextTick();
+        
         move(p, NORTH, (Shape) MoveNorth);
         move(p, SOUTH, (Shape) MoveSouth);
         move(p, EAST, (Shape) MoveEast);
@@ -324,8 +329,6 @@ public class InterfaceController implements Initializable {
         
         if(ToF.getWorld().isFullyExplored())
             ToF.getWorld().newMessage(new Message().add("You have explored everything!"));
-
-        ToF.getWorld().nextTick();
         
         Message msg;
         while((msg = ToF.getWorld().getNextMessage()) != null){
@@ -390,7 +393,7 @@ public class InterfaceController implements Initializable {
                     setText(item.getName());
                     setOnMouseReleased((MouseEvent e) -> {
                         InterfaceController.contextMenuItem(item, this, e,
-                                true, true, eh -> updateInventory());
+                                true, true, eh -> update(ToF.getWorld().getPlayer()));
                     });
                 }
             }
@@ -427,7 +430,7 @@ public class InterfaceController implements Initializable {
     }
     
     public static void contextMenuItem(Item item, Node node, MouseEvent mouse,
-            boolean allowUse, boolean allowDrop, EventHandler<WindowEvent> eh){
+            boolean allowUse, boolean allowDrop, EventHandler<Event> eh){
         println("GUI", "Context menu for the item " + item.getName());
         
         ContextMenu menu = new ContextMenu();
@@ -440,21 +443,22 @@ public class InterfaceController implements Initializable {
         // Use the item
         if(allowUse && item.canUse(ToF.getWorld().getPlayer())){
             MenuItem use = new MenuItem("Use");
-            use.setOnAction(e -> ToF.getWorld().getPlayer().use(item));
+            use.setOnAction(e -> {
+                ToF.getWorld().getPlayer().use(item);
+                eh.handle(e);
+            });
             menu.getItems().add(use);
         }
         
         // Drop the item
         if(allowDrop){
             MenuItem drop = new MenuItem("Drop");
-            drop.setOnAction(e -> 
-                ToF.getWorld().getPlayer().drop(item)
-            );
+            drop.setOnAction(e -> {
+                ToF.getWorld().getPlayer().drop(item);
+                eh.handle(e);
+            });
             menu.getItems().add(drop);
         }
-        
-        if(eh != null)
-            menu.setOnHidden(eh);
         menu.show(node, mouse.getScreenX(), mouse.getSceneY());
     }
     
