@@ -97,7 +97,7 @@ public class InterfaceController implements Initializable {
 
     @FXML
     private Button ButtonRest, ButtonSave, ButtonOpen, ButtonClose, ButtonReadNote,
-            ButtonSearchRoom, ButtonGrabItem, ButtonDropItem,
+            ButtonSearchRoom, UnderAttack,
             ButtonUpstairs, ButtonDownstairs;
 
     @FXML
@@ -326,6 +326,8 @@ public class InterfaceController implements Initializable {
         updateMap();
         updateBars();
         updateInventory();
+        
+        UnderAttack.setVisible(ToF.getWorld().getPlayer().getOpponent().isPresent());
         
         if(ToF.getWorld().isFullyExplored())
             ToF.getWorld().newMessage(new Message().add("You have explored everything!"));
