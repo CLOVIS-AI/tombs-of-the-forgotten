@@ -153,7 +153,7 @@ public class DefaultGenerator implements Generator {
 
         println("RNG", "Generation of the player & validation.");
         isGenerated = true;
-        return new World(rooms.values(), new Player("Player", 20, 10, 10, 20000, 0), entities);
+        return new World(rooms.values(), new Player("Player", 20, 30, 20, 20000, 0), entities);
     }
     
     boolean shortcut(){
