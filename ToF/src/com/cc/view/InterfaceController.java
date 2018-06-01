@@ -41,6 +41,7 @@ import static com.cc.world.Direction.WEST;
 import com.cc.world.Location;
 import com.cc.world.Room;
 import java.io.IOException;
+import static java.lang.Integer.min;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
@@ -101,6 +102,9 @@ public class InterfaceController implements Initializable {
 
     @FXML
     private AnchorPane Map;
+    
+    @FXML
+    private Label Text;
 
     @FXML
     private ProgressBar BarHP, BarMana, BarStamina, BarPods;
@@ -322,6 +326,12 @@ public class InterfaceController implements Initializable {
             ToF.getWorld().newMessage(new Message().add("You have explored everything!"));
 
         ToF.getWorld().nextTick();
+        
+        Message msg;
+        while((msg = ToF.getWorld().getNextMessage()) != null){
+            Text.setText(msg.toStringSimple() + "\n" + Text.getText()
+                    .substring(0, min(1000, Text.getText().length())));
+        }
     }
 
     public void fillBar(Bar b, ProgressBar bar) {
