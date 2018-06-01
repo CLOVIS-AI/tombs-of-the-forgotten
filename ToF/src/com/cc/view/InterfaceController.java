@@ -91,7 +91,7 @@ public class InterfaceController implements Initializable {
             ButtonUpstairs, ButtonDownstairs;
 
     @FXML
-    private AnchorPane Map;
+    private AnchorPane Map, GeneralMenu, WinMenu, LoseMenu;
 
     @FXML
     private ProgressBar BarHP, BarMana, BarStamina, BarPods;
@@ -399,5 +399,19 @@ public class InterfaceController implements Initializable {
         } catch (IOException ex) {
             throw new IllegalStateException("Couldn't load the item view.", ex);
         }
+    }
+    
+    /**
+     * Displays a stage when player wins.
+     */
+    public void ifWin() {
+        WinMenu.setVisible(true);
+    }
+    
+    /**
+     * Displays a stage when player loses.
+     */
+    public void ifLose() {
+        LoseMenu.setVisible(true);
     }
 }
