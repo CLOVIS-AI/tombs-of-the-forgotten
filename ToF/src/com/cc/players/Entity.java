@@ -207,6 +207,8 @@ public abstract class Entity implements Timable, Save<JsonObject> {
     public void nextTick() {
         getBars().forEach(Bar::nextTick);
         
+        mana.add(1, ACCEPT);
+        
         opponent = findHere();
         
         if(opponent.isPresent())

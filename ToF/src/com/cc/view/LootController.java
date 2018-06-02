@@ -66,8 +66,8 @@ public class LootController implements Initializable {
         inventory = items1;
         loot = items2;
 
-        generateList(listViewInventory, inventory);
-        generateList(listViewLoot, loot);
+        generateList(listViewInventory, inventory, true);
+        generateList(listViewLoot, loot, false);
 
         listViewInventory.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         listViewLoot.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -93,12 +93,12 @@ public class LootController implements Initializable {
                     inventory.remove(i);
         }
 
-        generateList(listViewInventory, inventory);
-        generateList(listViewLoot, loot);
+        generateList(listViewInventory, inventory, true);
+        generateList(listViewLoot, loot, false);
 
     }
 
-    private void generateList(ListView<Item> list, ItemContainer items) {
+    private void generateList(ListView<Item> list, ItemContainer items, boolean canUse) {
         // Inspired from
         // https://stackoverflow.com/questions/28264907/javafx-listview-contextmenu
         
@@ -116,7 +116,7 @@ public class LootController implements Initializable {
                     setOnMouseReleased((MouseEvent e) -> {
                         if(e.getButton() == MouseButton.SECONDARY)
                             InterfaceController.contextMenuItem(item, this, e,
-                                    false, false, null);
+                                    canUse, false, null);
                     });
                 }
             }
