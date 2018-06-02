@@ -4,6 +4,7 @@
 <?import java.net.URL?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.effect.Reflection?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
@@ -15,7 +16,7 @@
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="678.0" prefWidth="1127.0" style="-fx-background-color: white;" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cc.view.MenuController">
+<AnchorPane id="AnchorPane" prefHeight="678.0" prefWidth="1127.0" style="-fx-background-color: white;" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cc.view.MenuController">
     <stylesheets>
         <URL value="@menu.css" />
     </stylesheets>
@@ -43,7 +44,7 @@
                   </RadialGradient>
                </fill>
             </Polygon>
-            <Label fx:id="Title" layoutX="352.0" layoutY="281.0" text="Tomb of the Forgotten" textFill="#868686">
+            <Label fx:id="Title" layoutX="351.0" layoutY="281.0" text="Tomb of the Forgotten" textFill="#868686">
                <font>
                   <Font size="31.0" />
                </font>
@@ -271,10 +272,13 @@
                </fill>
             </Polygon>
             <Line endX="100.0" layoutX="892.0" layoutY="395.0" startX="-100.0" stroke="WHITE" />
-            <Label fx:id="MainTitle" alignment="CENTER" layoutX="396.0" layoutY="236.0" text="The Younger Scrolls VI" textFill="WHITE">
+            <Label fx:id="MainTitle" alignment="CENTER" layoutX="419.0" layoutY="236.0" text="The Younger Scrolls VI" textFill="#011726">
                <font>
                   <Font size="24.0" />
                </font>
+               <effect>
+                  <InnerShadow />
+               </effect>
             </Label>
             <Line endX="100.0" layoutX="567.0" layoutY="268.0" scaleX="0.6" startX="-100.0">
                <stroke>

@@ -88,8 +88,7 @@ public class MenuController implements Initializable {
     public void launchGame(){
         try {
             println("ToF", "Loading the game interface...");
-            Parent ui = FXMLLoader.load(ToF.getResource("interface.fxml"));
-            ui.relocate(-255, 0);
+            Parent ui = FXMLLoader.load(ToF.getResource("Introduction.fxml"));
             
             println("ToF", "Creating the scene...");
             Scene sc = new Scene(ui, 1000, 600);
