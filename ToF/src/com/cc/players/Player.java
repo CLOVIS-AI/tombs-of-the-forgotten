@@ -24,6 +24,7 @@ package com.cc.players;
 
 import com.cc.items.Item;
 import com.cc.tof.ToF;
+import com.cc.utils.EventBar;
 import com.cc.utils.messages.Message;
 import com.cc.world.Direction;
 import com.eclipsesource.json.JsonObject;
@@ -85,7 +86,10 @@ public class Player extends Entity {
     }
     
     public void addEvents() {
-        
+        ((EventBar)getStaminaBar()).setOnEmpty(e -> getWorld().newMessage(
+                new Message().add("You are really tired... Rest to be able to "
+                        + "play more!"))
+        );
     }
     
     @Override
