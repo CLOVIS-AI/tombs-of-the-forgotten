@@ -54,10 +54,10 @@ public class SimpleAI extends Entity {
             selectUsableItems()
                     .findAny()
                     .ifPresent(i -> getInventory().use(i, this));
-            pathToPlayer = null; // reset the path
+            pathToPlayer = null;
         }
         
-        if(pathToPlayer == null || pathToPlayer.size() == 0){
+        if(!isPathAvailable() && isPlayerInRange() && new Random().nextInt(10) < 1){
             try {
                 pathToPlayer = getCurrentRoom().pathTo(getWorld().getPlayer().getCurrentRoom(), this);
                 pathToPlayer.moveToNext();
@@ -68,7 +68,15 @@ public class SimpleAI extends Entity {
                 return;
             }
         }
-        if(!isFighting() && new Random().nextInt(100) < 30)
+        if(isPathAvailable() && !isFighting())
             moveTo(pathToPlayer.moveToNext());
+    }
+    
+    private boolean isPlayerInRange(){
+        return getWorld().getPlayer().getLocation().dist(getLocation()) < 5;
+    }
+    
+    private boolean isPathAvailable(){
+        return pathToPlayer != null && pathToPlayer.size() > 0;
     }
 }
