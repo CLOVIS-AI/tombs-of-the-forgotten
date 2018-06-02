@@ -37,6 +37,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.text.Font;
 
 /**
  *
@@ -89,6 +90,7 @@ public class IntroductionController implements Initializable {
             next.setVisible(false);
         } else {
             IntroText.setText(introduction.get(cpt));
+            IntroText.setFont(Font.loadFont(ToF.getResource("BebasNeue-Regular.ttf").toString(), 30));
             cpt++;
         }
     }
