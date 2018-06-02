@@ -260,7 +260,6 @@ public class InterfaceController implements Initializable {
             ((LootController)fxmlLoader.getController()).setInventories(ToF.getWorld().getPlayer().getInventory(), other);
             Stage stage = new Stage();
             stage.setScene(new Scene(menu));
-            stage.setOnCloseRequest(e -> me.update(ToF.getWorld().getPlayer()));
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
