@@ -68,8 +68,8 @@ public class MenuController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        Title.setFont(Font.loadFont(ToF.getResource("DeathtoMetal.ttf").toString(), 30));
-        MainTitle.setFont(Font.loadFont(ToF.getResource("Iglesia.ttf").toString(), 24));
+        Title.setFont(Font.loadFont(ToF.getResource("DragonBreath.ttf").toString(), 70));
+        MainTitle.setFont(Font.loadFont(ToF.getResource("BlackCastleMF.ttf").toString(), 19));
         NewArrow.setVisible(false);
         LoadArrow.setVisible(false);
         QuitArrow.setVisible(false);
