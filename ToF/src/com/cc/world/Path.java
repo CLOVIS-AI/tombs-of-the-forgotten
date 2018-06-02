@@ -24,6 +24,8 @@
 package com.cc.world;
 
 import com.cc.players.Entity;
+import static com.cc.tof.ToF.print;
+import static com.cc.tof.ToF.println;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -94,6 +96,11 @@ public class Path {
      * @throws com.cc.world.Path.UnreachableRoomException If no path is found.
      */
     public static Path createPath(World world, Room departure, Room arrival, Entity entity) throws UnreachableRoomException{
+        // Chrono
+        print("Path", "Generating a path for " +entity + " -> "
+                + arrival.getLocation()+"...");
+        long time = System.nanoTime();
+        
         // Initilization of costs (any=Infinity, first=0)
         Map<Room, Integer> costs = new HashMap<>();
         world.getRooms().forEach(r -> costs.put(r, Integer.MAX_VALUE));
@@ -140,6 +147,9 @@ public class Path {
         
         if(path.peek() != departure)
             throw new UnreachableRoomException(departure, arrival, path);
+        
+        long elapsed = System.nanoTime() - time;
+        println("[Done in "+(elapsed/1000)+"µs]");
         
         return new Path(path);
     }
