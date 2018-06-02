@@ -39,8 +39,6 @@ import static com.cc.players.Entity.Stat.HEALTH;
 import static com.cc.players.Entity.Stat.STAMINA;
 import com.cc.players.Player;
 import com.cc.players.SimpleAI;
-import static com.cc.tof.ToF.done;
-import static com.cc.tof.ToF.print;
 import static com.cc.tof.ToF.println;
 import com.cc.utils.Pair;
 import com.cc.world.Direction;
@@ -54,7 +52,6 @@ import com.cc.world.links.Link;
 import com.cc.world.links.Opening;
 import static java.lang.Math.abs;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -315,11 +312,11 @@ public class DefaultGenerator implements Generator {
     
     private Item createRandomItem(){
         int luck = random.nextInt(100);
-        return luck < 10 ? new ItemBuilder(crtName("Sword"), "", COMMON, rdmNbr(4000, 6000), rdmNbr(300, 400))
+        return luck < 10 ? new ItemBuilder("Iron Sword", "", COMMON, rdmNbr(4000, 6000), rdmNbr(300, 400))
                             .add(new EntityAction(OPPONENT, REMOVE, HEALTH, rdmNbr(2, 5), MODIFICATION))
                             .add(new EntityAction(SELF, REMOVE, STAMINA, rdmNbr(1, 2), MODIFICATION)).get():
                 
-               /*else...*/ new ItemBuilder(crtFood(), "", COMMON, rdmNbr(100, 2000), 1)
+               /*else...*/ new ItemBuilder("Bread", "", COMMON, rdmNbr(100, 300), 1)
                             .add(new EntityAction(SELF, ADD, HEALTH, rdmNbr(1, 5), MODIFICATION)).get();
     }
     
@@ -329,7 +326,7 @@ public class DefaultGenerator implements Generator {
         
         int luck = random.nextInt(100);
         return luck < 5 ? new SimpleAI("Miner", rdmNbr(45, 60), rdmNbr(10, 15), rdmNbr(20, 30), rdmNbr(50000, 100000), l)
-                            .addItem(new ItemBuilder(crtName("Pickaxe"), "", EPIC, 10000, 1000)
+                            .addItem(new ItemBuilder("Pickaxe", "", EPIC, 10000, 1000)
                                 .add(new EntityAction(OPPONENT, REMOVE, HEALTH, 10, MODIFICATION)).get()):
                            new SimpleAI("Zombie", rdmNbr(10, 30), rdmNbr(5, 10), rdmNbr(5, 10), rdmNbr(30000, 50000), l)
                             .addItem(createRandomItem())
@@ -371,34 +368,6 @@ public class DefaultGenerator implements Generator {
         );
         
         return sb.toString();
-    }
-    
-    private static final List<String> NAMES;
-    
-    static {
-        print("RNG", "Initilializing the list of item names...");
-        NAMES = Arrays.asList(
-                "of dispair"
-        );
-        done();
-    }
-
-    private String crtName(String name){
-        return name + " " + NAMES.get(random.nextInt(NAMES.size()));
-    }
-    
-    private static final List<String> FOOD_NAMES;
-    
-    static {
-        print("RNG", "Initializing list of foood names...");
-        FOOD_NAMES = Arrays.asList(
-                "Bread", "Steacks"
-        );
-        done();
-    }
-    
-    private String crtFood(){
-        return FOOD_NAMES.get(random.nextInt(FOOD_NAMES.size()));
     }
     
 }

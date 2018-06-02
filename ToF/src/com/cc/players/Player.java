@@ -24,6 +24,7 @@ package com.cc.players;
 
 import com.cc.items.Item;
 import com.cc.tof.ToF;
+import com.cc.utils.EventBar;
 import com.cc.utils.messages.Message;
 import com.cc.world.Direction;
 import com.eclipsesource.json.JsonObject;
@@ -42,6 +43,7 @@ public class Player extends Entity {
      */
     public Player(){
         this("Player", 20, 2, 5, 10);
+        addEvents();
     }
     
     /**
@@ -54,6 +56,7 @@ public class Player extends Entity {
      */
     public Player(String name, int maxHealth, int maxStrength, int maxMana, int maxWeight) {
         this(name, maxHealth, maxStrength, maxMana, maxWeight, 0);
+        addEvents();
     }
     
     /**
@@ -69,6 +72,7 @@ public class Player extends Entity {
             int luck) {
         super(name, maxHealth, maxStrength, maxMana, maxWeight);
         searchLuck = luck;
+        addEvents();
     }
     
     /**
@@ -78,6 +82,11 @@ public class Player extends Entity {
     public Player(JsonObject json) {
         super(json);
         searchLuck = json.getInt("luck", 0);
+        addEvents();
+    }
+    
+    public void addEvents() {
+        ((EventBar)getHealthBar()).setOnEmpty(b -> ToF.lose());
     }
     
     @Override

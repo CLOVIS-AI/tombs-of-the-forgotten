@@ -24,8 +24,13 @@
 package com.cc.world;
 
 import com.cc.players.Entity;
+import static com.cc.tof.ToF.print;
+import static com.cc.tof.ToF.println;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -38,11 +43,15 @@ import java.util.stream.Stream;
  */
 public class Path {
     
-    private final Stack<Room> rooms;
+    private final List<Room> rooms;
     
     private Path(Stack<Room> stack){
-        rooms = stack;
-        
+        rooms = new LinkedList<>(stack);
+        Collections.reverse(rooms);
+    }
+    
+    private Path(Room... rooms){
+        this.rooms = new LinkedList<>(Arrays.asList(rooms));
     }
     
     /**
@@ -50,7 +59,7 @@ public class Path {
      * @return The next step.
      */
     public Room moveToNext(){
-        return rooms.pop();
+        return rooms.remove(0);
     }
     
     /**
@@ -94,54 +103,77 @@ public class Path {
      * @throws com.cc.world.Path.UnreachableRoomException If no path is found.
      */
     public static Path createPath(World world, Room departure, Room arrival, Entity entity) throws UnreachableRoomException{
-        // Initilization of costs (any=Infinity, first=0)
-        Map<Room, Integer> costs = new HashMap<>();
-        world.getRooms().forEach(r -> costs.put(r, Integer.MAX_VALUE));
-        costs.put(departure, 0);
+        // Chrono
+        print("Path", "Generating path #"+nbrOfPathGenerated+" for " +entity + " -> "
+                + arrival.getLocation()+"...");
+        long time = System.nanoTime();
+        Path ret;
         
-        // Initilization of predecessors (any=itself)
-        Map<Room, Room> predecessors = new HashMap<>();
-        world.getRooms().forEach(r -> predecessors.put(r, r));
-        
-        // Search for shortcuts
-        List<Room> unterminated = new ArrayList<>(world.getRooms());
-        while(!unterminated.isEmpty()){
+        if(departure.getLocation().equals(arrival.getLocation())){
+            System.out.print(" Method:identity");
+            ret = new Path(arrival);
+        } else if(departure.isNeighbor(arrival)){
+            System.out.print(" Method:neighbor");
+            ret = new Path(departure, arrival);
+        } else {
+            System.out.print(" Method:dijsktra");
+            // Initilization of costs (any=Infinity, first=0)
+            Map<Room, Integer> costs = new HashMap<>();
+            world.getRooms().forEach(r -> costs.put(r, Integer.MAX_VALUE));
+            costs.put(departure, 0);
+
+            // Initilization of predecessors (any=itself)
+            Map<Room, Room> predecessors = new HashMap<>();
+            world.getRooms().forEach(r -> predecessors.put(r, r));
+
+            // Search for shortcuts
+            List<Room> unterminated = new ArrayList<>(world.getRooms());
+            while(!unterminated.isEmpty()){
+
+                //System.out.println("r          \tcost\tpred    \tterm");
+                //world.getRooms().forEach(r -> System.out.println(r+"\t"+costs.get(r)+"\t"+predecessors.get(r)+"\t"+(unterminated.contains(r) ? "" : "x")));
+
+                Room min = unterminated.stream()
+                        .min((r1, r2) -> costs.get(r1) - costs.get(r2))
+                        .orElseThrow(UnknownError::new);
+
+                min.getReachableNeighbors(entity)
+                        .filter(r -> unterminated.contains(r))
+                        .filter(r -> costs.get(min) + 1 < costs.get(r))
+                        .forEach(r -> {
+                            costs.put(r, costs.get(min) + 1);
+                            predecessors.put(r, min);
+                        });
+
+                unterminated.remove(min);
+            }
+
+            //System.out.println("Analyzing path...");
+
+            Stack<Room> path = new Stack<>();
+            do{
+                //System.out.println("> " + arrival);
+                path.add(arrival);
+
+                if(arrival == predecessors.get(arrival))
+                    break;
+
+                arrival = predecessors.get(arrival);
+            }while(arrival != null);
+
+            if(path.peek() != departure)
+                throw new UnreachableRoomException(departure, arrival, path);
             
-            //System.out.println("r          \tcost\tpred    \tterm");
-            //world.getRooms().forEach(r -> System.out.println(r+"\t"+costs.get(r)+"\t"+predecessors.get(r)+"\t"+(unterminated.contains(r) ? "" : "x")));
-            
-            Room min = unterminated.stream()
-                    .min((r1, r2) -> costs.get(r1) - costs.get(r2))
-                    .orElseThrow(UnknownError::new);
-            
-            min.getReachableNeighbors(entity)
-                    .filter(r -> unterminated.contains(r))
-                    .filter(r -> costs.get(min) + 1 < costs.get(r))
-                    .forEach(r -> {
-                        costs.put(r, costs.get(min) + 1);
-                        predecessors.put(r, min);
-                    });
-            
-            unterminated.remove(min);
+            ret = new Path(path);
         }
         
-        //System.out.println("Analyzing path...");
+        long nanos = System.nanoTime() - time;
+        long micros = nanos/1000;
+        long millis = micros/1000;
+        println("[Done in "+millis+"ms "+(micros-millis*1000)+"µs]");
+        nbrOfPathGenerated++;
         
-        Stack<Room> path = new Stack<>();
-        do{
-            //System.out.println("> " + arrival);
-            path.add(arrival);
-            
-            if(arrival == predecessors.get(arrival))
-                break;
-            
-            arrival = predecessors.get(arrival);
-        }while(arrival != null);
-        
-        if(path.peek() != departure)
-            throw new UnreachableRoomException(departure, arrival, path);
-        
-        return new Path(path);
+        return ret;
     }
     
     /**
@@ -157,4 +189,6 @@ public class Path {
             return sb.toString();
         }
     }
+    
+    private static int nbrOfPathGenerated = 0;
 }

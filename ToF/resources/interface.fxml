@@ -16,7 +16,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1254.0" style="-fx-background-color: linear-gradient(to bottom, #000000 0%,#95b1c6 50%,#95b1c6 50%,#000000 99%);" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cc.view.InterfaceController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1254.0" style="-fx-background-color: linear-gradient(to bottom, #000000 0%,#95b1c6 50%,#95b1c6 50%,#000000 99%);" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cc.view.InterfaceController">
     <stylesheets>
         <URL value="@menu.css" />
     </stylesheets>  
@@ -113,7 +113,8 @@
                   </RadialGradient>
                </fill>
             </Polygon>
-         </children></AnchorPane>
+         </children>
+      </AnchorPane>
       <AnchorPane fx:id="LeftMenu" prefHeight="600.0" prefWidth="254.0" style="-fx-background-color: #95B1C60;">
          <children>
             <Label layoutX="90.0" layoutY="26.0" text="PLAYERNAME" textFill="WHITE" />
@@ -280,11 +281,13 @@
             <Button fx:id="ButtonRest" layoutX="169.0" layoutY="53.0" mnemonicParsing="false" style="-fx-background-color: #517086;" text="REST" textFill="WHITE">
                <font>
                   <Font size="16.0" />
-               </font></Button>
+               </font>
+            </Button>
             <Button fx:id="ButtonOpen" layoutX="19.0" layoutY="95.0" mnemonicParsing="false" style="-fx-background-color: #517086;" text="OPEN" textFill="WHITE">
                <font>
                   <Font size="16.0" />
-               </font></Button>
+               </font>
+            </Button>
             <Button fx:id="ButtonClose" layoutX="97.0" layoutY="95.0" mnemonicParsing="false" style="-fx-background-color: #517086;" text="CLOSE" textFill="WHITE">
                <font>
                   <Font size="16.0" />
@@ -292,25 +295,30 @@
             <Button fx:id="UnderAttack" layoutX="162.0" layoutY="16.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="159.0" style="-fx-background-color: crimson;" text="UNDER ATTACK" textFill="WHITE">
                <font>
                   <Font size="16.0" />
-               </font></Button>
+               </font>
+            </Button>
             <Button fx:id="ButtonSearchRoom" layoutX="19.0" layoutY="53.0" mnemonicParsing="false" style="-fx-background-color: #517086;" text="SEARCH ROOM" textFill="WHITE">
                <font>
                   <Font size="16.0" />
-               </font></Button>
+               </font>
+            </Button>
             <Button fx:id="ButtonReadNote" layoutX="186.0" layoutY="95.0" mnemonicParsing="false" style="-fx-background-color: #517086;" text="READ NOTE" textFill="WHITE">
                <font>
                   <Font size="16.0" />
-               </font></Button>
+               </font>
+            </Button>
             <Button fx:id="ButtonSave" layoutX="22.0" layoutY="209.0" mnemonicParsing="false" style="-fx-background-color: snow;" text="          SAVE          " textFill="#517086">
                <font>
                   <Font size="16.0" />
-               </font></Button>
+               </font>
+            </Button>
             <Label layoutX="11.0" layoutY="14.0" text="ACTIONS" textFill="WHITE">
                <font>
                   <Font size="30.0" />
                </font>
             </Label>
-         </children></AnchorPane>
+         </children>
+      </AnchorPane>
       <AnchorPane layoutX="508.0" prefHeight="345.0" prefWidth="746.0">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00000033" height="348.0" strokeType="INSIDE" strokeWidth="2.0" width="747.0">
@@ -322,7 +330,8 @@
                         <Stop color="#a1bbcd" offset="1.0" />
                      </stops>
                   </LinearGradient>
-               </stroke></Rectangle>
+               </stroke>
+            </Rectangle>
             <Polygon blendMode="MULTIPLY" layoutX="157.0" layoutY="74.0" opacity="0.41" rotate="180.0" stroke="#ffffff00" strokeType="INSIDE">
                <points>
                   <Double fx:value="-50.0" />
@@ -465,6 +474,198 @@
                 <Double fx:value="-13.5" />
               </points>
             </Polygon>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="LoseMenu" layoutX="10.0" layoutY="10.0" prefHeight="600.0" prefWidth="1254.0" style="-fx-background-color: linear-gradient(to bottom, #000000 0%,#ff7575 19%,#ff5454 62%,#000000 99%);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label fx:id="GameOver" layoutX="788.0" layoutY="291.0" text="Game Over" />
+            <Polygon blendMode="MULTIPLY" layoutX="863.0" layoutY="74.0" opacity="0.41" rotate="180.0" scaleX="0.9" scaleY="1.4" stroke="#ffffff00" strokeType="INSIDE">
+               <points>
+                  <Double fx:value="-50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="0.0" />
+                  <Double fx:value="-60.0" />
+               </points>
+               <fill>
+                  <RadialGradient centerX="0.5561797752808989" centerY="0.9182692307692307" cycleMethod="REFLECT" focusAngle="-57.99" focusDistance="-0.2857142857142857" radius="0.8690476190476191">
+                     <stops>
+                        <Stop color="#060008" />
+                        <Stop color="#badaff59" offset="1.0" />
+                     </stops>
+                  </RadialGradient>
+               </fill>
+            </Polygon>
+            <Polygon blendMode="OVERLAY" layoutX="657.0" layoutY="74.0" opacity="0.41" rotate="180.0" scaleX="0.8" scaleY="1.2" stroke="#ffffff00" strokeType="INSIDE">
+               <points>
+                  <Double fx:value="-50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="0.0" />
+                  <Double fx:value="-60.0" />
+               </points>
+               <fill>
+                  <RadialGradient centerX="0.5561797752808989" centerY="0.9182692307692307" cycleMethod="REFLECT" focusAngle="-57.99" focusDistance="-0.2857142857142857" radius="0.8690476190476191">
+                     <stops>
+                        <Stop color="#060008" />
+                        <Stop color="#badaff59" offset="1.0" />
+                     </stops>
+                  </RadialGradient>
+               </fill>
+            </Polygon>
+            <Polygon blendMode="OVERLAY" layoutX="607.0" layoutY="546.0" opacity="0.41" stroke="#ffffff00" strokeType="INSIDE">
+               <points>
+                  <Double fx:value="-50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="0.0" />
+                  <Double fx:value="-60.0" />
+               </points>
+               <fill>
+                  <RadialGradient centerX="0.5561797752808989" centerY="0.9182692307692307" cycleMethod="REFLECT" focusAngle="-57.99" focusDistance="-0.2857142857142857" radius="0.8690476190476191">
+                     <stops>
+                        <Stop color="#060008" />
+                        <Stop color="#badaff59" offset="1.0" />
+                     </stops>
+                  </RadialGradient>
+               </fill>
+            </Polygon>
+            <Polygon blendMode="OVERLAY" layoutX="1023.0" layoutY="560.0" opacity="0.41" stroke="#ffffff00" strokeType="INSIDE">
+               <points>
+                  <Double fx:value="-50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="0.0" />
+                  <Double fx:value="-60.0" />
+               </points>
+               <fill>
+                  <RadialGradient centerX="0.5561797752808989" centerY="0.9182692307692307" cycleMethod="REFLECT" focusAngle="-57.99" focusDistance="-0.2857142857142857" radius="0.8690476190476191">
+                     <stops>
+                        <Stop color="#060008" />
+                        <Stop color="#badaff59" offset="1.0" />
+                     </stops>
+                  </RadialGradient>
+               </fill>
+            </Polygon>
+            <Polygon blendMode="MULTIPLY" layoutX="948.0" layoutY="536.0" opacity="0.41" scaleX="0.8" scaleY="1.2" stroke="#ffffff00" strokeType="INSIDE">
+               <points>
+                  <Double fx:value="-50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="0.0" />
+                  <Double fx:value="-60.0" />
+               </points>
+               <fill>
+                  <RadialGradient centerX="0.5561797752808989" centerY="0.9182692307692307" cycleMethod="REFLECT" focusAngle="-57.99" focusDistance="-0.2857142857142857" radius="0.8690476190476191">
+                     <stops>
+                        <Stop color="#060008" />
+                        <Stop color="#badaff59" offset="1.0" />
+                     </stops>
+                  </RadialGradient>
+               </fill>
+            </Polygon>
+            <Button fx:id="BackLose" layoutX="761.0" layoutY="446.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="114.0" style="-fx-background-color: black;" text="Back to menu" textFill="RED" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="WinMenu" layoutX="10.0" layoutY="10.0" prefHeight="600.0" prefWidth="1254.0" style="-fx-background-color: linear-gradient(to bottom, #000000 0%,#74dbbe 19%,#42ddb1 62%,#000000 99%);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label fx:id="GameOver1" layoutX="788.0" layoutY="291.0" text="Congratulations !" />
+            <Polygon blendMode="MULTIPLY" layoutX="863.0" layoutY="74.0" opacity="0.41" rotate="180.0" scaleX="0.9" scaleY="1.4" stroke="#ffffff00" strokeType="INSIDE">
+               <points>
+                  <Double fx:value="-50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="0.0" />
+                  <Double fx:value="-60.0" />
+               </points>
+               <fill>
+                  <RadialGradient centerX="0.5561797752808989" centerY="0.9182692307692307" cycleMethod="REFLECT" focusAngle="-57.99" focusDistance="-0.2857142857142857" radius="0.8690476190476191">
+                     <stops>
+                        <Stop color="#060008" />
+                        <Stop color="#badaff59" offset="1.0" />
+                     </stops>
+                  </RadialGradient>
+               </fill>
+            </Polygon>
+            <Polygon blendMode="OVERLAY" layoutX="657.0" layoutY="74.0" opacity="0.41" rotate="180.0" scaleX="0.8" scaleY="1.2" stroke="#ffffff00" strokeType="INSIDE">
+               <points>
+                  <Double fx:value="-50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="0.0" />
+                  <Double fx:value="-60.0" />
+               </points>
+               <fill>
+                  <RadialGradient centerX="0.5561797752808989" centerY="0.9182692307692307" cycleMethod="REFLECT" focusAngle="-57.99" focusDistance="-0.2857142857142857" radius="0.8690476190476191">
+                     <stops>
+                        <Stop color="#060008" />
+                        <Stop color="#badaff59" offset="1.0" />
+                     </stops>
+                  </RadialGradient>
+               </fill>
+            </Polygon>
+            <Polygon blendMode="OVERLAY" layoutX="607.0" layoutY="546.0" opacity="0.41" stroke="#ffffff00" strokeType="INSIDE">
+               <points>
+                  <Double fx:value="-50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="0.0" />
+                  <Double fx:value="-60.0" />
+               </points>
+               <fill>
+                  <RadialGradient centerX="0.5561797752808989" centerY="0.9182692307692307" cycleMethod="REFLECT" focusAngle="-57.99" focusDistance="-0.2857142857142857" radius="0.8690476190476191">
+                     <stops>
+                        <Stop color="#060008" />
+                        <Stop color="#badaff59" offset="1.0" />
+                     </stops>
+                  </RadialGradient>
+               </fill>
+            </Polygon>
+            <Polygon blendMode="OVERLAY" layoutX="1023.0" layoutY="560.0" opacity="0.41" stroke="#ffffff00" strokeType="INSIDE">
+               <points>
+                  <Double fx:value="-50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="0.0" />
+                  <Double fx:value="-60.0" />
+               </points>
+               <fill>
+                  <RadialGradient centerX="0.5561797752808989" centerY="0.9182692307692307" cycleMethod="REFLECT" focusAngle="-57.99" focusDistance="-0.2857142857142857" radius="0.8690476190476191">
+                     <stops>
+                        <Stop color="#060008" />
+                        <Stop color="#badaff59" offset="1.0" />
+                     </stops>
+                  </RadialGradient>
+               </fill>
+            </Polygon>
+            <Polygon blendMode="MULTIPLY" layoutX="948.0" layoutY="536.0" opacity="0.41" scaleX="0.8" scaleY="1.2" stroke="#ffffff00" strokeType="INSIDE">
+               <points>
+                  <Double fx:value="-50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="50.0" />
+                  <Double fx:value="40.0" />
+                  <Double fx:value="0.0" />
+                  <Double fx:value="-60.0" />
+               </points>
+               <fill>
+                  <RadialGradient centerX="0.5561797752808989" centerY="0.9182692307692307" cycleMethod="REFLECT" focusAngle="-57.99" focusDistance="-0.2857142857142857" radius="0.8690476190476191">
+                     <stops>
+                        <Stop color="#060008" />
+                        <Stop color="#badaff59" offset="1.0" />
+                     </stops>
+                  </RadialGradient>
+               </fill>
+            </Polygon>
+            <Button fx:id="BackWin" layoutX="776.0" layoutY="432.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="114.0" style="-fx-background-color: black;" text="Back to menu" textFill="#42ddb1" />
          </children>
       </AnchorPane>
    </children>

@@ -151,6 +151,8 @@ public final class World implements Timable, Save<JsonObject> {
     public void nextTick() {
         println("ToF", "Updating the world...");
         player.nextTick();
+        
+        println("ToF", "There are " + entities.size() + " entities to update...");
         entities.removeIf(e -> {
             e.nextTick();
             return e.isDead();

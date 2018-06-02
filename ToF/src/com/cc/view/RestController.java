@@ -41,9 +41,6 @@ import javafx.stage.Stage;
 public class RestController implements Initializable{
     
     @FXML
-    private Label RestText;
-    
-    @FXML
     private Button RestCancel, RestOK;
     
     @FXML

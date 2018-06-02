@@ -115,7 +115,7 @@ public class Bar implements Save<JsonObject> {
      */
     public boolean canAdd(int value){
         return value >= 0 ? real + value <= maximum
-                          : canRemove(value);
+                          : canRemove(-value);
     }
     
     /**

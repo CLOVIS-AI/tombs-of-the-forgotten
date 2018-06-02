@@ -81,7 +81,7 @@ public class ToF extends Application {
     }
     
     public static void opponentDied(Entity opponent) {
-        InterfaceController.lootPopup(opponent.getInventory());
+        InterfaceController.lootPopup(opponent.getInventory(), false);
     }
 
     /**
@@ -232,6 +232,16 @@ public class ToF extends Application {
         } catch (IOException ex) {
             throw new RuntimeException("Cannot open file", ex);
         }
+    }
+    
+    public static void win(){
+        println("ToF", "You win!");
+        // display a 'win' screen
+    }
+    
+    public static void lose(){
+        println("ToF", "You loose...");
+        // display a 'game over' screen
     }
 
     @Override

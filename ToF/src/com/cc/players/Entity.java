@@ -170,10 +170,10 @@ public abstract class Entity implements Timable, Save<JsonObject> {
      * the entity)
      */
     public final void heal(int n){
-        if(n >= 0)
-            health.add(n, ACCEPT);
-        else
-            hurt(n);
+        if(isDead())
+            return;
+        
+        health.add(n, ACCEPT);
     }
 
     /**
@@ -183,6 +183,9 @@ public abstract class Entity implements Timable, Save<JsonObject> {
      * @throws IllegalArgumentException for negative values
      */
     public final void hurt(int n) {
+        if(isDead())
+            return;
+        
         health.remove(n, ACCEPT);
     }
     
@@ -205,6 +208,9 @@ public abstract class Entity implements Timable, Save<JsonObject> {
 
     @Override
     public void nextTick() {
+        if(isDead())
+            return;
+        
         getBars().forEach(Bar::nextTick);
         
         mana.add(1, ACCEPT);
@@ -248,10 +254,10 @@ public abstract class Entity implements Timable, Save<JsonObject> {
      * @see #useStamina(int) Remove stamina
      */
     public void addStamina(int amount){
-        if(amount >= 0)
-            stamina.add(amount, ACCEPT);
-        else
-            useStamina(amount);
+        if(isDead())
+            return;
+        
+        stamina.add(amount, ACCEPT);
     }
     
     /**
@@ -261,6 +267,9 @@ public abstract class Entity implements Timable, Save<JsonObject> {
      * @see #addStamina(int) Add stamina
      */
     public void useStamina(int value) {
+        if(isDead())
+            return;
+        
         stamina.remove(value, ACCEPT);
     }
 
@@ -279,10 +288,7 @@ public abstract class Entity implements Timable, Save<JsonObject> {
      * @see #useMana(int) Remove mana
      */
     public void addMana(int amount){
-        if(amount >= 0)
-            mana.add(amount, ACCEPT);
-        else
-            useMana(amount);
+        mana.add(amount, ACCEPT);
     }
     
     /**
@@ -326,6 +332,9 @@ public abstract class Entity implements Timable, Save<JsonObject> {
      * {@link Room#canMove(com.cc.world.Direction) Room.canMove(Direction)}.
      */
     public boolean canMoveTo(Direction d) {
+        if(isDead())
+            return false;
+        
         return getCurrentRoom().canMove(d);
     }
     
@@ -337,6 +346,9 @@ public abstract class Entity implements Timable, Save<JsonObject> {
      * {@link Room#canReach(com.cc.world.Direction, com.cc.players.Entity) Room.canReach(Direction,Entity)}.
      */
     public boolean canReach(Direction d) {
+        if(isDead())
+            return false;
+        
         return getCurrentRoom().canReach(d, this);
     }
 
@@ -348,6 +360,9 @@ public abstract class Entity implements Timable, Save<JsonObject> {
      * Direction.
      */
     public void moveTo(Direction d) {
+        if(isDead())
+            return;
+        
         Room crt = getCurrentRoom();
         if (!crt.canMove(d) && crt.canOpen(d, this))
             crt.open(d, this);
@@ -382,6 +397,9 @@ public abstract class Entity implements Timable, Save<JsonObject> {
      * @param r the Room
      */
     public void moveTo(Room r) {
+        if(isDead())
+            return;
+        
         moveTo(getCurrentRoom().getDirectionTo(r).orElseThrow(
                 ()->new IllegalArgumentException("The given room ("
                         +r.getLocation()+") is not in a distance of 1 from the "
@@ -408,6 +426,9 @@ public abstract class Entity implements Timable, Save<JsonObject> {
      * @see Inventory#canAdd(com.cc.items.Item) canAdd
      */
     public boolean canAddItem(Item item) {
+        if(isDead())
+            return false;
+        
         return inventory.canAdd(item);
     }
 
@@ -419,6 +440,9 @@ public abstract class Entity implements Timable, Save<JsonObject> {
      * @see Inventory#add(com.cc.items.Item) add
      */
     public Entity addItem(Item item) {
+        if(isDead())
+            return this;
+        
         inventory.add(item);
         getBars().forEach(Bar::updateBonus);
         
@@ -430,6 +454,9 @@ public abstract class Entity implements Timable, Save<JsonObject> {
      * @param item The item.
      */
     public void drop(Item item) {
+        if(isDead())
+            return;
+        
         inventory.remove(item);
         getCurrentRoom().addItem(item);
     }
@@ -444,6 +471,9 @@ public abstract class Entity implements Timable, Save<JsonObject> {
      * @see Inventory#addIfPossible(java.util.Collection) addIfPossible
      */
     public List<Item> addItemIfPossible(Collection<Item> items) {
+        if(isDead())
+            return new ArrayList<>(items);
+        
         return inventory.addIfPossible(items);
     }
 
@@ -494,6 +524,9 @@ public abstract class Entity implements Timable, Save<JsonObject> {
      * his inventory.
      */
     public void removeItem(Item item) {
+        if(isDead())
+            return;
+        
         if (hasItem(item)) {
             inventory.remove(item);
             getBars().forEach(Bar::updateBonus);
@@ -512,7 +545,8 @@ public abstract class Entity implements Timable, Save<JsonObject> {
     }
     
     public Stream<Item> selectUsableItems() {
-        return inventory.stream();
+        return inventory.stream()
+                .filter(i -> i.canUse(this));
     }
 
     /**
@@ -590,7 +624,7 @@ public abstract class Entity implements Timable, Save<JsonObject> {
     
     @Override
     public String toString(){
-        return name + " " + location;
+        return name + (isDead() ? " [DEAD] " : " ") + location;
     }
     
     /**

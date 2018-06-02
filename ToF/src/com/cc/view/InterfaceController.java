@@ -98,10 +98,11 @@ public class InterfaceController implements Initializable {
     @FXML
     private Button ButtonRest, ButtonSave, ButtonOpen, ButtonClose, ButtonReadNote,
             ButtonSearchRoom, UnderAttack,
-            ButtonUpstairs, ButtonDownstairs;
+            ButtonUpstairs, ButtonDownstairs,
+            BackWin, BackLose;
 
     @FXML
-    private AnchorPane Map;
+    private AnchorPane Map, WinMenu, LoseMenu;
     
     @FXML
     private Label Text;
@@ -144,6 +145,9 @@ public class InterfaceController implements Initializable {
 
         restPopup(ButtonRest);
 
+        LoseMenu.setVisible(false);
+        WinMenu.setVisible(false);
+        
         /**
          * ******************************SAVE*********************************
          */
@@ -174,7 +178,7 @@ public class InterfaceController implements Initializable {
         
         if(items.getItems().isEmpty())
             ToF.getWorld().newMessage(new Message().add("There is nothing here..."));
-        else lootPopup(items);
+        else lootPopup(items, true);
         
         update(ToF.getWorld().getPlayer());
     }
@@ -249,14 +253,15 @@ public class InterfaceController implements Initializable {
         b.setOnAction(e -> restPopup(e));
     }
 
-    public static void lootPopup(ItemContainer other) {
+    public static void lootPopup(ItemContainer other, boolean update) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(ToF.getResource("Loot.fxml"));
             Parent menu = (Parent) fxmlLoader.load();
             ((LootController)fxmlLoader.getController()).setInventories(ToF.getWorld().getPlayer().getInventory(), other);
             Stage stage = new Stage();
             stage.setScene(new Scene(menu));
-            stage.setOnCloseRequest(e -> me.update(ToF.getWorld().getPlayer()));
+            if(update)
+                stage.setOnCloseRequest(e -> me.update(ToF.getWorld().getPlayer()));
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -339,17 +344,16 @@ public class InterfaceController implements Initializable {
         }
     }
 
-    public void fillBar(Bar b, ProgressBar bar) {
-
+    public void fillBar(Bar b, ProgressBar bar, String message) {
         bar.setProgress(b.getCurrent() * 1.0 / b.getMaximum());
-        bar.setTooltip(new Tooltip(b.getName() + ": " + b.getCurrent() + "/" + b.getMaximum()));
+        bar.setTooltip(new Tooltip(b.getName() + ": " + b.getCurrent() + "/" + b.getMaximum() + message));
     }
 
     public void updateBars() {
-        fillBar(ToF.getWorld().getPlayer().getHealthBar(), BarHP);
-        fillBar(ToF.getWorld().getPlayer().getManaBar(), BarMana);
-        fillBar(ToF.getWorld().getPlayer().getStaminaBar(), BarStamina);
-        fillBar(ToF.getWorld().getPlayer().getWeightBar(), BarPods);
+        fillBar(ToF.getWorld().getPlayer().getHealthBar(), BarHP, "");
+        fillBar(ToF.getWorld().getPlayer().getManaBar(), BarMana, "\nRefills overtime");
+        fillBar(ToF.getWorld().getPlayer().getStaminaBar(), BarStamina, "\nRest to refill");
+        fillBar(ToF.getWorld().getPlayer().getWeightBar(), BarPods, "\nThe weight of your inventory");
     }
 
     Location player;
@@ -480,5 +484,19 @@ public class InterfaceController implements Initializable {
         } catch (IOException ex) {
             throw new IllegalStateException("Couldn't load the item view.", ex);
         }
+    }
+    
+    /**
+     * Displays a stage when player wins.
+     */
+    public void ifWin() {
+        WinMenu.setVisible(true);
+    }
+    
+    /**
+     * Displays a stage when player loses.
+     */
+    public void ifLose() {
+        LoseMenu.setVisible(true);
     }
 }
