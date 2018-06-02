@@ -104,7 +104,6 @@ public class Player extends Entity {
     
     public void use(Item item) {
         getInventory().use(item, this);
-        getWorld().nextTick();
     }
     
     @Override
