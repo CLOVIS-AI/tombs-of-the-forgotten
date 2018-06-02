@@ -145,8 +145,10 @@ public class Bar implements Save<JsonObject> {
      * @param mode what should do this method if the maximum value is reached.
      */
     public void add(int value, Behavior mode){
-        if(value < 0)
+        if(value < 0){
             remove(-value, mode);
+            return;
+        }
         
         if(canAdd(value))
            real += value;
@@ -182,12 +184,15 @@ public class Bar implements Save<JsonObject> {
             throw new IllegalArgumentException("Negative decrements are not "
                     + "allowed. See Bar.add(int,int).");
         
-        if(canRemove(value))
-           real -= value;
-        else{
-            if(mode == ACCEPT)
+        if(canRemove(value)){
+            real -= value;
+        }else{
+            if(mode == ACCEPT){
+                System.out.print(" minimum="+minimum);
                 real = minimum;
-            else
+                System.out.print(" real=" + real);
+                System.out.print(" bonus=" + this.bonusTotal);
+            }else
                 throw new IllegalArgumentException(String.format("Removing %d from "
                         + "the current value (%d) would result in %d, which is "
                         + "lesser than the allowed maximum (%d)", value, real, 
@@ -284,7 +289,7 @@ public class Bar implements Save<JsonObject> {
      * @see #getReal() The value of this bar without the bonuses
      */
     public int getCurrent() {
-        return max(min(real + bonusTotal, maximum), minimum);
+        return real + bonusTotal;
     }
     
     /**
