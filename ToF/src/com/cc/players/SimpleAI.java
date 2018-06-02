@@ -23,6 +23,7 @@
  */
 package com.cc.players;
 
+import static com.cc.utils.Bar.Behavior.ACCEPT;
 import com.cc.world.Location;
 import com.cc.world.Path;
 import com.cc.world.Room;
@@ -73,7 +74,11 @@ public class SimpleAI extends Entity {
             Room next = pathToPlayer.moveToNext();
             if(canMoveTo(next))
                 moveTo(next);
-            else pathToPlayer = null;
+            else {
+                getStaminaBar().add(2, ACCEPT);
+                if(!pathToPlayer.checkPathValidity(this))
+                    pathToPlayer = null;
+            }
         }
     }
     
