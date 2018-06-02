@@ -344,17 +344,16 @@ public class InterfaceController implements Initializable {
         }
     }
 
-    public void fillBar(Bar b, ProgressBar bar) {
-
+    public void fillBar(Bar b, ProgressBar bar, String message) {
         bar.setProgress(b.getCurrent() * 1.0 / b.getMaximum());
-        bar.setTooltip(new Tooltip(b.getName() + ": " + b.getCurrent() + "/" + b.getMaximum()));
+        bar.setTooltip(new Tooltip(b.getName() + ": " + b.getCurrent() + "/" + b.getMaximum() + message));
     }
 
     public void updateBars() {
-        fillBar(ToF.getWorld().getPlayer().getHealthBar(), BarHP);
-        fillBar(ToF.getWorld().getPlayer().getManaBar(), BarMana);
-        fillBar(ToF.getWorld().getPlayer().getStaminaBar(), BarStamina);
-        fillBar(ToF.getWorld().getPlayer().getWeightBar(), BarPods);
+        fillBar(ToF.getWorld().getPlayer().getHealthBar(), BarHP, "");
+        fillBar(ToF.getWorld().getPlayer().getManaBar(), BarMana, "\nRefills overtime");
+        fillBar(ToF.getWorld().getPlayer().getStaminaBar(), BarStamina, "\nRest to refill");
+        fillBar(ToF.getWorld().getPlayer().getWeightBar(), BarPods, "\nThe weight of your inventory");
     }
 
     Location player;
