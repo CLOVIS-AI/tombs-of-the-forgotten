@@ -376,7 +376,6 @@ public final class World implements Timable, Save<JsonObject> {
      * @param message the message
      */
     public final void newMessage(Message message) {
-        System.out.println(">> " + message.toStringSimple());
         messages.add(message);
     }
 
