@@ -233,6 +233,16 @@ public class ToF extends Application {
             throw new RuntimeException("Cannot open file", ex);
         }
     }
+    
+    public static void win(){
+        println("ToF", "You win!");
+        // display a 'win' screen
+    }
+    
+    public static void lose(){
+        println("ToF", "You loose...");
+        // display a 'game over' screen
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
