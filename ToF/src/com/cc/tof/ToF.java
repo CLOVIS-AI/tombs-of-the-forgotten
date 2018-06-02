@@ -234,14 +234,17 @@ public class ToF extends Application {
         }
     }
     
+    public static boolean win = false;
+    public static boolean lose = false;
+    
     public static void win(){
         println("ToF", "You win!");
-        // display a 'win' screen
+        win = true;
     }
     
     public static void lose(){
         println("ToF", "You loose...");
-        // display a 'game over' screen
+        lose = true;
     }
 
     @Override
