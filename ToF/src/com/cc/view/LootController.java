@@ -64,7 +64,7 @@ public class LootController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+            LootConfirm.setOnAction(e -> closeLoot(null));
     }
 
     public void setInventories(ItemContainer items1, ItemContainer items2) {
