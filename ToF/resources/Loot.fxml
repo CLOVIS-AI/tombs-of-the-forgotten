@@ -27,6 +27,7 @@
             <Separator layoutX="25.0" layoutY="41.0" prefWidth="200.0" />
          </children>
       </AnchorPane>
+      <Button fx:id="LootConfirm" layoutX="322.0" layoutY="415.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="98.0" style="-fx-background-color: #4d6a7f;" text="CONFIRM" textFill="WHITE" />
       <Button fx:id="AddAll" layoutX="317.0" layoutY="126.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="92.0" style="-fx-background-color: #4d6a7f;" text="ADD ALL" textFill="WHITE" />
       <Polygon fx:id="ARight" fill="#4d6a7f" layoutX="397.0" layoutY="253.0" rotate="90.0" scaleX="0.4" scaleY="0.5" stroke="BLACK" strokeType="INSIDE">
         <points>
@@ -50,7 +51,6 @@
             <Double fx:value="-60.0" />
          </points>
       </Polygon>
-      <Button fx:id="LootConfirm" layoutX="322.0" layoutY="415.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="98.0" style="-fx-background-color: #4d6a7f;" text="CONFIRM" textFill="WHITE" />
       <Label layoutX="292.0" layoutY="33.0" text="Right click to view an item." textFill="WHITE" />
    </children>
 </AnchorPane>

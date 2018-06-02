@@ -87,10 +87,6 @@ public class InterfaceController implements Initializable {
 
     @FXML
     private Label Apparel, Weapons, Stats, Eatable, Scrolls, Other, All;
-
-    @FXML
-    private MenuItem ViewWeapon, ViewApparel, ViewEatable, ViewScroll, ViewOther,
-            ViewAll;
     
     @FXML
     private ListView<Item> MenuWeapon, MenuApparel, MenuEdible, MenuScroll, MenuOther, MenuAll;
@@ -332,15 +328,16 @@ public class InterfaceController implements Initializable {
         updateBars();
         updateInventory();
         
+        if(ToF.getWorld().getPlayer().isDead())
+            ifLose();
+        
         UnderAttack.setVisible(ToF.getWorld().getPlayer().getOpponent().isPresent());
         UnderAttack.setText("Under Attack " + ToF.getWorld().selectEntities(
                 e -> ToF.getWorld().getPlayer().getLocation().equals(e.getLocation())
         ).count());
         
-        if(ToF.getWorld().isFullyExplored()){
-            ToF.getWorld().newMessage(new Message().add("You have explored everything!"));
-            ToF.win();
-        }
+        if(ToF.getWorld().isFullyExplored())
+            ifWin();
         
         Message msg;
         while((msg = ToF.getWorld().getNextMessage()) != null){
@@ -503,5 +500,5 @@ public class InterfaceController implements Initializable {
      */
     public void ifLose() {
         LoseMenu.setVisible(true);
-    }
+    }  
 }
