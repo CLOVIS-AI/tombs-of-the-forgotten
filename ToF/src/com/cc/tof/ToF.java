@@ -81,7 +81,7 @@ public class ToF extends Application {
     }
     
     public static void opponentDied(Entity opponent) {
-        InterfaceController.lootPopup(opponent.getInventory());
+        InterfaceController.lootPopup(opponent.getInventory(), false);
     }
 
     /**

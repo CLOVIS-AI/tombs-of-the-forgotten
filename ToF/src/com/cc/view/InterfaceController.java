@@ -178,7 +178,7 @@ public class InterfaceController implements Initializable {
         
         if(items.getItems().isEmpty())
             ToF.getWorld().newMessage(new Message().add("There is nothing here..."));
-        else lootPopup(items);
+        else lootPopup(items, true);
         
         update(ToF.getWorld().getPlayer());
     }
@@ -253,13 +253,15 @@ public class InterfaceController implements Initializable {
         b.setOnAction(e -> restPopup(e));
     }
 
-    public static void lootPopup(ItemContainer other) {
+    public static void lootPopup(ItemContainer other, boolean update) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(ToF.getResource("Loot.fxml"));
             Parent menu = (Parent) fxmlLoader.load();
             ((LootController)fxmlLoader.getController()).setInventories(ToF.getWorld().getPlayer().getInventory(), other);
             Stage stage = new Stage();
             stage.setScene(new Scene(menu));
+            if(update)
+                stage.setOnCloseRequest(e -> me.update(ToF.getWorld().getPlayer()));
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
