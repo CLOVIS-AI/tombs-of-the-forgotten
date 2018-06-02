@@ -542,7 +542,7 @@ public class Room implements Save<JsonObject> {
     public void readNotes() {
         if(hasNotes())
             world.newMessage(new Message().add("There are " + notes.size() + " notes"
-                + "in this room. You read them..."));
+                + " in this room. You read them..."));
         else
             world.newMessage(new Message().add("There are no notes in this room."));
         

@@ -458,7 +458,7 @@
                   </RadialGradient>
                </fill>
             </Polygon>
-            <Label fx:id="Text" alignment="TOP_LEFT" contentDisplay="RIGHT" layoutY="30.0" prefHeight="315.0" prefWidth="747.0" text="welcome wanderer!" textFill="#7e9eb5" />
+            <Label fx:id="Text" alignment="TOP_LEFT" contentDisplay="RIGHT" ellipsisString="" layoutY="30.0" prefHeight="315.0" prefWidth="747.0" text="welcome wanderer!" textFill="#7e9eb5" />
          </children>
       </AnchorPane>
       <Line endY="600.0" layoutX="254.0" />
@@ -665,7 +665,7 @@
                   </RadialGradient>
                </fill>
             </Polygon>
-            <Polygon blendMode="OVERLAY" layoutX="546.0" layoutY="74.0" opacity="0.41" rotate="180.0" scaleX="0.8" scaleY="1.2" stroke="#ffffff00" strokeType="INSIDE">
+            <Polygon blendMode="OVERLAY" layoutX="657.0" layoutY="74.0" opacity="0.41" rotate="180.0" scaleX="0.8" scaleY="1.2" stroke="#ffffff00" strokeType="INSIDE">
                <points>
                   <Double fx:value="-50.0" />
                   <Double fx:value="40.0" />
@@ -683,7 +683,7 @@
                   </RadialGradient>
                </fill>
             </Polygon>
-            <Polygon blendMode="OVERLAY" layoutX="472.0" layoutY="546.0" opacity="0.41" stroke="#ffffff00" strokeType="INSIDE">
+            <Polygon blendMode="OVERLAY" layoutX="607.0" layoutY="546.0" opacity="0.41" stroke="#ffffff00" strokeType="INSIDE">
                <points>
                   <Double fx:value="-50.0" />
                   <Double fx:value="40.0" />
@@ -792,6 +792,8 @@
                   </RadialGradient>
                </fill>
             </Polygon>
+            <Button fx:id="Next2" layoutX="776.0" layoutY="432.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="114.0" style="-fx-background-color: black;" text="Next" textFill="#42ddb1" />
+            <Button fx:id="BackWin" layoutX="776.0" layoutY="480.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="114.0" style="-fx-background-color: black;" text="Back to menu" textFill="#42ddb1" />
          </children>
       </AnchorPane>
    </children>

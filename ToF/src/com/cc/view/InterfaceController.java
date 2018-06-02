@@ -43,6 +43,7 @@ import com.cc.world.Room;
 import java.io.IOException;
 import static java.lang.Integer.min;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
 import javafx.animation.KeyFrame;
@@ -89,23 +90,29 @@ public class InterfaceController implements Initializable {
     private Label Apparel, Weapons, Stats, Eatable, Scrolls, Other, All;
     
     @FXML
+    private MenuItem ViewWeapon, ViewApparel, ViewEatable, ViewScroll, ViewOther,
+            ViewAll;
+
+    @FXML
     private ListView<Item> MenuWeapon, MenuApparel, MenuEdible, MenuScroll, MenuOther, MenuAll;
 
     @FXML
     private Button ButtonRest, ButtonSave, ButtonOpen, ButtonClose, ButtonReadNote,
             ButtonSearchRoom, UnderAttack,
             ButtonUpstairs, ButtonDownstairs,
-            BackWin, BackLose;
+            BackWin, BackLose,
+            Next2;
 
     @FXML
     private AnchorPane Map, WinMenu, LoseMenu;
     
     @FXML
-    private Label Text;
+    private Label Text, Congratulations;
 
     @FXML
     private ProgressBar BarHP, BarMana, BarStamina, BarPods;
 
+    private ArrayList<String> Ending = new ArrayList<>();
     private boolean isMenu = false;
     private Timeline move = new Timeline();
     
@@ -513,4 +520,11 @@ public class InterfaceController implements Initializable {
     public void ifLose() {
         LoseMenu.setVisible(true);
     }  
+
+    int cpt = 0;
+
+    public void displayText() {
+        Congratulations.setText(Ending.get(cpt));
+        cpt++;
+    }
 }
