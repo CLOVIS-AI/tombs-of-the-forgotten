@@ -218,6 +218,17 @@ public class Room implements Save<JsonObject> {
     }
     
     /**
+     * Is the specified room a neighbor of this one?
+     * <p>Two rooms being neighbors means they share a link.
+     * @param room the other room
+     * @return {@code true} if they are neighbors.
+     */
+    public boolean isNeighbor(Room room) {
+        return getAllNeighbors()
+                .anyMatch(r -> r == room);
+    }
+    
+    /**
      * Gets all the links of this Room. To get the neighbors, 
      * see {@link #getAllNeighbors() getAllNeighbors}.
      * @return A stream of all the links of this Room.
