@@ -23,11 +23,17 @@
  */
 package com.cc.view;
 
+import com.cc.tof.ToF;
+import static com.cc.tof.ToF.println;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
@@ -41,7 +47,7 @@ public class IntroductionController implements Initializable {
     private Label IntroText;
 
     @FXML
-    private Button next;
+    private Button next, Play;
 
     private ArrayList<String> introduction = new ArrayList<>();
 
@@ -63,17 +69,43 @@ public class IntroductionController implements Initializable {
         introduction.add("You're sure you saw a shadow under the cracks of the door.");
         introduction.add("Yes, you are not alone here...");
 
+        Play.setVisible(false);
+
         next.setOnAction(e -> {
             displayText();
         });
 
     }
-    
+
     int cpt = 0;
 
     public void displayText() {
-        IntroText.setText(introduction.get(cpt));
-        cpt++;
+        if (cpt == introduction.size()) {
+            Play.setVisible(true);
+            Play.setOnAction(e -> {
+                launchInterfaceGame();
+            });
+            next.setVisible(false);
+        } else {
+            IntroText.setText(introduction.get(cpt));
+            cpt++;
+        }
+    }
+
+    public void launchInterfaceGame() {
+        try {
+            println("ToF", "Loading the game interface...");
+            Parent ui = FXMLLoader.load(ToF.getResource("interface.fxml"));
+            ui.relocate(-255, 0);
+
+            println("ToF", "Creating the scene...");
+            Scene sc = new Scene(ui, 1000, 600);
+
+            println("ToF", "Swapping the scene...");
+            ToF.getStage().setScene(sc);
+        } catch (IOException ex) {
+            throw new IllegalStateException("Could not load main UI", ex);
+        }
     }
 
 }
