@@ -332,6 +332,9 @@ public class InterfaceController implements Initializable {
         updateBars();
         updateInventory();
         
+        ifWin();
+        ifLose();
+        
         UnderAttack.setVisible(ToF.getWorld().getPlayer().getOpponent().isPresent());
         
         if(ToF.getWorld().isFullyExplored())
@@ -490,6 +493,7 @@ public class InterfaceController implements Initializable {
      * Displays a stage when player wins.
      */
     public void ifWin() {
+        if (ToF.win)
         WinMenu.setVisible(true);
     }
     
@@ -497,6 +501,7 @@ public class InterfaceController implements Initializable {
      * Displays a stage when player loses.
      */
     public void ifLose() {
+        if (ToF.lose)
         LoseMenu.setVisible(true);
     }
 }
