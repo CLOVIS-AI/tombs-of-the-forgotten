@@ -212,9 +212,26 @@ public class InterfaceController implements Initializable {
         
         Next2.setOnAction(e -> displayText());
         
+        BackLose.setOnAction(e -> launchBackGame());
+        BackWin.setOnAction(e -> launchBackGame());
 
     }
 
+        public void launchBackGame() {
+        try {
+            println("ToF", "Loading the game interface...");
+            Parent ui = FXMLLoader.load(ToF.getResource("Menu.fxml"));
+
+            println("ToF", "Creating the scene...");
+            Scene sc = new Scene(ui, 1000, 600);
+
+            println("ToF", "Swapping the scene...");
+            ToF.getStage().setScene(sc);
+        } catch (IOException ex) {
+            throw new IllegalStateException("Could not load main UI", ex);
+        }
+    }
+        
     private void onSearch() {
         ItemContainer items = ToF.getWorld().getPlayer().getCurrentRoom().getItems();
 
