@@ -58,13 +58,19 @@ public class LootController implements Initializable {
 
     @FXML
     private Button AddAll;
-    
+
     @FXML
     private Button LootConfirm;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-            LootConfirm.setOnAction(e -> closeLoot(null));
+        LootConfirm.setOnAction(e -> closeLoot(null));
+    }
+
+    public void closeLoot(ActionEvent event) {
+        System.out.println("closeLoot?");
+        Stage stage = (Stage) LootConfirm.getScene().getWindow();
+        stage.close();
     }
 
     public void setInventories(ItemContainer items1, ItemContainer items2) {
@@ -102,14 +108,13 @@ public class LootController implements Initializable {
                 }
             }
         }
-
         generateList(listViewInventory, inventory);
         generateList(listViewLoot, loot);
 
     }
 
     public void addAll() {
-        
+
         ObservableList<Item> allItems = listViewLoot.getItems();
 
         for (Item i : allItems) {
@@ -138,19 +143,13 @@ public class LootController implements Initializable {
                 } else {
                     setText(item.getName());
                     setOnMouseReleased((MouseEvent e) -> {
-                        if(e.getButton() == MouseButton.SECONDARY)
+                        if (e.getButton() == MouseButton.SECONDARY) {
                             InterfaceController.contextMenuItem(item, this, e,
                                     false, false, null);
+                        }
                     });
                 }
             }
         });
     }
-    
-    @FXML
-    public void closeLoot(ActionEvent event) {
-    Stage stage = (Stage) LootConfirm.getScene().getWindow();
-    stage.close();
-}
-
 }

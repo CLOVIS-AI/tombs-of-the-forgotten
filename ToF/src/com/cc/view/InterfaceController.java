@@ -88,7 +88,7 @@ public class InterfaceController implements Initializable {
 
     @FXML
     private Label Apparel, Weapons, Stats, Eatable, Scrolls, Other, All;
-
+    
     @FXML
     private MenuItem ViewWeapon, ViewApparel, ViewEatable, ViewScroll, ViewOther,
             ViewAll;
@@ -105,7 +105,7 @@ public class InterfaceController implements Initializable {
 
     @FXML
     private AnchorPane Map, WinMenu, LoseMenu;
-
+    
     @FXML
     private Label Text, Congratulations;
 
@@ -115,13 +115,13 @@ public class InterfaceController implements Initializable {
     private ArrayList<String> Ending = new ArrayList<>();
     private boolean isMenu = false;
     private Timeline move = new Timeline();
-
+    
     private static InterfaceController me;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         me = this;
-
+        
         Open.setOnMouseEntered(e -> {
             isMenu = true;
             slideRight(LeftMenu);
@@ -150,7 +150,7 @@ public class InterfaceController implements Initializable {
 
         LoseMenu.setVisible(false);
         WinMenu.setVisible(false);
-
+        
         /**
          * ******************************SAVE*********************************
          */
@@ -159,7 +159,7 @@ public class InterfaceController implements Initializable {
         // Buttons
         ButtonReadNote.setOnAction(e -> {
             ToF.getWorld().getPlayer().getCurrentRoom().readNotes();
-            update(ToF.getWorld().getPlayer());
+            update(true);
         });
 
         // Map
@@ -168,80 +168,22 @@ public class InterfaceController implements Initializable {
                 Map.getPrefHeight() / 2,
                 Map.getPrefWidth() / 2,
                 Map.getPrefHeight() / 2));
-
+        
         ButtonSearchRoom.setOnAction(e -> onSearch());
-        update(ToF.getWorld().getPlayer());
-
-        /**
-         * ******************************TEXT*********************************
-         */
-        Ending.add("Congratulations!");
-        Ending.add("You have finally escaped!");
-        Ending.add("You are slowly breathing as you feel the fresh air cuddling "
-                + "your nose");
-        Ending.add("You open your eyes and re-discover the world");
-        Ending.add("A lush bed of moss-covered grass is enclosed by tall flower bushes and shrubs.");
-        Ending.add("The flower beds are well looked after, but still allowed plenty"
-                + " of space to grow; they're home to all sorts of life. ");
-        Ending.add("Plants and flowers are starting to reclaim even all pieces of land,"
-                + " eager to expand their own dominion. ");
-        Ending.add("This is all new for you");
-        Ending.add("You are finally understanding what happened to this world");
-        Ending.add("You turn around and realize you were stuck in a giant underground"
-                + "bunker this whole time");
-        Ending.add("Mankind has disappear");
-        Ending.add("You were the only one alive");
-        Ending.add("You were cryogenized");
-        Ending.add("It was 100 years ago");
-        Ending.add("You survived");
-        Ending.add("Radioactivty killed everyone");
-        Ending.add("And transformed some into zombies and weird monsters");
-        Ending.add("You might have killed your family there");
-        Ending.add("You are now left with yourself");
-        Ending.add("...");
-        Ending.add("There's something there...");
-        Ending.add("A piece of sheet...");
-        Ending.add("That says...");
-        Ending.add("'YOU ARE NOT ALONE, WE ARE SURVIVORS. IF YOU SURVIVED"
-                + "JOIN US BEHIND THE TREES.");
-        Ending.add("Unbelievable.");
-        Ending.add("You are not alone..");
-        Ending.add("You are not a forgotten anymore.");
-        Ending.add("Thank you for playing this game! Hope you enjoyed!");
-        Ending.add("Sarah - Ivan");
+        update(false);
         
-        Next2.setOnAction(e -> displayText());
-        
-        BackLose.setOnAction(e -> launchBackGame());
-        BackWin.setOnAction(e -> launchBackGame());
-
+        // Faire en sorte d'ouvrir la page loot lorsque l'on gagne un combat ou
+        // lorsque l'on fouille un coffre.
     }
-
-        public void launchBackGame() {
-        try {
-            println("ToF", "Loading the game interface...");
-            Parent ui = FXMLLoader.load(ToF.getResource("Menu.fxml"));
-
-            println("ToF", "Creating the scene...");
-            Scene sc = new Scene(ui, 1000, 600);
-
-            println("ToF", "Swapping the scene...");
-            ToF.getStage().setScene(sc);
-        } catch (IOException ex) {
-            throw new IllegalStateException("Could not load main UI", ex);
-        }
-    }
-        
+    
     private void onSearch() {
         ItemContainer items = ToF.getWorld().getPlayer().getCurrentRoom().getItems();
-
-        if (items.getItems().isEmpty()) {
+        
+        if(items.getItems().isEmpty())
             ToF.getWorld().newMessage(new Message().add("There is nothing here..."));
-        } else {
-            lootPopup(items, true);
-        }
-
-        update(ToF.getWorld().getPlayer());
+        else lootPopup(items, true);
+        
+        update(true);
     }
 
     /**
@@ -291,13 +233,13 @@ public class InterfaceController implements Initializable {
      *
      * @param event the event
      */
-    public static void restPopup(ActionEvent event) {
+    public void restPopup(ActionEvent event) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(ToF.getResource("rest.fxml"));
             Parent menu = (Parent) fxmlLoader.load();
+            ((RestController)fxmlLoader.getController()).setAction(e -> update(false));
             Stage stage = new Stage();
             stage.setScene(new Scene(menu));
-            stage.setOnCloseRequest(e -> me.update(ToF.getWorld().getPlayer()));
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -318,12 +260,11 @@ public class InterfaceController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(ToF.getResource("Loot.fxml"));
             Parent menu = (Parent) fxmlLoader.load();
-            ((LootController) fxmlLoader.getController()).setInventories(ToF.getWorld().getPlayer().getInventory(), other);
+            ((LootController)fxmlLoader.getController()).setInventories(ToF.getWorld().getPlayer().getInventory(), other);
             Stage stage = new Stage();
             stage.setScene(new Scene(menu));
-            if (update) {
-                stage.setOnCloseRequest(e -> me.update(ToF.getWorld().getPlayer()));
-            }
+            if(update)
+                stage.setOnCloseRequest(e -> me.update(false));
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -348,22 +289,22 @@ public class InterfaceController implements Initializable {
         button.setOnMouseExited(e -> button.setFill(getColor(p.canReach(d))));
         button.setOnMouseReleased(e -> {
             p.moveTo(d);
-            update(p);
+            update(true);
         });
         button.setFill(getColor(p.canReach(d)));
     }
 
     public void move(Player p, Direction d, Button b) {
         b.setVisible(true);
-        if (!p.canReach(d)) {
+        if(!p.canReach(d)){
             b.setVisible(false);
         }
-        b.setOnMouseReleased(e -> {
+        b.setOnMouseReleased(e ->{
             p.moveTo(d);
-            update(p);
+            update(true);
         });
     }
-
+    
     /**
      * The color of a direction button
      *
@@ -377,13 +318,15 @@ public class InterfaceController implements Initializable {
     /**
      * Reinitialize every direction button's color each time the player moves.
      *
-     * @param p the player
+     * @param updateWorld update the world?
      */
-    public void update(Player p) {
+    public void update(boolean updateWorld) {
         println("GUI", "Updating the UI...");
-
-        ToF.getWorld().nextTick();
-
+        Player p = ToF.getWorld().getPlayer();
+        
+        if(updateWorld)
+            ToF.getWorld().nextTick();
+        
         move(p, NORTH, (Shape) MoveNorth);
         move(p, SOUTH, (Shape) MoveSouth);
         move(p, EAST, (Shape) MoveEast);
@@ -393,15 +336,30 @@ public class InterfaceController implements Initializable {
         updateMap();
         updateBars();
         updateInventory();
-
+        
+        if(ToF.getWorld().getPlayer().isDead())
+            ifLose();
+        
         UnderAttack.setVisible(ToF.getWorld().getPlayer().getOpponent().isPresent());
-
-        if (ToF.getWorld().isFullyExplored()) {
-            ToF.getWorld().newMessage(new Message().add("You have explored everything!"));
+        UnderAttack.setText("Under Attack " + ToF.getWorld().selectEntities(
+                e -> ToF.getWorld().getPlayer().getLocation().equals(e.getLocation())
+        ).count());
+        if(p.getOpponent().isPresent()){
+            ToF.getWorld().selectEntities(
+                e -> ToF.getWorld().getPlayer().getLocation().equals(e.getLocation())
+            ).forEach(e -> ToF.getWorld().newMessage(new Message()
+                    .add("Your opponent")
+                    .add(e.getName())
+                    .add("has")
+                    .add(e.getHealthBar().getCurrent() + "HP"))
+            );
         }
-
+        
+        if(ToF.getWorld().isFullyExplored())
+            ifWin();
+        
         Message msg;
-        while ((msg = ToF.getWorld().getNextMessage()) != null) {
+        while((msg = ToF.getWorld().getNextMessage()) != null){
             Text.setText(msg.toStringSimple() + "\n" + Text.getText()
                     .substring(0, min(1000, Text.getText().length())));
         }
@@ -429,7 +387,7 @@ public class InterfaceController implements Initializable {
                 .selectRoomsByLocation(l -> l.getZ() == player.getZ())
                 .forEach(this::drawRoom);
     }
-
+    
     public void updateInventory() {
         Inventory inventory = ToF.getWorld().getPlayer().getInventory();
         fillCategory(MenuAll, inventory.stream());
@@ -437,20 +395,20 @@ public class InterfaceController implements Initializable {
         fillCategory(MenuEdible, inventory.getEdible());
         fillCategory(MenuScroll, inventory.getScrolls());
         fillCategory(MenuWeapon, inventory.getWeapons());
-
+        
         fillCategory(MenuOther, inventory.stream()
-                .filter(i -> inventory.getScrolls().noneMatch(i2 -> i.equals(i2)))
+                .filter(i -> inventory.getScrolls()  .noneMatch(i2 -> i.equals(i2)))
                 .filter(i -> inventory.getWearables().noneMatch(i2 -> i.equals(i2)))
-                .filter(i -> inventory.getEdible().noneMatch(i2 -> i.equals(i2)))
-                .filter(i -> inventory.getWeapons().noneMatch(i2 -> i.equals(i2))));
+                .filter(i -> inventory.getEdible()   .noneMatch(i2 -> i.equals(i2)))
+                .filter(i -> inventory.getWeapons()  .noneMatch(i2 -> i.equals(i2))));
     }
-
+    
     private void fillCategory(ListView<Item> items, Stream<Item> source) {
         // Inspired from
         // https://stackoverflow.com/questions/28264907/javafx-listview-contextmenu
-
+        
         items.getItems().clear();
-        source.sorted((i1, i2) -> i1.getName().compareTo(i2.getName()))
+        source  .sorted((i1, i2) -> i1.getName().compareTo(i2.getName()))
                 .forEachOrdered(e -> items.getItems().add(e));
         items.setCellFactory(param -> new ListCell<Item>() {
             @Override
@@ -462,13 +420,13 @@ public class InterfaceController implements Initializable {
                     setText(item.getName());
                     setOnMouseReleased((MouseEvent e) -> {
                         InterfaceController.contextMenuItem(item, this, e,
-                                true, true, eh -> update(ToF.getWorld().getPlayer()));
+                                true, true, eh -> update(true));
                     });
                 }
             }
         });
     }
-
+    
     private static final int MAP_ROOM_SIZE = 5;
     private static final int MAP_ROOM_DIST = 15;
     private static final double TRANSPARENCY_COEF = 0.5;
@@ -484,33 +442,33 @@ public class InterfaceController implements Initializable {
         // Color
         if (r.getLocation().equals(player)) {
             e.setFill(Color.AQUAMARINE);
-        } else if (ToF.getWorld().getEntities(false).anyMatch(en -> en.getLocation().equals(r.getLocation()))) {
+        } else if (ToF.getWorld().getEntities(false).anyMatch(en -> en.getLocation().equals(r.getLocation()))){
             e.setFill(Color.CRIMSON);
         }
-
-        if (!r.isExplored()) {
+        
+        if (!r.isExplored()){
             Color p = (Color) e.getFill();
             e.setFill(new Color(p.getRed(), p.getGreen(), p.getRed(),
-                    TRANSPARENCY_COEF / (r.getLocation().dist(player) + TRANSPARENCY_COEF)
+                    TRANSPARENCY_COEF/(r.getLocation().dist(player)+TRANSPARENCY_COEF)
             ));
         }
 
         Map.getChildren().add(e);
     }
-
+    
     public static void contextMenuItem(Item item, Node node, MouseEvent mouse,
-            boolean allowUse, boolean allowDrop, EventHandler<Event> eh) {
+            boolean allowUse, boolean allowDrop, EventHandler<Event> eh){
         println("GUI", "Context menu for the item " + item.getName());
-
+        
         ContextMenu menu = new ContextMenu();
-
+        
         // View the item
         MenuItem view = new MenuItem("View");
         view.setOnAction(e -> viewItem(item));
         menu.getItems().add(view);
-
+        
         // Use the item
-        if (allowUse && item.canUse(ToF.getWorld().getPlayer())) {
+        if(allowUse && item.canUse(ToF.getWorld().getPlayer())){
             MenuItem use = new MenuItem("Use");
             use.setOnAction(e -> {
                 ToF.getWorld().getPlayer().use(item);
@@ -518,9 +476,9 @@ public class InterfaceController implements Initializable {
             });
             menu.getItems().add(use);
         }
-
+        
         // Drop the item
-        if (allowDrop) {
+        if(allowDrop){
             MenuItem drop = new MenuItem("Drop");
             drop.setOnAction(e -> {
                 ToF.getWorld().getPlayer().drop(item);
@@ -530,7 +488,7 @@ public class InterfaceController implements Initializable {
         }
         menu.show(node, mouse.getScreenX(), mouse.getSceneY());
     }
-
+    
     /**
      * Load a new fxml file.
      *
@@ -540,7 +498,7 @@ public class InterfaceController implements Initializable {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(ToF.getResource("Item.fxml"));
             Parent menu = (Parent) fxmlLoader.load();
-            ((ItemController) fxmlLoader.getController()).setItem(item);
+            ((ItemController)fxmlLoader.getController()).setItem(item);
             Stage stage = new Stage();
             stage.setScene(new Scene(menu));
             stage.show();
@@ -548,20 +506,20 @@ public class InterfaceController implements Initializable {
             throw new IllegalStateException("Couldn't load the item view.", ex);
         }
     }
-
+    
     /**
      * Displays a stage when player wins.
      */
     public void ifWin() {
         WinMenu.setVisible(true);
     }
-
+    
     /**
      * Displays a stage when player loses.
      */
     public void ifLose() {
         LoseMenu.setVisible(true);
-    }
+    }  
 
     int cpt = 0;
 

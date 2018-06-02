@@ -125,7 +125,7 @@ public class DefaultGenerator implements Generator {
         println("RNG", "Adding the spawn...");
         addRoom(new Room("This is where you spawn.").explore(), new Location());
         
-        int nbrLines = rdmNbr(2, 15);
+        int nbrLines = rdmNbr(5, 20);
         println("RNG", "Adding " + nbrLines + " lines...");
         for(int i = 0; i < nbrLines; i++)
             line();
@@ -285,9 +285,9 @@ public class DefaultGenerator implements Generator {
     
     {
         PAIRS = new HashMap<>();
-        PAIRS.put(15, (rs) -> new Pair<>(createRandomRoom(), new Opening(rs)));
-        PAIRS.put( 5, (rs) -> new Pair<>(createRandomRoom(), new Door(rs)));
-        PAIRS.put( 1, this::lockedDoor);
+        PAIRS.put( 2, (rs) -> new Pair<>(createRandomRoom(), new Opening(rs)));
+        PAIRS.put( 1, (rs) -> new Pair<>(createRandomRoom(), new Door(rs)));
+        PAIRS.put( 3, this::lockedDoor);
         
         TOTAL = PAIRS.keySet().stream()
                 .mapToInt(v -> (int)v)

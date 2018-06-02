@@ -334,6 +334,9 @@ public abstract class Entity implements Timable, Save<JsonObject> {
     public boolean canMoveTo(Direction d) {
         if(isDead())
             return false;
+
+        if(!stamina.canRemove(1))
+            return false;
         
         return getCurrentRoom().canMove(d);
     }
@@ -347,6 +350,9 @@ public abstract class Entity implements Timable, Save<JsonObject> {
      */
     public boolean canReach(Direction d) {
         if(isDead())
+            return false;
+
+        if(!stamina.canRemove(1))
             return false;
         
         return getCurrentRoom().canReach(d, this);
@@ -362,6 +368,9 @@ public abstract class Entity implements Timable, Save<JsonObject> {
     public void moveTo(Direction d) {
         if(isDead())
             return;
+
+	if(stamina.getCurrent() < 1)
+            throw new IllegalStateException("Not enough stamina ("+stamina.getCurrent()+") to move!");
         
         Room crt = getCurrentRoom();
         if (!crt.canMove(d) && crt.canOpen(d, this))
@@ -406,7 +415,7 @@ public abstract class Entity implements Timable, Save<JsonObject> {
                         +"Entity '"+this+"'")
         ));
     }
-
+    
     /**
      * Can the Entity move in one move to that Room?
      *
@@ -415,6 +424,12 @@ public abstract class Entity implements Timable, Save<JsonObject> {
      * {@link Room#canMove(com.cc.world.Room) Room.canMove(Room)}.
      */
     public boolean canMoveTo(Room r) {
+        if(isDead())
+            return false;
+
+        if(!stamina.canRemove(1))
+            return false;
+        
         return getCurrentRoom().canMove(r);
     }
 
@@ -674,6 +689,18 @@ public abstract class Entity implements Timable, Save<JsonObject> {
          */
         public void newBonus(Entity e, int turns, int value){
             bar.apply(e).addBonus(turns, value, true);
+        }
+
+        /**
+         * Increases the maximum of the bar or decreases the minimum of he bar.
+         * @param e the entity that is affected
+         * @param value by how much
+         */
+        public void upgrade(Entity e, int value){
+            if(value >= 0)
+                 bar.apply(e).increaseMaximum(value);
+            else
+                 bar.apply(e).decreaseMinimum(-value);
         }
         
         @Override

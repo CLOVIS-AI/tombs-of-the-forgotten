@@ -86,7 +86,10 @@ public class Player extends Entity {
     }
     
     public void addEvents() {
-        ((EventBar)getHealthBar()).setOnEmpty(b -> ToF.lose());
+        ((EventBar)getStaminaBar()).setOnEmpty(e -> getWorld().newMessage(
+                new Message().add("You are really tired... Rest to be able to "
+                        + "play more!"))
+        );
     }
     
     @Override
@@ -101,7 +104,6 @@ public class Player extends Entity {
     
     public void use(Item item) {
         getInventory().use(item, this);
-        getWorld().nextTick();
     }
     
     @Override
@@ -110,6 +112,13 @@ public class Player extends Entity {
         getOpponent()
                 .filter(Entity::isDead)
                 .ifPresent(ToF::opponentDied);
+        
+        if(getStaminaBar().isLowerThan(2))
+            getWorld().newMessage(new Message().add("Low stamina! Rest to refill!"));
+        if(getHealthBar().isLowerThan(5))
+            getWorld().newMessage(new Message().add("Low health! Eat to refill!"));
+        if(getWeightBar().getCurrent() >= getWeightBar().getMaximum() - 500)
+            getWorld().newMessage(new Message().add("Your inventory is almost full!"));
         
         super.nextTick();
     }
