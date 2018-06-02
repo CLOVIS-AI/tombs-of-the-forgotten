@@ -337,6 +337,16 @@ public class InterfaceController implements Initializable {
         UnderAttack.setText("Under Attack " + ToF.getWorld().selectEntities(
                 e -> ToF.getWorld().getPlayer().getLocation().equals(e.getLocation())
         ).count());
+        if(p.getOpponent().isPresent()){
+            ToF.getWorld().selectEntities(
+                e -> ToF.getWorld().getPlayer().getLocation().equals(e.getLocation())
+            ).forEach(e -> ToF.getWorld().newMessage(new Message()
+                    .add("Your opponent")
+                    .add(e.getName())
+                    .add("has")
+                    .add(e.getHealthBar().getCurrent() + "HP"))
+            );
+        }
         
         if(ToF.getWorld().isFullyExplored())
             ifWin();
