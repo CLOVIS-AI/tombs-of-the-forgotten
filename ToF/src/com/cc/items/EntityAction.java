@@ -120,7 +120,7 @@ public class EntityAction implements Action {
             if(target == OPPONENT){
                 target.select(entity);
                 return true;
-            }else
+            } else
                 return mode.canExecute(entity, stat, operation.getValue(value));
         }catch(CannotUseItem e){
             return false;
