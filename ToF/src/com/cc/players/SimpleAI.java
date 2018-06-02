@@ -51,10 +51,10 @@ public class SimpleAI extends Entity {
         super.nextTick();
         
         if(isFighting() || new Random().nextInt(100) < PERCENT_CHANCE_USE_ITEM){
-            getInventory().getItems().stream()
-                    .filter(i -> i.canUse(this))
+            selectUsableItems()
                     .findAny()
                     .ifPresent(i -> getInventory().use(i, this));
+            pathToPlayer = null; // reset the path
         }
         
         if(pathToPlayer == null || pathToPlayer.size() == 0){
