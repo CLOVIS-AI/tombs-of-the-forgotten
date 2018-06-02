@@ -24,6 +24,7 @@ package com.cc.items;
 
 import static com.cc.items.EntityAction.Mode.MODIFICATION;
 import static com.cc.items.EntityAction.Operation.ADD;
+import static com.cc.items.EntityAction.Target.OPPONENT;
 import com.cc.players.Entity;
 import com.cc.players.Entity.Stat;
 import com.cc.utils.messages.Message;
@@ -116,7 +117,11 @@ public class EntityAction implements Action {
     @Override
     public boolean canUse(Entity entity) {
         try{
-            return mode.canExecute(target.select(entity), stat, operation.getValue(value));
+            if(target == OPPONENT){
+                target.select(entity);
+                return true;
+            }else
+                return mode.canExecute(entity, stat, operation.getValue(value));
         }catch(CannotUseItem e){
             return false;
         }

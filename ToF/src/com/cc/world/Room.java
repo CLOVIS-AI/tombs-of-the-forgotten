@@ -167,10 +167,6 @@ public class Room implements Save<JsonObject> {
      * @return This room itself, to allow method-chaining.
      */
     public final Room addItem(Item i){
-        if(isGenerated)
-            throw new IllegalStateException("This room has already been generated,"
-                    + " no new items can be added.");
-        
         if(i == null)
             throw new IllegalArgumentException("The direction shouldn't be null.");
         

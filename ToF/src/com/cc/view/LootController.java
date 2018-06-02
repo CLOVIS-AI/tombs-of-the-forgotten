@@ -25,7 +25,6 @@ package com.cc.view;
 
 import com.cc.items.Item;
 import com.cc.items.ItemContainer;
-import com.cc.tof.ToF;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
@@ -111,13 +110,11 @@ public class LootController implements Initializable {
 
     public void addAll() {
         
-        if (!listViewLoot.getSelectionModel().getSelectedItems().isEmpty()) {
-            ObservableList<Item> allItems = listViewLoot.getItems();
+        ObservableList<Item> allItems = listViewLoot.getItems();
 
-            for (Item i : allItems) {
-                if (inventory.add(i)) {
-                    loot.remove(i);
-                }
+        for (Item i : allItems) {
+            if (inventory.add(i)) {
+                loot.remove(i);
             }
         }
 
@@ -141,9 +138,9 @@ public class LootController implements Initializable {
                 } else {
                     setText(item.getName());
                     setOnMouseReleased((MouseEvent e) -> {
-                        if (e.getButton() == MouseButton.SECONDARY) {
-                            InterfaceController.contextMenuItem(item, this, e);
-                        }
+                        if(e.getButton() == MouseButton.SECONDARY)
+                            InterfaceController.contextMenuItem(item, this, e,
+                                    false, false, null);
                     });
                 }
             }

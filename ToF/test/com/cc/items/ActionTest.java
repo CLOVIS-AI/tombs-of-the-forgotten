@@ -114,7 +114,7 @@ public class ActionTest {
         p.removeItem(i);
         p.nextTick();
         System.out.println(p.getInventory().getWeightBar().save().toString(WriterConfig.PRETTY_PRINT));
-        assertEquals(0, p.getMana());
+        assertEquals(1, p.getMana());
     }
     
 }

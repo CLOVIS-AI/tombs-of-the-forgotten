@@ -104,8 +104,8 @@ public class DefaultGenerator implements Generator {
     List<Entity> entities;
     boolean isGenerated = false;
     
-    private static final int NBR_ROOMS_MAX = 100;
-    private static final int NBR_ROOMS_MIN = 50;
+    private static final int NBR_ROOMS_MAX = 200;
+    private static final int NBR_ROOMS_MIN = 100;
     
     private static final int NBR_SHORT_MAX = 50;
     private static final int NBR_SHORT_MIN = 10;
@@ -153,7 +153,7 @@ public class DefaultGenerator implements Generator {
 
         println("RNG", "Generation of the player & validation.");
         isGenerated = true;
-        return new World(rooms.values(), new Player("Player", 20, 10, 10, 20000, 0), entities);
+        return new World(rooms.values(), new Player("Player", 20, 30, 20, 20000, 0), entities);
     }
     
     boolean shortcut(){

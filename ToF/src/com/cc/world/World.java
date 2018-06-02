@@ -385,7 +385,9 @@ public final class World implements Timable, Save<JsonObject> {
      * @return A message from the queue.
      */
     public final Message getNextMessage() {
-        return messages.remove();
+        if(messages.isEmpty())
+            return null;
+        else return messages.remove();
     }
 
     /**
