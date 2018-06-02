@@ -284,7 +284,7 @@ public class Bar implements Save<JsonObject> {
      * @see #getReal() The value of this bar without the bonuses
      */
     public int getCurrent() {
-        return min(real + bonusTotal, maximum);
+        return max(min(real + bonusTotal, maximum), minimum);
     }
     
     /**
