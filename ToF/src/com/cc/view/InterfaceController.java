@@ -88,9 +88,6 @@ public class InterfaceController implements Initializable {
     @FXML
     private Label Apparel, Weapons, Stats, Eatable, Scrolls, Other, All;
 
-    @FXML
-    private MenuItem ViewWeapon, ViewApparel, ViewEatable, ViewScroll, ViewOther,
-            ViewAll;
     
     @FXML
     private ListView<Item> MenuWeapon, MenuApparel, MenuEdible, MenuScroll, MenuOther, MenuAll;
@@ -503,5 +500,5 @@ public class InterfaceController implements Initializable {
     public void ifLose() {
         if (ToF.lose)
         LoseMenu.setVisible(true);
-    }
+    }  
 }

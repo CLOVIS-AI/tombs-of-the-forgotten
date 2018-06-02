@@ -243,7 +243,7 @@ public class ToF extends Application {
     }
     
     public static void lose(){
-        println("ToF", "You loose...");
+        println("ToF", "You lose...");
         lose = true;
     }
 
