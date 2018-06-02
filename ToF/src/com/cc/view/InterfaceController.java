@@ -87,10 +87,6 @@ public class InterfaceController implements Initializable {
 
     @FXML
     private Label Apparel, Weapons, Stats, Eatable, Scrolls, Other, All;
-
-    @FXML
-    private MenuItem ViewWeapon, ViewApparel, ViewEatable, ViewScroll, ViewOther,
-            ViewAll;
     
     @FXML
     private ListView<Item> MenuWeapon, MenuApparel, MenuEdible, MenuScroll, MenuOther, MenuAll;
@@ -156,7 +152,7 @@ public class InterfaceController implements Initializable {
         // Buttons
         ButtonReadNote.setOnAction(e -> {
             ToF.getWorld().getPlayer().getCurrentRoom().readNotes();
-            update(ToF.getWorld().getPlayer());
+            update(true);
         });
 
         // Map
@@ -167,7 +163,7 @@ public class InterfaceController implements Initializable {
                 Map.getPrefHeight() / 2));
         
         ButtonSearchRoom.setOnAction(e -> onSearch());
-        update(ToF.getWorld().getPlayer());
+        update(false);
         
         // Faire en sorte d'ouvrir la page loot lorsque l'on gagne un combat ou
         // lorsque l'on fouille un coffre.
@@ -180,7 +176,7 @@ public class InterfaceController implements Initializable {
             ToF.getWorld().newMessage(new Message().add("There is nothing here..."));
         else lootPopup(items, true);
         
-        update(ToF.getWorld().getPlayer());
+        update(true);
     }
 
     /**
@@ -230,13 +226,13 @@ public class InterfaceController implements Initializable {
      *
      * @param event the event
      */
-    public static void restPopup(ActionEvent event) {
+    public void restPopup(ActionEvent event) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(ToF.getResource("rest.fxml"));
             Parent menu = (Parent) fxmlLoader.load();
+            ((RestController)fxmlLoader.getController()).setAction(e -> update(false));
             Stage stage = new Stage();
             stage.setScene(new Scene(menu));
-            stage.setOnCloseRequest(e -> me.update(ToF.getWorld().getPlayer()));
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -261,7 +257,7 @@ public class InterfaceController implements Initializable {
             Stage stage = new Stage();
             stage.setScene(new Scene(menu));
             if(update)
-                stage.setOnCloseRequest(e -> me.update(ToF.getWorld().getPlayer()));
+                stage.setOnCloseRequest(e -> me.update(false));
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -286,7 +282,7 @@ public class InterfaceController implements Initializable {
         button.setOnMouseExited(e -> button.setFill(getColor(p.canReach(d))));
         button.setOnMouseReleased(e -> {
             p.moveTo(d);
-            update(p);
+            update(true);
         });
         button.setFill(getColor(p.canReach(d)));
     }
@@ -298,7 +294,7 @@ public class InterfaceController implements Initializable {
         }
         b.setOnMouseReleased(e ->{
             p.moveTo(d);
-            update(p);
+            update(true);
         });
     }
     
@@ -315,12 +311,14 @@ public class InterfaceController implements Initializable {
     /**
      * Reinitialize every direction button's color each time the player moves.
      *
-     * @param p the player
+     * @param updateWorld update the world?
      */
-    public void update(Player p) {
+    public void update(boolean updateWorld) {
         println("GUI", "Updating the UI...");
+        Player p = ToF.getWorld().getPlayer();
         
-        ToF.getWorld().nextTick();
+        if(updateWorld)
+            ToF.getWorld().nextTick();
         
         move(p, NORTH, (Shape) MoveNorth);
         move(p, SOUTH, (Shape) MoveSouth);
@@ -332,10 +330,26 @@ public class InterfaceController implements Initializable {
         updateBars();
         updateInventory();
         
+        if(ToF.getWorld().getPlayer().isDead())
+            ifLose();
+        
         UnderAttack.setVisible(ToF.getWorld().getPlayer().getOpponent().isPresent());
+        UnderAttack.setText("Under Attack " + ToF.getWorld().selectEntities(
+                e -> ToF.getWorld().getPlayer().getLocation().equals(e.getLocation())
+        ).count());
+        if(p.getOpponent().isPresent()){
+            ToF.getWorld().selectEntities(
+                e -> ToF.getWorld().getPlayer().getLocation().equals(e.getLocation())
+            ).forEach(e -> ToF.getWorld().newMessage(new Message()
+                    .add("Your opponent")
+                    .add(e.getName())
+                    .add("has")
+                    .add(e.getHealthBar().getCurrent() + "HP"))
+            );
+        }
         
         if(ToF.getWorld().isFullyExplored())
-            ToF.getWorld().newMessage(new Message().add("You have explored everything!"));
+            ifWin();
         
         Message msg;
         while((msg = ToF.getWorld().getNextMessage()) != null){
@@ -399,7 +413,7 @@ public class InterfaceController implements Initializable {
                     setText(item.getName());
                     setOnMouseReleased((MouseEvent e) -> {
                         InterfaceController.contextMenuItem(item, this, e,
-                                true, true, eh -> update(ToF.getWorld().getPlayer()));
+                                true, true, eh -> update(true));
                     });
                 }
             }
@@ -498,5 +512,5 @@ public class InterfaceController implements Initializable {
      */
     public void ifLose() {
         LoseMenu.setVisible(true);
-    }
+    }  
 }

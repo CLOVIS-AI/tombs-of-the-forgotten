@@ -23,8 +23,10 @@
  */
 package com.cc.players;
 
+import static com.cc.utils.Bar.Behavior.ACCEPT;
 import com.cc.world.Location;
 import com.cc.world.Path;
+import com.cc.world.Room;
 import com.eclipsesource.json.JsonObject;
 import java.util.Random;
 
@@ -57,7 +59,7 @@ public class SimpleAI extends Entity {
             pathToPlayer = null;
         }
         
-        if(!isPathAvailable() && isPlayerInRange() && new Random().nextInt(10) < 1){
+        if(!isPathAvailable() && isPlayerInRange() && new Random().nextInt(3) < 1){
             try {
                 pathToPlayer = getCurrentRoom().pathTo(getWorld().getPlayer().getCurrentRoom(), this);
                 pathToPlayer.moveToNext();
@@ -68,8 +70,16 @@ public class SimpleAI extends Entity {
                 return;
             }
         }
-        if(isPathAvailable() && !isFighting())
-            moveTo(pathToPlayer.moveToNext());
+        if(isPathAvailable() && !isFighting()){
+            Room next = pathToPlayer.moveToNext();
+            if(canMoveTo(next))
+                moveTo(next);
+            else {
+                getStaminaBar().add(2, ACCEPT);
+                if(!pathToPlayer.checkPathValidity(this))
+                    pathToPlayer = null;
+            }
+        }
     }
     
     private boolean isPlayerInRange(){

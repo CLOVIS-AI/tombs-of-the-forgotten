@@ -296,8 +296,8 @@ public class Room implements Save<JsonObject> {
      */
     public boolean canMove(Room r){
         return canMove(getDirectionTo(r)
-                .orElseThrow(()->new IllegalArgumentException("The provided"
-                        + "room is not a neighbor of this room!")));
+                .orElse(null)
+        );
     }
     
     /**

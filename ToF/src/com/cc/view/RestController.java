@@ -26,11 +26,11 @@ package com.cc.view;
 import com.cc.tof.ToF;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.stage.Stage;
 
@@ -45,16 +45,23 @@ public class RestController implements Initializable{
     
     @FXML
     private Spinner RestSpinner;
+    
+    private Consumer<RestController> consumer;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         RestOK.setOnAction(e -> rest());
     }
     
+    public void setAction(Consumer<RestController> consumer){
+        this.consumer = consumer;
+    }
+    
     void rest(){
         closeRest(null);
         int n = (int) RestSpinner.getValue();
         ToF.rest(n);
+        consumer.accept(this);
     }
     
     @FXML
