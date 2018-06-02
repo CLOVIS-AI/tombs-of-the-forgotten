@@ -248,6 +248,15 @@ public class Bar implements Save<JsonObject> {
         
         updateBonus();
     }
+    
+    /**
+     * Does this bar have a smaller value than the specified one?
+     * @param value the value
+     * @return {@code true} if it's the case.
+     */
+    public boolean isLowerThan(int value){
+        return getCurrent() < value;
+    }
 
     /**
      * The minimum value of this bar.
