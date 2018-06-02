@@ -210,6 +210,11 @@ public class EntityAction implements Action {
             public int getWear(Stat current, Stat requested, int value) {
                 return current == requested ? value : 0;
             }
+        }, UPGRADE {
+            @Override
+            public void execute(Entity e, Stat s, int value, int turns) {
+                s.upgrade(e, value);
+            }
         };
         
         public abstract void execute(Entity e, Stat s, int value, int turns);
