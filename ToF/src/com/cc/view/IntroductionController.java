@@ -36,13 +36,13 @@ import javafx.scene.control.Label;
  * @author a.chourouq
  */
 public class IntroductionController implements Initializable {
-    
-    @FXML 
-    private Label TextIntro;
-    
+
+    @FXML
+    private Label IntroText;
+
     @FXML
     private Button next;
-    
+
     private ArrayList<String> introduction = new ArrayList<>();
 
     @Override
@@ -52,7 +52,7 @@ public class IntroductionController implements Initializable {
         introduction.add("You are slowly opening your eyes as you feel an unbearable headache.");
         introduction.add("You look around you and see nothing but a dark and vast place");
         introduction.add("You are wondering how you got here, and where you were before that.");
-        introduction.add("You literaly have no clue of what hapened here and not even who you are.");
+        introduction.add("You literaly have no clue of what happened here and not even who you are.");
         introduction.add("You stand up, stumble and almost fall. Your body hurt and you feel weak.");
         introduction.add("'What is it?...");
         introduction.add("There's a demolished door with a sign that says \"don't open\". What happened in this place?");
@@ -60,18 +60,20 @@ public class IntroductionController implements Initializable {
         introduction.add("An enormous metal door blocks your path. Ash and soot is all over it,\n "
                 + "somehow untouched by time and the elements.");
         introduction.add("You step closer to inspect it and.. wait..");
-        introduction.add("you're sure you saw a shadow under the cracks of the door.");
+        introduction.add("You're sure you saw a shadow under the cracks of the door.");
         introduction.add("Yes, you are not alone here...");
-        
-        int cpt = 0;
-        
+
         next.setOnAction(e -> {
-            TextIntro.setText(introduction.get(cpt));
+            displayText();
         });
-        
-        
-        
-        
+
     }
     
+    int cpt = 0;
+
+    public void displayText() {
+        IntroText.setText(introduction.get(cpt));
+        cpt++;
+    }
+
 }
