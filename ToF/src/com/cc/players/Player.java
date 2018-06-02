@@ -114,6 +114,13 @@ public class Player extends Entity {
                 .filter(Entity::isDead)
                 .ifPresent(ToF::opponentDied);
         
+        if(getStaminaBar().isLowerThan(2))
+            getWorld().newMessage(new Message().add("Low stamina! Rest to refill!"));
+        if(getHealthBar().isLowerThan(5))
+            getWorld().newMessage(new Message().add("Low health! Eat to refill!"));
+        if(getWeightBar().getCurrent() >= getWeightBar().getMaximum() - 500)
+            getWorld().newMessage(new Message().add("Your inventory is almost full!"));
+        
         super.nextTick();
     }
     
