@@ -333,9 +333,14 @@ public class InterfaceController implements Initializable {
         updateInventory();
         
         UnderAttack.setVisible(ToF.getWorld().getPlayer().getOpponent().isPresent());
+        UnderAttack.setText("Under Attack " + ToF.getWorld().selectEntities(
+                e -> ToF.getWorld().getPlayer().getLocation().equals(e.getLocation())
+        ).count());
         
-        if(ToF.getWorld().isFullyExplored())
+        if(ToF.getWorld().isFullyExplored()){
             ToF.getWorld().newMessage(new Message().add("You have explored everything!"));
+            ToF.win();
+        }
         
         Message msg;
         while((msg = ToF.getWorld().getNextMessage()) != null){
