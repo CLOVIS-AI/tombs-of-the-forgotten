@@ -6,3 +6,6 @@ build/
 .nb-gradle/
 private/
 /.nb-gradle/
+
+/tombs-of-the-forgotten/
+tombs-of-the-forgotten.zip
